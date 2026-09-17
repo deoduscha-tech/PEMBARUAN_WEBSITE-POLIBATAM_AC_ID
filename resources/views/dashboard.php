@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pusat P2M Polibatam</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://p2m.polibatam.ac.id/wp-content/uploads/2020/01/cropped-Logo-Polibatam-3-32x32.png">
+    <link rel="apple-touch-icon" href="https://p2m.polibatam.ac.id/wp-content/uploads/2020/01/cropped-Logo-Polibatam-3-32x32.png">
     <style>
+        /* =========================================================
+           Theme variables and shared base styles
+        ========================================================= */
         :root {
             --navy-dark: #0d244a;
             --navy: #0e2d5d;
@@ -62,29 +67,35 @@
         .top-date-row {
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             gap: 12px;
+        }
+
+        .top-date-text {
+            letter-spacing: 0.01em;
         }
 
         .top-date-time {
             background: #1c73d9;
             color: #fff;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
-            padding: 3px 10px;
+            padding: 3px 9px;
             letter-spacing: 0.02em;
+            border-radius: 3px;
         }
 
         .page-inner {
-            max-width: 1280px;
+            max-width: 1240px;
             margin: 0 auto;
-            width: calc(100% - 26px);
+            width: calc(100% - 22px);
         }
 
         .hero-wrap {
             position: relative;
             background: linear-gradient(180deg, rgba(15, 32, 58, 0.56), rgba(15, 32, 58, 0.42)),
                 url('https://p2m.polibatam.ac.id/wp-content/themes/newsup/images/head-back.jpg') center/cover no-repeat;
-            min-height: 150px;
+            min-height: 138px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -109,35 +120,33 @@
             z-index: 1;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 18px;
-            padding: 14px 0;
+            justify-content: flex-start;
+            gap: 16px;
+            padding: 12px 0;
+            min-height: 110px;
         }
 
         .site-logo {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.98);
-            color: var(--navy-dark);
-            display: grid;
-            place-items: center;
-            font-size: 2.3rem;
-            font-weight: 900;
+            width: 68px;
+            height: 68px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #ffffff, #dfefff) url('https://p2m.polibatam.ac.id/wp-content/uploads/2020/01/cropped-Logo-Polibatam-3-32x32.png') center center no-repeat;
+            background-size: contain;
             box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-            border: 4px solid rgba(16, 52, 110, 0.5);
+            border: 3px solid rgba(255,255,255,0.6);
             flex-shrink: 0;
+            transform: rotate(-5deg);
         }
 
         .site-logo::before {
-            content: "P";
+            content: "";
         }
 
         .site-branding-text {
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
+            justify-content: flex-start;
+            text-align: left;
         }
 
         .hero-wrap::before {
@@ -155,11 +164,12 @@
             position: relative;
             z-index: 1;
             color: rgba(255,255,255,0.98);
-            font-size: clamp(2.2rem, 3vw, 3.2rem);
+            font-size: clamp(2rem, 2.4vw, 2.4rem);
             font-weight: 800;
             letter-spacing: -0.04em;
             text-shadow: 0 4px 18px rgba(0,0,0,0.25);
             margin: 0;
+            line-height: 1.08;
         }
 
         .nav-bar {
@@ -167,9 +177,9 @@
             align-items: center;
             justify-content: space-between;
             background: linear-gradient(180deg, #1a4d88, #0d2e5d);
-            padding: 0 18px 0 10px;
-            min-height: 58px;
-            gap: 10px;
+            padding: 0 10px 0 0;
+            min-height: 50px;
+            gap: 8px;
             border-bottom: 1px solid rgba(255,255,255,0.12);
             box-shadow: inset 0 -1px 0 rgba(255,255,255,0.05);
         }
@@ -196,12 +206,12 @@
         }
 
         .nav-item {
-            padding: 18px 12px 16px;
+            padding: 16px 11px 15px;
             color: rgba(255,255,255,0.88);
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.02em;
             text-transform: uppercase;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             border-bottom: 3px solid transparent;
             line-height: 1.2;
             transition: background-color 0.2s ease, color 0.2s ease;
@@ -218,6 +228,9 @@
             color: white;
         }
 
+        /* =========================================================
+           Navigation and ticker styles
+        ========================================================= */
         .nav-item .caret {
             display: inline-block;
             margin-left: 4px;
@@ -242,6 +255,53 @@
 
         .nav-search:hover {
             background: rgba(255,255,255,0.08);
+        }
+
+        .site-search-panel {
+            width: 100%;
+            background: linear-gradient(180deg, #f5f9ff, #edf4ff);
+            border-bottom: 1px solid rgba(13, 45, 94, 0.08);
+            padding: 10px 0 12px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        .site-search-inner {
+            width: min(1240px, calc(100% - 22px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border: 1px solid rgba(13, 45, 94, 0.12);
+            border-radius: 999px;
+            padding: 8px 12px 8px 18px;
+            box-shadow: 0 8px 18px rgba(13, 45, 94, 0.08);
+        }
+
+        #global-search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 9px 0;
+            color: #132c54;
+            font-size: 0.98rem;
+            outline: none;
+        }
+
+        #global-search-input::placeholder {
+            color: #71819a;
+        }
+
+        .site-search-close {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: #eaf1ff;
+            color: #133b70;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .mg-latest-news-sec {
@@ -491,6 +551,15 @@
             padding: 18px 0 0;
         }
 
+        /* =========================================================
+           Content grid and article layouts
+        ========================================================= */
+        .content-shell .page-inner,
+        .main-grid {
+            width: min(1280px, calc(100% - 26px));
+            margin: 0 auto;
+        }
+
         .main-grid {
             display: grid;
             grid-template-columns: minmax(0, 2.1fr) minmax(300px, 0.92fr);
@@ -502,6 +571,173 @@
         .mg-fea-area {
             padding: 0;
             background: #eceef2;
+        }
+
+        /* =========================================================
+           Hero / feature slider styles
+        ========================================================= */
+        .feature-slider {
+            position: relative;
+            overflow: hidden;
+            min-height: 420px;
+            height: 100%;
+            background: linear-gradient(120deg, #eff3f7 0%, #f6f6f6 38%, #eaeaea 100%);
+            border: 1px solid rgba(12, 37, 70, 0.08);
+            box-shadow: 0 10px 24px rgba(12, 24, 54, 0.08);
+        }
+
+        .feature-slider::before,
+        .feature-slider::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .feature-slider::before {
+            background: linear-gradient(135deg, rgba(30, 124, 215, 0.95) 0 28%, rgba(30, 124, 215, 0.15) 28% 29%, transparent 29% 100%);
+            clip-path: polygon(0 0, 32% 0, 58% 100%, 0 100%);
+        }
+
+        .feature-slider::after {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0 58%, transparent 58% 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 42% 100%);
+        }
+
+        .feature-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(8%) scale(0.985);
+            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .feature-slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        .feature-slide .feature-image {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #edf3fb;
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .feature-slide .feature-image::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(5, 32, 62, 0.18) 0 40%, transparent 40% 100%),
+                linear-gradient(180deg, rgba(7, 29, 54, 0.08), rgba(7, 29, 54, 0.25));
+        }
+
+        .feature-slide .feature-image::after {
+            content: "";
+            position: absolute;
+            right: -50px;
+            top: -60px;
+            width: 62%;
+            height: 120%;
+            background: rgba(255, 255, 255, 0.14);
+            transform: rotate(18deg);
+            filter: blur(1px);
+        }
+
+        .feature-slide .feature-content {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            padding: 22px 30px 18px 36px;
+            color: #fff;
+            background: transparent;
+            max-width: 74%;
+        }
+
+        .feature-slide .feature-category {
+            display: inline-block;
+            background: linear-gradient(180deg, #1d85e7, #1167c2);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 18px rgba(17, 92, 167, 0.25);
+        }
+
+        .feature-slide .feature-title {
+            margin: 0 0 12px;
+            font-size: clamp(2rem, 3vw, 4.1rem);
+            line-height: 0.96;
+            color: #fff;
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            max-width: 820px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 14px rgba(4, 20, 41, 0.24);
+        }
+
+        .feature-slide .feature-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.96);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .feature-slide .feature-meta .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            display: inline-block;
+        }
+
+        .feature-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(13, 45, 94, 0.12);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.85);
+            color: #0d2d5e;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(12, 24, 54, 0.16);
+            z-index: 2;
+        }
+
+        .feature-nav.prev {
+            left: 18px;
+        }
+
+        .feature-nav.next {
+            right: 18px;
         }
 
         .fea-grid {
@@ -516,7 +752,7 @@
         .feature-panel {
             background: #fff;
             border: 1px solid var(--line);
-            box-shadow: var(--shadow);
+            box-shadow: 0 8px 20px rgba(12, 24, 54, 0.06);
             padding: 0;
             overflow: hidden;
             min-height: 0;
@@ -652,8 +888,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 28px 24px 18px 28px;
-            background: #f3f5f7;
+            padding: 22px 24px 18px 28px;
+            background: linear-gradient(180deg, #f7f9fb, #edf3fa);
         }
 
         .feature-title {
@@ -664,14 +900,15 @@
             flex-direction: column;
             gap: 2px;
             font-weight: 900;
-            line-height: 0.82;
+            line-height: 0.8;
             color: var(--navy-dark);
             letter-spacing: -0.08em;
+            text-transform: uppercase;
         }
 
         .feature-title .line {
             display: block;
-            font-size: clamp(2.8rem, 4vw, 5.8rem);
+            font-size: clamp(2.2rem, 2.7vw, 4rem);
         }
 
         .feature-title .line-gold {
@@ -735,8 +972,9 @@
             background: #fff;
             border: 1px solid var(--line);
             box-shadow: var(--shadow);
-            padding: 12px 12px 8px;
+            padding: 0;
             width: 100%;
+            overflow: hidden;
         }
 
         .tabs,
@@ -744,10 +982,10 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 0;
-            margin: 0 0 12px;
+            margin: 0;
             list-style: none;
-            background: #fff;
-            border: 1px solid var(--line);
+            background: #f4f5f7;
+            border-bottom: 1px solid var(--line);
             padding: 0;
         }
 
@@ -762,44 +1000,65 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            background: #f4f6f8;
+            gap: 8px;
+            background: linear-gradient(180deg, #f8fafc, #edf2f8);
             border: 0;
-            border-right: 1px solid var(--line);
-            color: #2d4058;
-            font-weight: 700;
-            font-size: 0.88rem;
-            padding: 13px 8px;
+            border-right: 1px solid rgba(13, 46, 87, 0.08);
+            color: #1a2d43;
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 13px 10px 12px;
             text-align: center;
             cursor: pointer;
             text-decoration: none;
+            text-transform: none;
+            letter-spacing: 0.02em;
+            position: relative;
+            min-height: 48px;
+            transition: all 0.2s ease;
         }
 
         .nav-tabs .nav-item:last-child .nav-link {
             border-right: none;
         }
 
+        .tab:hover,
+        .nav-link:hover {
+            background: linear-gradient(180deg, #ffffff, #edf4ff);
+            color: #123d6d;
+        }
+
         .tab.active,
         .nav-link.active {
-            background: #fff;
-            box-shadow: inset 0 -2px 0 #0d5ec9;
+            background: linear-gradient(180deg, #ffffff, #f4f9ff);
+            box-shadow: inset 0 -3px 0 #0d5ec9;
             color: #0d2f5f;
         }
 
-        .tab::before,
-        .nav-link::before {
-            content: "\25CF";
-            font-size: 0.6rem;
-            color: #9aa7b6;
+        .tab-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            color: #6d7a8b;
+            flex-shrink: 0;
+            transition: color 0.2s ease;
         }
 
-        .tab.active::before,
-        .nav-link.active::before {
+        .tab-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.9;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .nav-link.active .tab-icon {
             color: #0d5ec9;
-        }
-
-        .nav-tabs .nav-link::before {
-            content: none;
         }
 
         .navigation.pagination {
@@ -860,10 +1119,11 @@
             grid-template-columns: 92px 1fr;
             gap: 12px;
             align-items: center;
-            background: #f7f9fc;
+            background: linear-gradient(180deg, #f7f9fc, #eef5fb);
             border: 1px solid var(--line);
-            padding: 10px;
-            min-height: 108px;
+            padding: 9px;
+            min-height: 104px;
+            box-shadow: inset 0 0 0 1px rgba(17, 59, 116, 0.02);
         }
 
         .side-thumb {
@@ -875,6 +1135,7 @@
             font-weight: 800;
             color: var(--navy-dark);
             font-size: 0.8rem;
+            box-shadow: inset 0 0 0 1px rgba(10, 45, 93, 0.12);
         }
 
         .side-item strong {
@@ -1102,32 +1363,64 @@
         }
 
         .footer {
-            background: linear-gradient(180deg, #0f1f3d, #0b1d35);
+            position: relative;
+            background: linear-gradient(180deg, rgba(10, 19, 42, 1), rgba(8, 15, 34, 1));
             color: white;
-            min-height: 220px;
+            min-height: 180px;
             margin-top: 20px;
-            padding: 28px 12px 18px;
+            padding: 0 12px 0;
+            overflow: hidden;
         }
 
         .footer-inner {
             max-width: 1280px;
             margin: 0 auto;
+            padding-top: 40px;
+            padding-bottom: 18px;
+            position: relative;
         }
 
         .footer-title {
-            font-size: clamp(2rem, 4vw, 4rem);
+            font-size: clamp(2.4rem, 3.1vw, 3.5rem);
             font-weight: 800;
-            letter-spacing: -0.05em;
-            margin: 0 0 20px;
-            color: rgba(255,255,255,0.95);
+            letter-spacing: -0.06em;
+            margin: 0 0 34px;
+            color: rgba(255,255,255,0.96);
+            line-height: 1.1;
+        }
+
+        .footer-inner::before {
+            content: "";
+            display: block;
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.14);
+            margin-bottom: 18px;
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.12);
             text-align: center;
-            padding-top: 18px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.7);
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.74);
+            line-height: 1.5;
+            padding-bottom: 18px;
+        }
+
+        .footer-back-to-top {
+            position: absolute;
+            right: 32px;
+            bottom: 14px;
+            width: 42px;
+            height: 42px;
+            border-radius: 6px;
+            background: linear-gradient(180deg, #1b6ee8, #0d4ca8);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 18px rgba(29, 108, 220, 0.45);
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
         }
 
         .page-shell {
@@ -1782,6 +2075,45 @@
             line-height: 1.6;
         }
 
+        @media (max-width: 900px) {
+            .main-grid,
+            .missed-grid,
+            .tabs {
+                grid-template-columns: 1fr;
+            }
+
+            .col-md-8,
+            .col-md-4,
+            .col-md-6,
+            .col-lg-3,
+            .col-sm-6 {
+                flex-basis: 100%;
+            }
+
+            .row {
+                gap: 14px;
+                padding: 14px 0;
+            }
+            .nav-bar {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 8px 10px;
+            }
+            .nav-main {
+                justify-content: center;
+            }
+            .nav-item {
+                padding: 10px 8px;
+            }
+            .ticker {
+                font-size: 0.82rem;
+                padding: 10px 12px;
+            }
+            .feature-title {
+                font-size: 2rem;
+            }
+        }
+
         /* --- Minimal grid shim: the markup uses Bootstrap column classes
            but no Bootstrap stylesheet is loaded, so the home layout
            collapsed to a single full-width column. These rules restore
@@ -2471,63 +2803,78 @@
                 gap: 14px;
                 padding: 14px 0;
             }
-            .nav-bar {
-                flex-wrap: wrap;
-                justify-content: center;
-                padding: 8px 10px;
-            }
-            .nav-main {
-                justify-content: center;
-            }
-            .nav-item {
-                padding: 10px 8px;
-            }
-            .ticker {
-                font-size: 0.82rem;
-                padding: 10px 12px;
-            }
-            .feature-title {
-                font-size: 2rem;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="page-shell">
-        <div class="page top-date">
-            <div class="page-inner top-date-row">
-                <span class="top-date-text">September 16, 2026</span>
-                <span class="top-date-time">10:10 PM</span>
-            </div>
-        </div>
+    <?php
+        $navItems = [
+            ['label' => 'PROFIL', 'href' => '/profil', 'active' => ($page ?? 'home') === 'profil'],
+            ['label' => 'INFORMASI', 'href' => '/informasi', 'active' => ($page ?? 'home') === 'penelitian'],
+            ['label' => 'PUBLIKASI', 'href' => '/publikasi', 'active' => ($page ?? 'home') === 'publikasi' || ($page ?? 'home') === 'tahun2024'],
+            ['label' => 'HKI', 'href' => '#', 'active' => false, 'hasDropdown' => true],
+            ['label' => 'SINTA', 'href' => 'https://sinta.kemdiktisaintek.go.id/affiliations/profile/564', 'active' => false, 'external' => true],
+            ['label' => 'JURNAL', 'href' => 'https://jurnal.polibatam.ac.id/', 'active' => false, 'external' => true],
+            ['label' => 'STATISTIK', 'href' => '#', 'active' => false],
+            ['label' => 'POLIBATAM UNIVERSITY BERDAMPAK', 'href' => '#', 'active' => false],
+        ];
 
-        <div class="page hero-wrap">
-            <div class="page-inner branding-inner">
-                <div class="site-branding-text">
-                    <h1 class="hero-title">Pusat P2M Polibatam</h1>
-                </div>
-            </div>
-        </div>
+        $tickerItems = [
+            'Pengumuman Hasil Seleksi Penelitian dan Pengabdian kepada Masyarakat Politeknik Negeri Batam TA 2026',
+            'Panduan Penelitian dan Pengabdian kepada Masyarakat Tahun 2026',
+            'P3M Polibatam Gelar Expert Talk Series #1: Strategi Publikasi Artikel pada Jurnal Q1 (PASTI Q1)',
+            'Pengumuman Penerima Pendanaan Program Penelitian dan Pengabdian kepada Masyarakat (BIMA), Program Inovasi Seni Nusantara (BIMA), Program Hilirisasi Riset Prioritas (HILIRISET), dan Program SEMESTA Tahun Anggaran 2026',
+            'Pembentukan dan Pengangkatan Ketua Pusat Kajian (PK) dan Center Of Excellence (CoE) Politeknik Negeri Batam Tahun 2026',
+        ];
 
-        <div class="page nav-bar">
-            <div class="nav-main">
-                <a class="nav-home <?php echo (($page ?? 'home') === 'home' ? 'active' : ''); ?>" href="/">⌂</a>
-                <a class="nav-item has-dropdown <?php echo (($page ?? 'home') === 'profil' ? 'active' : ''); ?>" href="/profil">PROFIL<span class="caret">▾</span></a>
-                <a class="nav-item <?php echo (($page ?? 'home') === 'penelitian' ? 'active' : ''); ?>" href="/informasi">INFORMASI</a>
-                <a class="nav-item has-dropdown <?php echo (($page ?? 'home') === 'publikasi' || ($page ?? 'home') === 'tahun2024' ? 'active' : ''); ?>" href="/publikasi">PUBLIKASI<span class="caret">▾</span></a>
-                <a class="nav-item has-dropdown" href="#">HKI<span class="caret">▾</span></a>
-                <a class="nav-item" href="https://sinta.kemdiktisaintek.go.id/affiliations/profile/564" target="_blank" rel="noopener noreferrer">SINTA</a>
-                <a class="nav-item" href="https://jurnal.polibatam.ac.id/" target="_blank" rel="noopener noreferrer">JURNAL</a>
-                <a class="nav-item" href="#">STATISTIK</a>
-                <a class="nav-item" href="#">POLIBATAM UNIVERSITY BERDAMPAK</a>
-            </div>
-            <div class="nav-search" role="button" aria-label="Search">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <line x1="16.2" y1="16.2" x2="21" y2="21"></line>
-                </svg>
-            </div>
-        </div>
+        $sidebarPosts = [
+            ['title' => 'Pengumuman Hasil Seleksi Penelitian dan Pengabdian kepada Masyarakat Politeknik Negeri Batam TA 2026', 'img' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2023/06/Pengumuman-Penerima-Bantuan-Dana-Penelitian-dan-Pengabdian-Masyarakat-Usulan-Baru-bagi-Perguruan-Tinggi-Pengelola-Program-Studi-Pendidikan-Tinggi-Vokasi-Tahun-Anggaran-2023-2-300x169.png'],
+            ['title' => 'Panduan Penelitian dan Pengabdian kepada Masyarakat Tahun 2026', 'img' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/BUKU-PANDUAN-300x212.jpg'],
+            ['title' => 'P3M Polibatam Gelar Expert Talk Series #1: Strategi Publikasi Artikel pada Jurnal Q1 (PASTI Q1)', 'img' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/111-1-300x200.png'],
+            ['title' => 'Pengumuman Penerima Pendanaan Program Penelitian dan Pengabdian kepada Masyarakat (BIMA), Program Inovasi Seni Nusantara (BIMA), Program Hilirisasi Riset Prioritas (HILIRISET), dan Program SEMESTA Tahun Anggaran 2026', 'img' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/1-300x212.jpg'],
+        ];
+
+        $latestPosts = $sidebarPosts;
+        $popularPosts = array_reverse($sidebarPosts);
+        $trendingPosts = [
+            $sidebarPosts[3],
+            $sidebarPosts[0],
+            $sidebarPosts[2],
+            $sidebarPosts[1],
+        ];
+
+        $featuredSlides = [
+            [
+                'title' => 'Pengumuman Penerima Pendanaan Program Penelitian dan Pengabdian kepada Masyarakat',
+                'date' => 'April 10, 2026',
+                'author' => 'P3M',
+                'category' => 'Informasi',
+                'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/1.jpg',
+            ],
+            [
+                'title' => 'Panduan Penelitian dan Pengabdian kepada Masyarakat Tahun 2026',
+                'date' => 'April 29, 2026',
+                'author' => 'P3M',
+                'category' => 'Informasi',
+                'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/BUKU-PANDUAN.jpg',
+            ],
+            [
+                'title' => 'P3M Polibatam Gelar Expert Talk Series #1: Strategi Publikasi Artikel pada Jurnal Q1 (PASTI Q1)',
+                'date' => 'April 20, 2026',
+                'author' => 'P3M',
+                'category' => 'Informasi',
+                'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/111-1.png',
+            ],
+        ];
+
+        $missedCards = [
+            ['tag' => 'Informasi', 'title' => 'Pengumuman Hasil Seleksi Penelitian dan Pengabdian...', 'date' => 'June 15, 2026'],
+            ['tag' => 'Informasi', 'title' => 'Buku Panduan Penelitian dan Pengabdian kepada Masyarakat...', 'date' => 'April 29, 2026'],
+            ['tag' => 'Informasi', 'title' => 'P3M Polibatam Gelar Expert Talk Series #1: Strategi Publikasi...', 'date' => 'April 20, 2026'],
+        ];
+    ?>
+    <div class="page-shell" data-page="<?php echo e($page ?? 'home'); ?>">
+        <?php echo view('partials.site-header', ['page' => $page ?? 'home']); ?>
 
         <?php if (($page ?? 'home') === 'home') : ?>
             <section class="mg-latest-news-sec">
@@ -2537,15 +2884,6 @@
                             <span class="ticker-badge"><span class="ticker-icon" aria-hidden="true">&#9889;</span>Latest Post</span>
                         </div>
                         <div class="page ticker" aria-label="Latest post ticker">
-                            <?php
-                                $tickerItems = [
-                                    'Pengumuman Hasil Seleksi Penelitian dan Pengabdian kepada Masyarakat Politeknik Negeri Batam TA 2026',
-                                    'Panduan Penelitian dan Pengabdian kepada Masyarakat Tahun 2026',
-                                    'P3M Polibatam Gelar Expert Talk Series #1: Strategi Publikasi Artikel pada Jurnal Q1 (PASTI Q1)',
-                                    'Pengumuman Penerima Pendanaan Program Penelitian dan Pengabdian kepada Masyarakat (BIMA), Program Inovasi Seni Nusantara (BIMA), Program Hilirisasi Riset Prioritas (HILIRISET), dan Program SEMESTA Tahun Anggaran 2026',
-                                    'Pembentukan dan Pengangkatan Ketua Pusat Kajian (PK) dan Center Of Excellence (CoE) Politeknik Negeri Batam Tahun 2026',
-                                ];
-                            ?>
                             <div class="ticker-track">
                                 <div class="ticker-group">
                                     <?php foreach ($tickerItems as $item) : ?>
@@ -2569,23 +2907,24 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div id="homemain" class="homemain">
-                                    <div class="item">
-                                        <div class="mg-blog-post lg back-img" style="background-image: url('https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/BUKU-PANDUAN.jpg');">
-                                            <a class="link-div" href="#"></a>
-                                            <article class="bottom">
-                                                <span class="post-form"><i class="fas fa-camera"></i></span>
-                                                <div class="mg-blog-category">
-                                                    <a class="newsup-categories category-color-1" href="#">INFORMASI</a>
-                                                </div>
-                                                <h4 class="title">
-                                                    <a href="#">Panduan Penelitian dan Pengabdian kepada Masyarakat Tahun 2026</a>
-                                                </h4>
-                                                <div class="mg-blog-meta">
-                                                    <span class="mg-blog-date"><i class="fas fa-clock"></i> April 29, 2026</span>
-                                                    <a class="auth" href="#"><i class="fas fa-user-circle"></i> P3M</a>
+                                    <div class="feature-slider" aria-label="Featured stories carousel">
+                                        <?php foreach ($featuredSlides as $index => $slide) : ?>
+                                            <article class="feature-slide <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>">
+                                                <div class="feature-image" style="background-image: url('<?php echo $slide['image']; ?>');">
+                                                    <button class="feature-nav prev" type="button" aria-label="Previous slide">&#8249;</button>
+                                                    <button class="feature-nav next" type="button" aria-label="Next slide">&#8250;</button>
+                                                    <div class="feature-content">
+                                                        <span class="feature-category"><?php echo $slide['category']; ?></span>
+                                                        <h4 class="feature-title"><?php echo $slide['title']; ?></h4>
+                                                        <div class="feature-meta">
+                                                            <span><?php echo strtoupper(date('F d, Y', strtotime($slide['date']))); ?></span>
+                                                            <span class="dot" aria-hidden="true"></span>
+                                                            <span><?php echo $slide['author']; ?></span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </article>
-                                        </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
                             </div>
@@ -2593,43 +2932,79 @@
                             <div class="col-md-4 top-right-area">
                                 <div id="exTab2">
                                     <ul class="nav nav-tabs tabs">
-                                        <li class="nav-item"><a class="nav-link tab active" href="#">Latest</a></li>
-                                        <li class="nav-item"><a class="nav-link tab" href="#">Popular</a></li>
-                                        <li class="nav-item"><a class="nav-link tab" href="#">Trending</a></li>
+                                        <li class="nav-item">
+                                            <a class="nav-link tab active" href="#tan-main-banner-latest-trending-popular-recent" data-tab="latest">
+                                                <span class="tab-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M12 7v5l3 2"></path></svg>
+                                                </span>
+                                                <span>Latest</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link tab" href="#tan-main-banner-latest-trending-popular-recent" data-tab="popular">
+                                                <span class="tab-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"></circle><path d="M5 18c1.6-2.6 4-3.9 7-3.9s5.4 1.3 7 3.9"></path></svg>
+                                                </span>
+                                                <span>Popular</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link tab" href="#tan-main-banner-latest-trending-popular-recent" data-tab="trending">
+                                                <span class="tab-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24"><path d="M4 16l7-7 4 4 7-7"></path><path d="M18 6h2v2"></path></svg>
+                                                </span>
+                                                <span>Trending</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                     <div class="tab-content">
-                                        <div id="tan-main-banner-latest-trending-popular-recent" class="tab-pane active fade show">
+                                        <div id="tan-main-banner-latest-trending-popular-recent" class="tab-pane active fade show" data-panel="latest">
                                             <div class="mg-posts-sec mg-posts-modul-2">
                                                 <div class="mg-posts-sec-inner row">
                                                     <div class="small-list-post col-lg-12">
-                                                        <div class="small-post">
-                                                            <div class="img-small-post"><a href="#"><img src="https://p2m.polibatam.ac.id/wp-content/uploads/2023/06/Pengumuman-Penerima-Bantuan-Dana-Penelitian-dan-Pengabdian-Masyarakat-Usulan-Baru-bagi-Perguruan-Tinggi-Pengelola-Program-Studi-Pendidikan-Tinggi-Vokasi-Tahun-Anggaran-2023-2-300x169.png" alt="Pengumuman Hasil Seleksi Penelitian dan Pengabdian ..."></a></div>
-                                                            <div class="small-post-content">
-                                                                <div class="mg-blog-category"><a class="newsup-categories category-color-1" href="#">INFORMASI</a></div>
-                                                                <div class="title_small_post"><h5 class="title"><a href="#">Pengumuman Hasil Seleksi Penelitian dan Pengabdian kepada Masyarakat Politeknik Negeri Batam TA 2026</a></h5></div>
+                                                        <?php foreach ($latestPosts as $post) : ?>
+                                                            <div class="small-post">
+                                                                <div class="img-small-post"><a href="#"><img src="<?php echo $post['img']; ?>" alt="<?php echo htmlspecialchars($post['title']); ?>"></a></div>
+                                                                <div class="small-post-content">
+                                                                    <div class="mg-blog-category"><a class="newsup-categories category-color-1" href="#">INFORMASI</a></div>
+                                                                    <div class="title_small_post"><h5 class="title"><a href="#"><?php echo $post['title']; ?></a></h5></div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="small-post">
-                                                            <div class="img-small-post"><a href="#"><img src="https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/BUKU-PANDUAN-300x212.jpg" alt="Panduan Penelitian dan Pengabdian ..."></a></div>
-                                                            <div class="small-post-content">
-                                                                <div class="mg-blog-category"><a class="newsup-categories category-color-1" href="#">INFORMASI</a></div>
-                                                                <div class="title_small_post"><h5 class="title"><a href="#">Panduan Penelitian dan Pengabdian kepada Masyarakat Tahun 2026</a></h5></div>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" data-panel="popular" hidden>
+                                            <div class="mg-posts-sec mg-posts-modul-2">
+                                                <div class="mg-posts-sec-inner row">
+                                                    <div class="small-list-post col-lg-12">
+                                                        <?php foreach ($popularPosts as $post) : ?>
+                                                            <div class="small-post">
+                                                                <div class="img-small-post"><a href="#"><img src="<?php echo $post['img']; ?>" alt="<?php echo htmlspecialchars($post['title']); ?>"></a></div>
+                                                                <div class="small-post-content">
+                                                                    <div class="mg-blog-category"><a class="newsup-categories category-color-1" href="#">INFORMASI</a></div>
+                                                                    <div class="title_small_post"><h5 class="title"><a href="#"><?php echo $post['title']; ?></a></h5></div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="small-post">
-                                                            <div class="img-small-post"><a href="#"><img src="https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/111-1-300x200.png" alt="P3M Polibatam Gelar Expert Talk Series ..."></a></div>
-                                                            <div class="small-post-content">
-                                                                <div class="mg-blog-category"><a class="newsup-categories category-color-1" href="#">INFORMASI</a></div>
-                                                                <div class="title_small_post"><h5 class="title"><a href="#">P3M Polibatam Gelar Expert Talk Series #1: Strategi Publikasi Artikel pada Jurnal Q1 (PASTI Q1)</a></h5></div>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" data-panel="trending" hidden>
+                                            <div class="mg-posts-sec mg-posts-modul-2">
+                                                <div class="mg-posts-sec-inner row">
+                                                    <div class="small-list-post col-lg-12">
+                                                        <?php foreach ($trendingPosts as $post) : ?>
+                                                            <div class="small-post">
+                                                                <div class="img-small-post"><a href="#"><img src="<?php echo $post['img']; ?>" alt="<?php echo htmlspecialchars($post['title']); ?>"></a></div>
+                                                                <div class="small-post-content">
+                                                                    <div class="mg-blog-category"><a class="newsup-categories category-color-1" href="#">INFORMASI</a></div>
+                                                                    <div class="title_small_post"><h5 class="title"><a href="#"><?php echo $post['title']; ?></a></h5></div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="small-post">
-                                                            <div class="img-small-post"><a href="#"><img src="https://p2m.polibatam.ac.id/wp-content/uploads/2023/06/Pengumuman-Penerima-Bantuan-Dana-Penelitian-dan-Pengabdian-Masyarakat-Usulan-Baru-bagi-Perguruan-Tinggi-Pengelola-Program-Studi-Pendidikan-Tinggi-Vokasi-Tahun-Anggaran-2023-2-300x169.png" alt="Pengumuman Penerima Pendanaan Program ..."></a></div>
-                                                            <div class="small-post-content">
-                                                                <div class="mg-blog-category"><a class="newsup-categories category-color-1" href="#">INFORMASI</a></div>
-                                                                <div class="title_small_post"><h5 class="title"><a href="#">Pengumuman Penerima Pendanaan Program Penelitian dan Pengabdian kepada Masyarakat (BIMA), Program Inovasi Seni Nusantara (BIMA), Program Hilirisasi Riset Prioritas (HILIRISET), dan Program SEMESTA Tahun Anggaran 2026</a></h5></div>
-                                                            </div>
-                                                        </div>
+                                                        <?php endforeach; ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2814,25 +3189,17 @@
                 <div class="page you-missed" style="margin-top: 18px;">
                     <div class="section-label">You missed</div>
                     <div class="missed-grid">
-                        <div class="missed-card">
-                            <span class="missed-tag">Informasi</span>
-                            <h4>Pengumuman Hasil Seleksi Penelitian dan Pengabdian...</h4>
-                            <div class="missed-date">June 15, 2026</div>
-                        </div>
-                        <div class="missed-card">
-                            <span class="missed-tag">Informasi</span>
-                            <h4>Buku Panduan Penelitian dan Pengabdian kepada Masyarakat...</h4>
-                            <div class="missed-date">April 29, 2026</div>
-                        </div>
-                        <div class="missed-card">
-                            <span class="missed-tag">Informasi</span>
-                            <h4>P3M Polibatam Gelar Expert Talk Series #1: Strategi Publikasi...</h4>
-                            <div class="missed-date">April 20, 2026</div>
-                        </div>
+                        <?php foreach ($missedCards as $card) : ?>
+                            <div class="missed-card">
+                                <span class="missed-tag"><?php echo $card['tag']; ?></span>
+                                <h4><?php echo $card['title']; ?></h4>
+                                <div class="missed-date"><?php echo $card['date']; ?></div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
-        <?php elseif (($page ?? 'home') === 'penelitian') : ?>
+        <?php elseif (($page ?? 'home') === 'informasi' || ($page ?? 'home') === 'penelitian') : ?>
             <div class="page article-layout">
                 <div class="article-head">INFORMASI</div>
                 <div class="article-body large-box">
@@ -2869,7 +3236,81 @@
                 </div>
                 <div class="page stat-row"><i class="mini-icon"></i> Jumlah Pengunjung: 6,589</div>
             </div>
-        <?php elseif (($page ?? 'home') === 'publikasi') : ?>
+        <?php elseif (($page ?? 'home') === 'hki') : ?>
+            <div class="page article-layout">
+                <div class="article-head">HKI</div>
+                <div class="article-body large-box">
+                    <div class="story-row">
+                        <div class="story-thumb blue-thumb">
+                            <div class="story-mini-logo">HKI</div>
+                        </div>
+                        <div class="story-copy">
+                            <h3>Hak Kekayaan Intelektual</h3>
+                            <p>Pusat Penelitian dan Pengabdian kepada Masyarakat Politeknik Negeri Batam aktif mendorong pengembangan inovasi, karya ilmiah, dan produk teknologi yang memiliki nilai komersial serta manfaat bagi masyarakat.</p>
+                            <p>Berbagai karya inovatif dari dosen dan mahasiswa didaftarkan sebagai HKI untuk melindungi, meningkatkan nilai ekonomi, serta memperkuat ekosistem riset dan inovasi perguruan tinggi.</p>
+                            <a class="read-more" href="https://p2m.polibatam.ac.id/?page_id=4735" target="_blank" rel="noopener noreferrer">Lihat Detail HKI</a>
+                        </div>
+                    </div>
+
+                    <div class="story-row">
+                        <div class="story-thumb blue-thumb dark-thumb">
+                            <div class="story-mini-logo large-title">INTELLECTUAL<br>PROPERTY</div>
+                        </div>
+                        <div class="story-copy">
+                            <h3>Prioritas Pengembangan HKI</h3>
+                            <p>Beberapa fokus utama pengembangan HKI meliputi teknologi tepat guna, perangkat lunak, desain produk, inovasi pendidikan, serta solusi berbasis kebutuhan industri dan masyarakat.</p>
+                            <ul>
+                                <li>Perlindungan inovasi produk dan teknologi</li>
+                                <li>Pengembangan karya riset yang aplikatif</li>
+                                <li>Dukungan komersialisasi hasil penelitian</li>
+                                <li>Kolaborasi dengan industri dan mitra strategis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="page stat-row"><i class="mini-icon"></i> Jumlah Pengunjung: 4,342</div>
+            </div>
+        <?php elseif (($page ?? 'home') === 'statistik') : ?>
+            <div class="page article-layout">
+                <div class="article-head">STATISTIK</div>
+                <div class="article-body large-box">
+                    <div class="story-row">
+                        <div class="story-thumb blue-thumb">
+                            <div class="story-mini-logo">P2M</div>
+                        </div>
+                        <div class="story-copy">
+                            <h3>Statistik Pusat Penelitian dan Pengabdian Masyarakat</h3>
+                            <p>Pusat P2M Polibatam terus memperkuat aktivitas riset, publikasi, dan pengabdian dengan fokus pada inovasi, kolaborasi, serta dampak nyata bagi masyarakat dan industri.</p>
+                            <ul>
+                                <li>Riset dan inovasi terarah sesuai kebutuhan industri</li>
+                                <li>Kolaborasi lintas disiplin dan mitra strategis</li>
+                                <li>Publikasi ilmiah dan penguatan karya akademik</li>
+                                <li>Pengabdian masyarakat berbasis solusi teknologi</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="page stat-row"><i class="mini-icon"></i> Jumlah Pengunjung: 12,480</div>
+            </div>
+        <?php elseif (($page ?? 'home') === 'berdampak') : ?>
+            <div class="page article-layout">
+                <div class="article-head">POLIBATAM UNIVERSITY BERDAMPAK</div>
+                <div class="article-body large-box">
+                    <div class="story-row">
+                        <div class="story-thumb blue-thumb dark-thumb">
+                            <div class="story-mini-logo large-title">IMPACT</div>
+                        </div>
+                        <div class="story-copy">
+                            <h3>Membangun dampak nyata untuk masyarakat dan industri</h3>
+                            <p>Polibatam University Berdampak merupakan komitmen untuk membawa kontribusi nyata melalui riset, inovasi, pengabdian, dan penerapan teknologi yang berdampak pada kualitas hidup, daya saing industri, serta kesejahteraan masyarakat.</p>
+                            <p>Melalui pendekatan kolaboratif, Polibatam mendorong terciptanya solusi yang bermanfaat secara luas, terukur, dan berkelanjutan.</p>
+                            <a class="read-more" href="#">Pelajari lebih lanjut</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page stat-row"><i class="mini-icon"></i> Dampak Program: Tingkatkan sinergi riset, industri, dan masyarakat</div>
+            </div>
+        <?php elseif (($page ?? 'home') === 'publikasi' || ($page ?? 'home') === 'tahun2025' || ($page ?? 'home') === 'tahun2026') : ?>
             <div class="page article-layout">
                 <div class="article-head">TAHUN 2025</div>
                 <div class="publication-shell">
@@ -3023,11 +3464,15 @@
             <div class="footer-inner page">
                 <h2 class="footer-title">Pusat P2M Polibatam</h2>
                 <div class="footer-bottom">Proudly powered by WordPress | Theme: Newsup by Themeansar.</div>
+                <a class="footer-back-to-top" href="#" aria-label="Back to top">↑</a>
             </div>
         </footer>
     </div>
 
     <script>
+        /* =========================================================
+           Page interactions (vanilla JS)
+        ========================================================= */
         var WP_Statistics_Tracker_Object = {
             "requestUrl": "https://p2m.polibatam.ac.id/index.php?rest_route=/wp-statistics/v2",
             "ajaxUrl": "https://p2m.polibatam.ac.id/wp-admin/admin-ajax.php",
@@ -3062,6 +3507,183 @@
             },
             "jsCheckTime": "60000"
         };
+
+        (function () {
+            function initDateTime() {
+                var topDateText = document.getElementById('top-date-text');
+                var topDateTime = document.getElementById('top-date-time');
+
+                if (!topDateText || !topDateTime) return;
+
+                function updateDateTime() {
+                    var now = new Date();
+                    topDateText.textContent = now.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                    topDateTime.textContent = now.toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+                }
+
+                updateDateTime();
+                setInterval(updateDateTime, 1000);
+            }
+
+            function initSearchToggle() {
+                var searchButton = document.querySelector('.nav-search');
+                var searchPanel = document.getElementById('search-panel');
+                var searchInput = document.getElementById('global-search-input');
+                var searchClose = document.querySelector('.site-search-close');
+
+                if (!searchButton || !searchPanel || !searchInput) return;
+
+                function closeSearch() {
+                    searchPanel.setAttribute('hidden', 'hidden');
+                    searchButton.setAttribute('aria-expanded', 'false');
+                }
+
+                function openSearch() {
+                    searchPanel.removeAttribute('hidden');
+                    searchButton.setAttribute('aria-expanded', 'true');
+                    setTimeout(function () {
+                        searchInput.focus();
+                    }, 40);
+                }
+
+                searchButton.addEventListener('click', function () {
+                    if (searchPanel.hasAttribute('hidden')) {
+                        openSearch();
+                    } else {
+                        closeSearch();
+                    }
+                });
+
+                searchButton.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        if (searchPanel.hasAttribute('hidden')) {
+                            openSearch();
+                        } else {
+                            closeSearch();
+                        }
+                    }
+                });
+
+                if (searchClose) {
+                    searchClose.addEventListener('click', closeSearch);
+                }
+
+                searchInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        closeSearch();
+                    }
+                });
+            }
+
+            function initTabs() {
+                var tabLinks = document.querySelectorAll('.nav-link.tab');
+                var tabPanes = document.querySelectorAll('.tab-pane');
+
+                if (!tabLinks.length || !tabPanes.length) return;
+
+                tabLinks.forEach(function (tabLink) {
+                    tabLink.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        var targetTab = tabLink.getAttribute('data-tab');
+
+                        tabLinks.forEach(function (link) {
+                            link.classList.toggle('active', link === tabLink);
+                        });
+
+                        tabPanes.forEach(function (pane) {
+                            var isActive = pane.getAttribute('data-panel') === targetTab;
+                            pane.classList.toggle('active', isActive);
+                            pane.classList.toggle('show', isActive);
+                            pane.hidden = !isActive;
+                        });
+                    });
+                });
+            }
+
+            function initBackToTop() {
+                var backToTop = document.querySelector('.footer-back-to-top');
+
+                if (!backToTop) return;
+
+                backToTop.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            function initSlider() {
+                var slider = document.querySelector('.feature-slider');
+                if (!slider) return;
+
+                var slides = Array.prototype.slice.call(slider.querySelectorAll('.feature-slide'));
+                if (!slides.length) return;
+
+                var currentIndex = 0;
+                var timer = null;
+
+                function showSlide(index) {
+                    currentIndex = (index + slides.length) % slides.length;
+                    slides.forEach(function (slide, slideIndex) {
+                        var isActive = slideIndex === currentIndex;
+                        slide.classList.toggle('active', isActive);
+                        slide.style.transform = isActive ? 'translateX(0) scale(1)' : 'translateX(8%) scale(0.985)';
+                    });
+                }
+
+                function goNext() {
+                    showSlide(currentIndex + 1);
+                }
+
+                function goPrev() {
+                    showSlide(currentIndex - 1);
+                }
+
+                function startAutoplay() {
+                    if (timer) {
+                        clearInterval(timer);
+                    }
+                    timer = setInterval(goNext, 5000);
+                }
+
+                slider.querySelectorAll('.feature-nav').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        if (button.classList.contains('prev')) {
+                            goPrev();
+                        } else {
+                            goNext();
+                        }
+                        startAutoplay();
+                    });
+                });
+
+                slider.addEventListener('mouseenter', function () {
+                    if (timer) {
+                        clearInterval(timer);
+                        timer = null;
+                    }
+                });
+
+                slider.addEventListener('mouseleave', startAutoplay);
+                showSlide(0);
+                startAutoplay();
+            }
+
+            initDateTime();
+            initSearchToggle();
+            initTabs();
+            initBackToTop();
+            initSlider();
+        })();
     </script>
 </body>
 </html>
