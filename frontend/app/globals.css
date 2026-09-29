@@ -1,0 +1,415 @@
+@import 'tailwindcss';
+
+/* Tailwind harus memindai semua file yang memuat nama class.
+   Path di bawah relatif terhadap file ini (frontend/app/). */
+@source '../components/**/*.jsx';
+@source '../app/**/*.jsx';
+@source '../lib/**/*.js';
+
+/* =========================================================
+   Design tokens (Pusat P2M Polibatam)
+   Exposed to Tailwind utilities: bg-navy, text-gold, etc.
+   ========================================================= */
+@theme {
+    --font-sans: 'Instrument Sans', Arial, Helvetica, ui-sans-serif, system-ui, sans-serif;
+
+    --color-navy-dark: #0d244a;
+    --color-navy: #0e2d5d;
+    --color-navy-soft: #1d4c81;
+    --color-blue: #1c73d9;
+    --color-blue-bright: #2d9aff;
+    --color-blue-soft: #dff4ff;
+    --color-gold: #f4bd3b;
+    --color-page: #dfe3e8;
+    --color-panel: #f4f4f4;
+    --color-ink: #1d2430;
+    --color-muted: #5c6777;
+    --color-line: #dfe5ec;
+
+    --shadow-card: 0 10px 25px rgba(12, 24, 54, 0.08);
+
+    --animate-ticker: ticker-scroll 60s linear infinite;
+}
+
+@keyframes ticker-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-page text-ink font-sans leading-normal antialiased;
+    }
+
+    a {
+        @apply text-inherit no-underline;
+    }
+}
+
+/* =========================================================
+   Components — repeated patterns kept out of the markup
+   ========================================================= */
+@layer components {
+    /* --- Layout helpers --------------------------------- */
+    .page-inner {
+        @apply mx-auto w-[calc(100%-22px)] max-w-[1240px];
+    }
+
+    .wide-inner {
+        @apply mx-auto w-[calc(100%-26px)] max-w-[1280px];
+    }
+
+    /* --- Top date bar ----------------------------------- */
+    .top-date-time {
+        @apply rounded-[3px] bg-blue px-[9px] py-[3px] text-[12px] font-extrabold tracking-[0.02em] text-white;
+    }
+
+    /* --- Hero / branding -------------------------------- */
+    .hero-wrap {
+        @apply relative flex min-h-[138px] items-center justify-center overflow-hidden bg-navy;
+        background-image:
+            linear-gradient(180deg, rgba(13, 36, 74, 0.72), rgba(13, 36, 74, 0.58)),
+            url('/images/head-back.jpg');
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .hero-wrap::after {
+        @apply pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[4px] bg-gradient-to-r from-blue to-blue-bright;
+        content: '';
+    }
+
+    .site-logo {
+        @apply block size-[68px] shrink-0 rounded-xl border-[3px] border-white/60 bg-white bg-center bg-no-repeat;
+        background-image: url('/images/cropped-Logo-Polibatam-3-32x32.png');
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    /* --- Navigation ------------------------------------- */
+    .nav-bar {
+        @apply flex min-h-[50px] items-center justify-between gap-2 border-b border-white/10 bg-gradient-to-b from-navy-soft to-navy-dark pr-2.5;
+    }
+
+    .nav-home {
+        @apply mr-2 inline-flex size-[46px] shrink-0 items-center justify-center border-r border-white/10 bg-white/10 text-lg text-white transition-colors;
+    }
+
+    .nav-home:hover,
+    .nav-home.active {
+        @apply bg-blue/25;
+    }
+
+    .nav-item {
+        @apply inline-flex items-center gap-1 border-b-[3px] border-transparent px-[11px] pt-4 pb-[15px] text-[0.7rem] leading-tight font-bold tracking-[0.02em] text-white/90 uppercase transition-colors;
+    }
+
+    .nav-item:hover {
+        @apply bg-white/5 text-white;
+    }
+
+    .nav-item.active {
+        @apply border-b-gold bg-blue/20 text-white;
+    }
+
+    /* --- PROFIL dropdown --------------------------------- */
+    .nav-dropdown {
+        @apply relative inline-flex items-stretch;
+    }
+
+    .profile-trigger {
+        @apply cursor-pointer border-0 bg-transparent font-bold;
+    }
+
+    .profile-trigger .caret {
+        @apply size-3 shrink-0 transition-transform duration-200;
+    }
+
+    .nav-dropdown.open .profile-trigger .caret {
+        @apply rotate-180;
+    }
+
+    .nav-submenu {
+        @apply absolute top-full left-0 z-50 min-w-[260px] border-t-[3px] border-gold bg-navy-dark py-1 shadow-[0_18px_38px_rgba(6,18,38,0.42)];
+    }
+
+    .nav-submenu[hidden] {
+        @apply hidden;
+    }
+
+    .nav-submenu-item {
+        @apply flex items-center gap-2.5 border-b border-white/8 px-4 py-3 text-[0.72rem] font-bold tracking-[0.02em] text-white/85 uppercase transition-colors last:border-b-0;
+    }
+
+    .nav-submenu-item::before {
+        @apply inline-block size-[7px] shrink-0 rounded-full bg-blue-bright;
+        content: '';
+    }
+
+    .nav-submenu-item:hover {
+        @apply bg-blue/25 text-white;
+    }
+
+    .profile-trigger {
+        @apply cursor-pointer border-0 bg-transparent text-left;
+    }
+
+    .caret {
+        @apply size-[12px] shrink-0;
+    }
+
+    .nav-submenu {
+        @apply absolute left-0 top-full z-30 mt-0 min-w-[220px] border border-[#dfeaf6] bg-white shadow-[0_12px_30px_rgba(11,23,40,0.14)];
+    }
+
+    .nav-submenu-item {
+        @apply block border-b border-[#edf2f7] px-4 py-3 text-[0.72rem] font-bold tracking-[0.04em] text-[#1f2d3d] uppercase transition-colors;
+    }
+
+    .nav-submenu-item:hover {
+        @apply bg-[#edf5ff] text-[#0d4ea8];
+    }
+
+    /* --- Search panel ----------------------------------- */
+    .site-search-inner {
+        @apply mx-auto flex w-[min(1240px,calc(100%-22px))] items-center gap-2.5 rounded-full border-navy/10 bg-white py-2 pr-3 pl-[18px] shadow-[0_8px_18px_rgba(13,45,94,0.08)];
+    }
+
+    /* --- Latest-post ticker ----------------------------- */
+    .bn-title {
+        @apply inline-flex h-[52px] min-w-[180px] shrink-0 items-center justify-center bg-gradient-to-b from-[#1e7be8] to-[#0e5ebf] px-5 text-base font-extrabold text-white;
+    }
+
+    .ticker-icon {
+        @apply inline-grid size-6 shrink-0 place-items-center rounded-[7px] bg-gradient-to-b from-[#cdefff] to-[#4fb3f7] text-base leading-none font-black text-white;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 14px rgba(120, 206, 255, 0.9);
+    }
+
+    .ticker-track {
+        @apply flex h-full w-max items-center whitespace-nowrap motion-safe:animate-ticker;
+    }
+
+    .ticker-item {
+        @apply relative inline-flex h-full items-center gap-2.5 px-[26px] text-[0.95rem] leading-none font-bold whitespace-nowrap text-[#0d4aa6];
+    }
+
+    .ticker-item:hover {
+        @apply underline-offset-2;
+    }
+
+    .ticker-item:not(:last-child)::after {
+        @apply absolute -right-[3px] text-[1.1rem] text-[#9aa7b6] no-underline;
+        content: '\2022';
+    }
+
+    /* --- Featured slider -------------------------------- */
+    .feature-slide {
+        @apply pointer-events-none invisible absolute inset-0 z-0 translate-x-[8%] scale-[0.985] opacity-0 transition-[opacity,transform,visibility] duration-[600ms];
+    }
+
+    .feature-slide.active {
+        @apply pointer-events-auto visible z-[1] translate-x-0 scale-100 opacity-100;
+    }
+
+    .feature-slide .feature-image {
+        @apply relative flex h-full w-full items-end justify-center overflow-hidden bg-[#edf3fb] bg-contain bg-center bg-no-repeat;
+    }
+
+    .feature-slide .feature-image::before {
+        @apply pointer-events-none absolute inset-0 bg-gradient-to-b from-[rgba(7,29,54,0.08)] to-[rgba(7,29,54,0.25)];
+        content: '';
+    }
+
+    .feature-slide .feature-content {
+        @apply absolute inset-x-0 bottom-0 z-[1] max-w-[74%] px-9 pt-[22px] pb-[18px] text-white;
+    }
+
+    .feature-category {
+        @apply mb-3 inline-block rounded-md bg-gradient-to-b from-[#1d85e7] to-[#1167c2] px-3 py-1.5 text-[0.7rem] font-extrabold tracking-[0.08em] text-white uppercase;
+    }
+
+    .feature-title {
+        @apply mb-3 max-w-[820px] text-[clamp(2rem,3vw,4.1rem)] leading-[0.96] font-black tracking-[-0.06em] text-white uppercase;
+        text-shadow: 0 2px 14px rgba(4, 20, 41, 0.24);
+    }
+
+    .feature-meta {
+        @apply flex items-center gap-3 text-[0.78rem] font-bold tracking-[0.08em] text-white/95 uppercase;
+    }
+
+    .feature-meta .dot {
+        @apply inline-block size-[7px] rounded-full bg-white/90;
+    }
+
+    .feature-nav {
+        @apply absolute top-1/2 z-[2] grid size-[38px] -translate-y-1/2 cursor-pointer place-items-center rounded-full border-navy/10 bg-white/85 text-[2rem] leading-none text-navy-dark;
+        box-shadow: 0 8px 18px rgba(12, 24, 54, 0.16);
+    }
+
+    .feature-nav.prev {
+        @apply left-[18px];
+    }
+
+    .feature-nav.next {
+        @apply right-[18px];
+    }
+
+    /* --- Sidebar tabs ----------------------------------- */
+    .tab {
+        @apply relative flex min-h-[48px] cursor-pointer items-center justify-center gap-2 border-0 border-r border-navy/10 bg-gradient-to-b from-[#f8fafc] to-[#edf2f8] px-2.5 py-3 text-[0.82rem] font-extrabold text-[#1a2d43] transition-all duration-200;
+    }
+
+    .tab:last-child {
+        @apply border-r-0;
+    }
+
+    .tab:hover {
+        @apply bg-gradient-to-b from-white to-[#edf4ff] text-[#123d6d];
+    }
+
+    .tab.active {
+        @apply bg-gradient-to-b from-white to-[#f4f9ff] text-navy-dark shadow-[inset_0_-3px_0_#0d5ec9];
+    }
+
+    .tab-icon {
+        @apply inline-flex size-3.5 shrink-0 items-center justify-center text-[#6d7a8b] transition-colors;
+    }
+
+    .tab-icon svg {
+        @apply block size-full fill-none stroke-current;
+        stroke-width: 1.9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .tab.active .tab-icon {
+        @apply text-[#0d5ec9];
+    }
+
+    /* --- Small post list (sidebar) ---------------------- */
+    .small-post {
+        @apply grid-cols-[92px_1fr] items-center gap-2.5 border-line bg-[#f7f9fc] p-2;
+    }
+
+    .small-post .title {
+        @apply mt-1.5 line-clamp-3 text-[0.9rem] leading-snug;
+    }
+
+    /* --- Article cards ---------------------------------- */
+    .article-post {
+        @apply flex-row flex-nowrap items-stretch border-line bg-[#f7f9fc] p-4 shadow-card;
+    }
+
+    .article-post .entry-title {
+        @apply mt-2 mb-2.5 text-[clamp(1.15rem,1.7vw,1.5rem)] leading-[1.28] font-extrabold text-[#0e294f];
+    }
+
+    /* --- Cover-card overlays ---------------------------- */
+    .card-overlay-sm {
+        @apply relative z-[1] w-full bg-gradient-to-b from-[rgba(8,22,44,0)] via-[rgba(8,22,44,0.6)] to-[rgba(8,22,44,0.94)] px-3.5 pt-[50px] pb-3.5 text-white;
+    }
+
+    .card-overlay-lg {
+        @apply relative z-[1] w-full bg-gradient-to-b from-[rgba(8,22,44,0)] via-[rgba(8,22,44,0.55)] to-[rgba(8,22,44,0.92)] px-[22px] pt-[60px] pb-[18px] text-white;
+    }
+
+    .category-chip {
+        @apply inline-block rounded bg-blue px-2 py-1 text-[0.68rem] tracking-[0.06em] text-white;
+    }
+
+    /* --- Pagination ------------------------------------- */
+    .page-numbers {
+        @apply inline-grid h-[38px] min-w-[38px] place-items-center rounded border-line bg-white px-2.5 text-[0.92rem] font-bold text-navy-dark;
+    }
+
+    .page-numbers.current {
+        @apply border-blue bg-blue text-white;
+    }
+
+    /* --- Section title ---------------------------------- */
+    .section-label {
+        @apply inline-flex items-center rounded-t-md bg-blue px-4 py-3 text-[0.95rem] font-extrabold text-white;
+    }
+
+    /* --- Publication / year archive --------------------- */
+    .year-item {
+        @apply flex min-h-[64px] items-center border-b border-white/10 px-[18px] text-[0.72rem] font-bold tracking-[0.04em] text-white/80 transition-colors last:border-b-0;
+    }
+
+    .year-item:hover {
+        @apply bg-white/10 text-white;
+    }
+
+    .year-item.active {
+        @apply bg-blue text-white;
+    }
+
+    /* --- Story rows (informasi / hki / statistik) ------- */
+    .story-row {
+        @apply grid items-center gap-5 border-b border-ink/10 p-[18px] pb-3 last:border-b-0 md:grid-cols-[310px_1fr];
+    }
+
+    .story-thumb {
+        @apply flex min-h-[220px] items-center justify-center overflow-hidden border-black/10 bg-gradient-to-br from-[#d7f0ff] to-[#b4e2ff];
+    }
+
+    .story-copy h3 {
+        @apply mb-2.5 text-[clamp(1.3rem,2.1vw,2.3rem)] leading-[1.2] font-extrabold text-[#0e294f];
+    }
+
+    /* --- Read more button ------------------------------- */
+    .read-more {
+        @apply inline-block rounded-md bg-[#2bb673] px-[18px] py-2.5 font-bold text-white shadow-[0_8px_18px_rgba(43,182,115,0.2)] transition-colors;
+    }
+
+    .read-more:hover {
+        @apply bg-[#249c62];
+    }
+
+    /* --- Rich copy inside content boxes ----------------- */
+    .rich-copy p,
+    .rich-copy li {
+        @apply text-base leading-relaxed text-[#1a2433];
+    }
+
+    /* Paragraf diberi jarak bawah supaya tidak menempel satu sama lain. */
+    .rich-copy > p,
+    .rich-copy > div > p {
+        @apply mb-4;
+    }
+
+    .rich-copy h3 {
+        @apply mt-6 mb-3 text-[1.15rem] font-extrabold text-[#0e294f];
+    }
+
+    .rich-copy h3:first-child {
+        @apply mt-0;
+    }
+
+    .rich-copy ul {
+        @apply mb-[18px] list-disc space-y-1 pl-6;
+    }
+
+    .rich-copy ol {
+        @apply mb-[18px] list-decimal space-y-1 pl-6;
+    }
+
+    .rich-copy a {
+        @apply text-[#0d4aa6] underline-offset-2 hover:underline;
+    }
+}

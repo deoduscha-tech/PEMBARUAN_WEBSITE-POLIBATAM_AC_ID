@@ -1,64 +1,262 @@
-<<<<<<< HEAD
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PEMBARUAN WEBSITE P2M POLIBATAM BERBASIS LARAVEL DAN NEXT.JS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Website Pusat Penelitian dan Pengabdian kepada Masyarakat (P3M), Politeknik Negeri Batam.
 
-## About Laravel
+| | |
+|---|---|
+| **Mahasiswa** | Farhan Mansyuri |
+| **NIM** | 3312511141 |
+| **Jurusan / Prodi** | Teknik Informatika |
+| **Backend** | Laravel 12 (API JSON) |
+| **Frontend** | Next.js 15 App Router + React + Tailwind CSS |
+| **Website referensi** | https://p2m.polibatam.ac.id/ |
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Arsitektur
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Dua aplikasi terpisah yang berkomunikasi lewat HTTP.
 
-## Learning Laravel
+```
+┌───────────────────────────┐          ┌───────────────────────────┐
+│  FRONTEND                 │          │  BACKEND                  │
+│  Next.js + React          │  HTTP    │  Laravel                  │
+│  frontend/                │ ───────► │  backend/                 │
+│  localhost:3000           │  /api/*  │  localhost:8000           │
+│                           │  JSON    │                           │
+│  • Tampilan & komponen    │          │  • Data & logika bisnis   │
+│  • Routing halaman        │          │  • Validasi               │
+│  • Form (tampilan saja)   │          │  • CRUD                   │
+│  • Loading & error state  │          │  • Login & sesi admin     │
+└───────────────────────────┘          └───────────────────────────┘
+         yang dilihat user                  pemilik data
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**Aturan utama:** Next.js **tidak pernah** mengakses data langsung.
+Semua data diambil dari API Laravel dalam format JSON.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Struktur Folder
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+PEMBARUAN_WEBSITE-POLIBATAM_AC_ID/
+│
+├── backend/                     ← LARAVEL (Backend / API)
+│   │
+│   ├── app/
+│   │   ├── Http/
+│   │   │   ├── Controllers/
+│   │   │   │   ├── Api/         ← Controller JSON (dipakai Next.js)
+│   │   │   │   │   └── NewsApiController.php
+│   │   │   │   └── Admin/       ← Panel admin (Blade)
+│   │   │   │       ├── AuthController.php
+│   │   │   │       └── NewsController.php
+│   │   │   └── Middleware/      ← Login admin
+│   │   └── Support/
+│   │       └── NewsRepository.php   ← Baca/tulis data berita
+│   │
+│   ├── routes/
+│   │   ├── api.php              ← endpoint /api/*  (untuk Next.js)
+│   │   └── web.php              ← halaman & panel admin
+│   │
+│   ├── resources/data/
+│   │   └── berita.php           ← Data berita
+│   │
+│   ├── config/admin.php         ← Kredensial admin
+│   ├── public/images/           ← Gambar (dilayani Laravel)
+│   ├── database/                ← Migration (untuk MySQL nanti)
+│   └── .env                     ← Konfigurasi
+│
+├── frontend/                    ← NEXT.JS (Frontend / Tampilan)
+│   │
+│   ├── app/                     ← Halaman (App Router)
+│   │   ├── layout.js            Layout akar
+│   │   ├── globals.css          Tailwind + token warna Polibatam
+│   │   ├── not-found.jsx        Halaman 404
+│   │   ├── page.jsx             Beranda
+│   │   │
+│   │   ├── profil/              Profil P2M
+│   │   ├── penelitian/          Penelitian (6 skema)
+│   │   ├── pengabdian/          Pengabdian (6 skema)
+│   │   ├── publikasi/           Publikasi
+│   │   ├── hki/                 HKI
+│   │   ├── statistik/           Statistik
+│   │   ├── berdampak/           Polibatam University Berdampak
+│   │   ├── laporan-tahunan/     Laporan Tahunan P3M
+│   │   ├── tahun-2024/2025/2026 Arsip publikasi
+│   │   │
+│   │   ├── berita/
+│   │   │   ├── page.jsx         Daftar + cari + filter + paginasi
+│   │   │   └── [slug]/page.jsx  Detail berita
+│   │   │
+│   │   └── admin/               ← Dashboard admin
+│   │       ├── login/
+│   │       ├── LogoutButton.jsx
+│   │       ├── DeleteButton.jsx
+│   │       └── berita/
+│   │           ├── page.jsx         Daftar (Read)
+│   │           ├── BeritaForm.jsx   Form bersama
+│   │           ├── tambah/          (Create)
+│   │           └── [id]/edit/       (Update)
+│   │
+│   ├── components/
+│   │   ├── SiteHeader.jsx        Header + navigasi
+│   │   ├── SiteFooter.jsx        Footer
+│   │   ├── ProfileDropdown.jsx   Menu PROFIL
+│   │   ├── SearchToggle.jsx      Tombol cari
+│   │   ├── SearchPanel.jsx       Panel cari
+│   │   ├── FeaturedSlider.jsx    Slider unggulan
+│   │   ├── Pagination.jsx        Navigasi halaman
+│   │   ├── EditorialPage.jsx     Layout halaman editorial
+│   │   ├── RisetPage.jsx         Layout Penelitian & Pengabdian
+│   │   │
+│   │   └── ui/                   ← Komponen dasar
+│   │       ├── Button.jsx        Tombol (4 varian)
+│   │       ├── Card.jsx          Kotak konten
+│   │       ├── CategoryChip.jsx  Label kategori
+│   │       ├── Form.jsx          Input, Textarea, Select, Checkbox
+│   │       ├── EmptyState.jsx    Tampilan data kosong
+│   │       ├── Skeleton.jsx      Placeholder saat memuat
+│   │       └── Alert.jsx         Pesan sukses/gagal
+│   │
+│   ├── lib/                      ← Penghubung ke Laravel
+│   │   ├── api.js                Fungsi fetch ke API
+│   │   ├── format.js             Format tanggal & angka
+│   │   └── constants.js          Menu & kategori
+│   │
+│   ├── public/
+│   │   ├── images/               Gambar
+│   │   └── documents/            PDF (laporan, panduan)
+│   │
+│   ├── .env.local                NEXT_PUBLIC_API_URL
+│   ├── jsconfig.json             Alias "@/" → root frontend
+│   └── next.config.mjs
+│
+└── README.md
+```
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Menjalankan
 
-## Contributing
+Butuh **dua terminal**.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Terminal 1 — Backend Laravel:**
 
-## Code of Conduct
+```bash
+cd backend
+php artisan serve
+# → http://127.0.0.1:8000
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Terminal 2 — Frontend Next.js:**
 
-## Security Vulnerabilities
+```bash
+cd frontend
+npm run dev
+# → http://localhost:3000
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Buka **http://localhost:3000**. Laravel berjalan di belakang sebagai penyedia data.
 
-## License
+> Kedua terminal harus tetap terbuka. Kalau salah satu ditutup, bagian itu mati.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-=======
-# PEMBARUAN_WEBSITE-POLIBATAM_AC_ID
-memperbarui website yang sudah ada sebelum nya 
->>>>>>> 161349aa7e846dad03a3264297b533148c299572
+---
+
+## API Laravel
+
+| Method | Endpoint | Fungsi | Status |
+|---|---|---|---|
+| GET | `/api/beranda` | Data beranda (slider, ticker, sidebar) | ✅ |
+| GET | `/api/berita` | Daftar berita (`?limit=`, `?category=`) | ✅ |
+| GET | `/api/berita/{slug}` | Detail berita + terkait | ✅ |
+| GET | `/api/laporan-tahunan` | Konten laporan tahunan | ✅ |
+| POST | `/api/auth/login` | Login admin | ⏳ |
+| POST | `/api/berita` | Tambah berita | ⏳ |
+| PUT | `/api/berita/{id}` | Ubah berita | ⏳ |
+| DELETE | `/api/berita/{id}` | Hapus berita | ⏳ |
+
+Contoh pemakaian dari Next.js:
+
+```js
+const response = await fetch('http://127.0.0.1:8000/api/berita');
+const { data } = await response.json();
+```
+
+---
+
+## Panel Admin
+
+| | |
+|---|---|
+| **Laravel (Blade)** | http://127.0.0.1:8000/admin/login |
+| **Next.js** | http://localhost:3000/admin/login |
+
+Kredensial diatur di `backend/config/admin.php`:
+
+```
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
+```
+
+> Ganti password sebelum dipasang di server publik.
+
+---
+
+## Halaman
+
+### Selesai
+
+| Halaman | URL |
+|---|---|
+| Beranda | `/` |
+| Profil P2M | `/profil` |
+| Penelitian | `/penelitian` |
+| Pengabdian | `/pengabdian` |
+| Publikasi | `/publikasi` |
+| HKI | `/hki` |
+| Statistik | `/statistik` |
+| Polibatam University Berdampak | `/berdampak` |
+| Laporan Tahunan | `/laporan-tahunan` |
+| Arsip publikasi | `/tahun-2024`, `/tahun-2025`, `/tahun-2026` |
+| Daftar berita | `/berita` |
+| Detail berita | `/berita/[slug]` |
+| Login admin | `/admin/login` |
+| Kelola berita | `/admin/berita` |
+
+### Belum dibuat
+
+| Halaman | Keterangan |
+|---|---|
+| Pengumuman | Daftar & detail pengumuman |
+| Kontak | Alamat, telepon, peta |
+
+### Tautan eksternal (website terpisah)
+
+| Menu | Tujuan |
+|---|---|
+| Jurnal | https://jurnal.polibatam.ac.id/ |
+| Sinta | https://sinta.kemdiktisaintek.go.id/ |
+
+---
+
+## Warna (Identitas Polibatam)
+
+| Peran | Hex |
+|---|---|
+| Primary | `#1e6fd9` |
+| Primary dark | `#0e5ebf` |
+| Navy (gelap) | `#0a1428` |
+| Gold (aksen) | `#f0c869` |
+| Surface | `#efefef` |
+| Text | `#1f2937` |
+| Muted | `#6b7787` |
+
+---
+
+## Catatan
+
+- **Data berita** tersimpan di `backend/resources/data/berita.php` (belum pakai MySQL).
+- **Gambar** dilayani dari `backend/public/images/`.
+- **PDF** panduan/laporan belum tersedia; tombol unduh masih nonaktif.
