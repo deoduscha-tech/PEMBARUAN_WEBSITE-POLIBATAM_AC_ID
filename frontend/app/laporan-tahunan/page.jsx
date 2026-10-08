@@ -4,17 +4,17 @@ import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 
 export const metadata = {
-  title: 'Laporan Tahunan P3M 2025 — Pusat P2M Polibatam',
+  title: 'Laporan Tahunan P3M 2025 â€” Pusat P2M Polibatam',
 };
 
 /**
- * VIEW — halaman Laporan Tahunan.
+ * VIEW â€” halaman Laporan Tahunan.
  *
  * Isi laporan didefinisikan di sini karena murni konten statis. Kalau nanti
  * perlu diubah lewat admin, pindahkan ke Model.
  */
 const REPORT_YEAR = '2025';
-const VISITORS = 264;
+const VISITORS = 680;
 
 // Null selama PDF belum diunggah ke public/documents/.
 const REPORT_FILE = null;
@@ -54,7 +54,7 @@ export default function LaporanTahunanPage() {
                   Klik Disini
                 </a>
               ) : (
-                // PDF belum diunggah — tampil sebagai teks mati, bukan tautan rusak.
+                // PDF belum diunggah â€” tampil sebagai teks mati, bukan tautan rusak.
                 <span
                   className="cursor-not-allowed font-bold text-[#1e6fd9]/60"
                   title="Dokumen belum tersedia"

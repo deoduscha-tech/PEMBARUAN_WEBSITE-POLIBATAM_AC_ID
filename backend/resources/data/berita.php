@@ -117,7 +117,7 @@ return [
         'image' => '/images/1.jpg',
         'excerpt' => 'Politeknik Negeri Batam menetapkan Pembentukan dan Pengangkatan Ketua Pusat Kajian (PK) serta Center Of Excellence (CoE) Politeknik Negeri Batam Tahun 2026.',
         'featured' => false,
-        'views' => 742,
+        'views' => 743,
         'published' => true,
         'body' => <<<'HTML'
         <p>Sebagai upaya penguatan ekosistem penelitian dan pengabdian kepada masyarakat, Politeknik Negeri Batam menetapkan pembentukan dan pengangkatan Ketua Pusat Kajian (PK) serta Center of Excellence (CoE).</p>

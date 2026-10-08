@@ -5,8 +5,8 @@ import Link from 'next/link';
 
 const PROFILE_SUBMENU = [
   { label: 'LAPORAN TAHUNAN P3M TAHUN 2025', href: '/laporan-tahunan' },
-  { label: 'KONTAK P3M', href: '/profil#kontak' },
-  { label: 'TUPOKSI', href: '/profil#tupoksi' },
+  { label: 'KONTAK P3M', href: '/kontak' },
+  { label: 'TUPOKSI', href: '/tupoksi' },
   { label: 'RENSTRA PENELITIAN', href: '/profil#renstra' },
   { label: 'RIP PENGABDIAN', href: '/profil#rip-pengabdian' },
 ];
