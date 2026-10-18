@@ -133,46 +133,49 @@ function initBackToTop() {
 }
 
 function initProfileDropdown() {
-    const dropdown = document.querySelector('.nav-dropdown');
-    if (!dropdown) return;
+    // Menangani semua dropdown navigasi (mis. PROFIL dan HKI).
+    const dropdowns = document.querySelectorAll('.nav-dropdown');
+    if (!dropdowns.length) return;
 
-    const trigger = dropdown.querySelector('.profile-trigger');
-    const submenu = dropdown.querySelector('.nav-submenu');
+    dropdowns.forEach((dropdown) => {
+        const trigger = dropdown.querySelector('.nav-item');
+        const submenu = dropdown.querySelector('.nav-submenu');
 
-    if (!trigger || !submenu) return;
+        if (!trigger || !submenu) return;
 
-    const isOpen = () => !submenu.hasAttribute('hidden');
+        const isOpen = () => !submenu.hasAttribute('hidden');
 
-    const open = () => {
-        submenu.removeAttribute('hidden');
-        dropdown.classList.add('open');
-        trigger.setAttribute('aria-expanded', 'true');
-    };
+        const open = () => {
+            submenu.removeAttribute('hidden');
+            dropdown.classList.add('open');
+            trigger.setAttribute('aria-expanded', 'true');
+        };
 
-    const close = () => {
-        submenu.setAttribute('hidden', 'hidden');
-        dropdown.classList.remove('open');
-        trigger.setAttribute('aria-expanded', 'false');
-    };
+        const close = () => {
+            submenu.setAttribute('hidden', 'hidden');
+            dropdown.classList.remove('open');
+            trigger.setAttribute('aria-expanded', 'false');
+        };
 
-    trigger.addEventListener('click', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        isOpen() ? close() : open();
+        trigger.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            isOpen() ? close() : open();
+        });
+
+        // Click-away and Escape both dismiss it.
+        document.addEventListener('click', (event) => {
+            if (!dropdown.contains(event.target)) close();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') close();
+        });
+
+        // Pointer users expect hover to open it, as on the live site.
+        dropdown.addEventListener('mouseenter', open);
+        dropdown.addEventListener('mouseleave', close);
     });
-
-    // Click-away and Escape both dismiss it.
-    document.addEventListener('click', (event) => {
-        if (!dropdown.contains(event.target)) close();
-    });
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') close();
-    });
-
-    // Pointer users expect hover to open it, as on the live site.
-    dropdown.addEventListener('mouseenter', open);
-    dropdown.addEventListener('mouseleave', close);
 }
 
 const boot = () => {

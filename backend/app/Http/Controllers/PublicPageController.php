@@ -92,6 +92,34 @@ class PublicPageController extends Controller
         return $this->page('hki');
     }
 
+    /**
+     * Halaman "Pendaftaran HKI" — isinya mengikuti halaman asli
+     * p2m.polibatam.ac.id (page_id=5346).
+     */
+    public function hkiPendaftaran(): View
+    {
+        return $this->page('hki-pendaftaran');
+    }
+
+    /**
+     * Arsip HKI per tahun, mis. /hki/tahun-2025. Data judul HKI disimpan pada
+     * resources/data/hki.php dan ditampilkan sebagai tabel — meniru halaman
+     * "HKI TAHUN 20xx" di situs asli.
+     */
+    public function hkiTahun(string $tahun): View
+    {
+        $path = resource_path('data/hki.php');
+        $data = is_file($path) ? require $path : [];
+
+        return view('dashboard', array_merge($this->sharedData(), [
+            'page' => 'hki-tahun-' . $tahun,
+            'hkiTahun' => $tahun,
+            'hkiData' => $data[$tahun] ?? null,
+            'hkiViews' => $data[$tahun]['views'] ?? null,
+            'homePosts' => $this->news->published(),
+        ]));
+    }
+
     public function statistik(): View
     {
         return $this->page('statistik');

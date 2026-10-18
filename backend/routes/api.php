@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\Api\HkiApiController;
 use App\Http\Controllers\Api\KontakApiController;
 use App\Http\Controllers\Api\NewsAdminApiController;
 use App\Http\Controllers\Api\NewsApiController;
@@ -20,6 +21,10 @@ Route::get('/laporan-tahunan', [NewsApiController::class, 'laporanTahunan'])->na
 // --- Publikasi ---
 Route::get('/publikasi', [PublikasiApiController::class, 'index'])->name('api.publikasi.index');
 Route::get('/publikasi/{tahun}', [PublikasiApiController::class, 'show'])->name('api.publikasi.show');
+
+// --- HKI ---
+Route::get('/hki', [HkiApiController::class, 'index'])->name('api.hki.index');
+Route::get('/hki/{tahun}', [HkiApiController::class, 'show'])->name('api.hki.show');
 
 // --- Kontak ---
 Route::get('/kontak', [KontakApiController::class, 'index'])->name('api.kontak');

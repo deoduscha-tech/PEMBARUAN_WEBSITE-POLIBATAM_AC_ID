@@ -29,6 +29,12 @@
         ['label' => 'TAHUN 2024', 'href' => '/tahun-2024', 'key' => 'tahun2024'],
         ['label' => 'TAHUN SEBELUMNYA', 'href' => '/publikasi', 'key' => 'publikasi'],
     ];
+
+    // Pilihan tahun arsip HKI — sama seperti submenu HKI di situs asli.
+    $hkiYearMenu = array_map(
+        fn ($year) => ['label' => 'HKI TAHUN ' . $year, 'href' => '/hki/tahun-' . $year, 'key' => (string) $year],
+        ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017'],
+    );
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -250,33 +256,106 @@
             <div class="wide-inner pb-6 text-[1.12rem] font-bold">Jumlah Pengunjung: 6,589</div>
         </div>
     @elseif ($page === 'hki')
+        {{-- Halaman ini mengikuti halaman "POLIBATAM UNIVERSITY BERDAMPAK"
+             di situs asli p2m.polibatam.ac.id (page_id=9219). --}}
         <div class="bg-[#efefef] pb-6">
             <h1 class="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">HKI</h1>
-            <div class="wide-inner mb-4 border-line bg-[#f3f3f3]">
-                <div class="story-row">
-                    <div class="story-thumb"><span class="text-[clamp(1.8rem,3vw,3rem)] font-black text-navy-dark">HKI</span></div>
-                    <div class="story-copy rich-copy">
-                        <h3>Hak Kekayaan Intelektual</h3>
-                        <p>Pusat Penelitian dan Pengabdian kepada Masyarakat Politeknik Negeri Batam aktif mendorong pengembangan inovasi, karya ilmiah, dan produk teknologi yang memiliki nilai komersial serta manfaat bagi masyarakat.</p>
-                        <p>Berbagai karya inovatif dari dosen dan mahasiswa didaftarkan sebagai HKI untuk melindungi, meningkatkan nilai ekonomi, serta memperkuat ekosistem riset dan inovasi perguruan tinggi.</p>
-                        <a class="read-more" href="https://p2m.polibatam.ac.id/?page_id=4735" target="_blank" rel="noopener noreferrer">Lihat Detail HKI</a>
-                    </div>
+
+            <div class="wide-inner mb-4 border border-line bg-white p-6 rich-copy">
+                <p>Hak Kekayaan Intelektual (HKI) merupakan bagian dari komitmen Polibatam University Berdampak dalam mendorong lahirnya karya intelektual yang terlindungi dan bermanfaat bagi masyarakat serta industri.</p>
+                <ul>
+                    <li>Perlindungan inovasi produk dan teknologi</li>
+                    <li>Pengembangan karya riset yang aplikatif</li>
+                    <li>Dukungan komersialisasi hasil penelitian</li>
+                    <li>Kolaborasi dengan industri dan mitra strategis</li>
+                </ul>
+            </div>
+
+            {{-- Pilihan tahun HKI, sama seperti submenu di situs asli. --}}
+            <div class="wide-inner mb-4">
+                <div class="mb-[18px] flex items-end border-b-2 border-line">
+                    <span class="section-label">Pilih Tahun</span>
                 </div>
-                <div class="story-row">
-                    <div class="story-thumb"><span class="text-[clamp(1.2rem,2vw,2.2rem)] font-black text-navy-dark uppercase">Intellectual<br>Property</span></div>
-                    <div class="story-copy rich-copy">
-                        <h3>Prioritas Pengembangan HKI</h3>
-                        <p>Beberapa fokus utama pengembangan HKI meliputi teknologi tepat guna, perangkat lunak, desain produk, inovasi pendidikan, serta solusi berbasis kebutuhan industri dan masyarakat.</p>
-                        <ul>
-                            <li>Perlindungan inovasi produk dan teknologi</li>
-                            <li>Pengembangan karya riset yang aplikatif</li>
-                            <li>Dukungan komersialisasi hasil penelitian</li>
-                            <li>Kolaborasi dengan industri dan mitra strategis</li>
-                        </ul>
-                    </div>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('hki.pendaftaran') }}"
+                       class="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]">
+                        Pendaftaran HKI
+                    </a>
+                    @foreach ($hkiYearMenu as $year)
+                        <a href="{{ $year['href'] }}"
+                           class="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]">
+                            {{ $year['label'] }}
+                        </a>
+                    @endforeach
                 </div>
             </div>
-            <div class="wide-inner pb-6 text-[1.12rem] font-bold">Jumlah Pengunjung: 4,342</div>
+
+            <div class="wide-inner mb-4">
+                <div class="border border-line bg-white p-5 text-[1.12rem] font-bold text-[#0b1d35]">
+                    Jumlah Pengunjung: 8,490
+                </div>
+            </div>
+        </div>
+    @elseif ($page === 'hki-pendaftaran')
+        {{-- Isi plek dari halaman "Pendaftaran HKI" website asli
+             p2m.polibatam.ac.id (page_id=5346). --}}
+        <div class="bg-[#efefef] pb-6">
+            <h1 class="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">Pendaftaran HKI</h1>
+
+            <div class="wide-inner mb-4 border border-line bg-white p-6 rich-copy">
+                <p>Dalam rangka mendukung dan melindungi karya civitas akademika dalam penelitian, pengabdian, atau program karya ilmiah mahasiswa, dengan ini Sentra HKI mengajak Bapak/Ibu untuk mendaftarkan hak kekayaan intelektualnya. Adapun KI yang bisa didaftarkan melalui Sentra HKI Polibatam adalah sebagai berikut:</p>
+
+                <ul>
+                    <li><strong>Hak Cipta</strong>, hak eksklusif bagi pencipta atau penerima hak untuk mengumumkan atau memperbanyak ciptaannya.</li>
+                    <li>
+                        <strong>Hak kekayaan industri</strong>, yang mencakup:
+                        <ul>
+                            <li><strong>Paten</strong>, hak eksklusif yang diberikan oleh negara kepada inventor atas hasil invensinya di bidang teknologi.</li>
+                            <li><strong>Desain industri</strong>, suatu kreasi tentang bentuk, konfigurasi, atau komposisi garis atau warna, atau garis dan warna, atau gabungan daripadanya serta dapat dipakai untuk menghasilkan suatu produk, barang, komoditas industri, atau kerajinan tangan.</li>
+                            <li><strong>Merek</strong>, suatu tanda yang berupa gambar, nama, kata, huruf, angka, susunan warna atau kombinasi dari unsur tersebut yang memiliki daya pembeda dan digunakan dalam kegiatan perdagangan barang atau jasa.</li>
+                            <li><strong>Desain tata letak sirkuit terpadu</strong>, Sirkuit Terpadu adalah suatu produk dalam bentuk jadi atau setengah jadi, yang di dalamnya terdapat berbagai elemen dan sekurang-kurangnya satu elemen adalah elemen aktif, yang saling berkaitan serta dibentuk secara terpadu di dalam sebuah bahan semikonduktor. Desain Tata Letak adalah kreasi berupa rancangan peletakan tiga dimensi, sekurang-kurangnya satu elemen adalah elemen aktif, serta interkoneksi dalam suatu Sirkuit Terpadu dan peletakan tiga dimensi tersebut untuk persiapan pembuatan Sirkuit Terpadu.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <p>Materi terkait HKI: <a href="https://p2m.polibatam.ac.id/?page_id=5346">Klik disini</a></p>
+
+                <p>Untuk proses pendaftarannya bisa mengikuti panduan pada Linktree (<a href="https://linktr.ee/sentrahkipolibatam">Klik disini</a>) atau dengan mengakses situs <a href="https://dgip.go.id" target="_blank" rel="noopener noreferrer">dgip.go.id</a>.</p>
+
+                <p>Tim pengelola Sentra HKI Politeknik Negeri Batam, dan berikut Surat Keputusan No. 171/K/PL29/I/2026:</p>
+
+                <ul>
+                    <li>Ketua Sentra HKI: Fitriyanti Nakul</li>
+                    <li>PIC Hak Cipta Jurusan Manajemen Bisnis dan Teknik Mesin : Muhammad Ali Faisal</li>
+                    <li>PIC Hak Cipta Jurusan Teknik Informatika dan Teknik Elektro: Widya Putri Ramadhani</li>
+                    <li>PIC Paten/ Paten Sederhana, dan DTLST Jurusan Teknik Elektro, Teknik Mesin, Teknik Informatika dan Manajemen Bisnis: Mishthafiyatillah</li>
+                    <li>PIC Desain Industri Jurusan Teknik Elektro, Teknik Mesin, Teknik Informatika dan Manajemen Bisnis: Adi Syahputra Purba</li>
+                </ul>
+
+                <p>Proses pendaftaran KI ini akan dibuka hingga tanggal 15 setiap bulan (jika melewati tanggal 15 akan diproses dibulan berikutnya) dan akan dilanjutkan dengan proses review dari Tim Sentra HKI Polibatam untuk kemudian di input ke efilling DJKI (bagi pengajuan yang lolos review).</p>
+            </div>
+
+            {{-- Pilihan tahun HKI — selalu tampil di bawah tiap halaman HKI,
+                 termasuk halaman Pendaftaran HKI ini. --}}
+            <div class="wide-inner mb-4">
+                <div class="mb-[18px] flex items-end border-b-2 border-line">
+                    <span class="section-label">Pilih Tahun</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('hki') }}"
+                       class="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]">
+                        HKI
+                    </a>
+                    @foreach ($hkiYearMenu as $year)
+                        <a href="{{ $year['href'] }}"
+                           class="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]">
+                            {{ $year['label'] }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="wide-inner pb-6 text-[1.12rem] font-bold">Jumlah Pengunjung: 10,568</div>
         </div>
     @elseif ($page === 'statistik')
         <div class="bg-[#efefef] pb-6">
@@ -310,6 +389,84 @@
                         <p>Melalui pendekatan kolaboratif, Polibatam mendorong terciptanya solusi yang bermanfaat secara luas, terukur, dan berkelanjutan.</p>
                         <a class="read-more" href="#">Pelajari lebih lanjut</a>
                     </div>
+                </div>
+            </div>
+        </div>
+    @elseif (str_starts_with($page, 'hki-tahun-'))
+        {{-- Arsip HKI per tahun — meniru halaman "HKI TAHUN 20xx" situs asli.
+             Datanya dibaca dari resources/data/hki.php. --}}
+        <div class="bg-[#efefef] pb-6">
+            <h1 class="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">HKI TAHUN {{ $hkiTahun }}</h1>
+
+            <div class="wide-inner mb-4 border border-line bg-white p-6 rich-copy">
+                @if ($hkiData && count($hkiData['daftar']) > 0)
+                    <p>
+                        Daftar HKI Politeknik Negeri Batam {{ $hkiTahun }}, terdapat
+                        <strong>{{ number_format($hkiData['ringkasan']['total']) }} Judul</strong>
+                        yang terdiri dari:
+                    </p>
+                    <ul>
+                        @foreach ($hkiData['ringkasan']['rincian'] as $baris)
+                            <li>{{ $baris['jumlah'] }} Judul {{ $baris['jenis'] }}</li>
+                        @endforeach
+                    </ul>
+
+                    <div class="mt-4 overflow-x-auto">
+                        <table class="w-full border-collapse text-[0.86rem]">
+                            <thead>
+                                <tr class="bg-[#1d2432] text-left text-white">
+                                    <th class="border border-line px-3 py-2">No</th>
+                                    <th class="border border-line px-3 py-2">Judul</th>
+                                    <th class="border border-line px-3 py-2">Jenis HKI</th>
+                                    <th class="border border-line px-3 py-2">Nama Pencipta</th>
+                                    <th class="border border-line px-3 py-2">Nomor Permohonan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($hkiData['daftar'] as $index => $item)
+                                    <tr class="align-top {{ $index % 2 ? 'bg-[#f7f9fc]' : 'bg-white' }}">
+                                        <td class="border border-line px-3 py-2">{{ $index + 1 }}</td>
+                                        <td class="border border-line px-3 py-2 font-bold text-[#0b1d35]">{{ $item['judul'] }}</td>
+                                        <td class="border border-line px-3 py-2">{{ $item['jenis'] }}</td>
+                                        <td class="border border-line px-3 py-2">{{ $item['pencipta'] }}</td>
+                                        <td class="border border-line px-3 py-2 whitespace-nowrap">{{ $item['nomor'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p>
+                        Daftar HKI Politeknik Negeri Batam {{ $hkiTahun }} belum tersedia pada
+                        situs ini. Silakan pilih tahun lain pada halaman <a href="{{ route('hki') }}">HKI</a>.
+                    </p>
+                @endif
+            </div>
+
+            {{-- Jumlah pengunjung, sama seperti halaman asli HKI TAHUN 20xx. --}}
+            <div class="wide-inner pb-6 text-[1.12rem] font-bold">Jumlah Pengunjung: {{ number_format($hkiViews ?? 0) }}</div>
+
+            {{-- Pilihan tahun HKI — selalu tampil di bawah setiap halaman tahun,
+                 supaya pengunjung bisa pindah tahun tanpa kembali ke halaman HKI. --}}
+            <div class="wide-inner mb-4">
+                <div class="mb-[18px] flex items-end border-b-2 border-line">
+                    <span class="section-label">Pilih Tahun</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('hki') }}"
+                       class="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]">
+                        HKI
+                    </a>
+                    <a href="{{ route('hki.pendaftaran') }}"
+                       class="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]">
+                        Pendaftaran HKI
+                    </a>
+                    @foreach ($hkiYearMenu as $year)
+                        <a href="{{ $year['href'] }}"
+                           class="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] uppercase transition-colors hover:bg-[#eaf1ff] {{ $year['key'] === $hkiTahun ? 'bg-[#1e6fd9] text-white' : 'text-[#3b4757]' }}">
+                            {{ $year['label'] }}
+                        </a>
+                    @endforeach
                 </div>
             </div>
         </div>

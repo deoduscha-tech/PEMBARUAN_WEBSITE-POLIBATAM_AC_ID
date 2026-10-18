@@ -11,6 +11,10 @@ const BACKEND_ORIGIN = BACKEND.replace(/\/api\/?$/, '');
 const nextConfig = {
   reactStrictMode: true,
 
+  // Izinkan akses 127.0.0.1 saat pengembangan (mis. dari PowerShell/curl),
+  // selain localhost yang sudah default.
+  allowedDevOrigins: ['127.0.0.1', 'localhost'],
+
   // Folder ini adalah root aplikasi. Tanpa ini Next menebak ke folder induk
   // hanya karena ada package-lock.json di sana.
   turbopack: {

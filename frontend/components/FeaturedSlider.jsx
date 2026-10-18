@@ -18,47 +18,49 @@ export default function FeaturedSlider({ slides = [] }) {
 
   return (
     <div className="relative min-h-[480px] overflow-hidden border-navy-dark/10 bg-[#eef2f7] shadow-card">
-      {slides.map((slide, index) => (
-        <article
-          key={slide.slug}
-          className={`feature-slide ${index === active ? 'active' : ''}`}
-        >
-          <div className="feature-image" style={{ backgroundImage: `url('${slide.image}')` }}>
-            {slides.length > 1 && index === active && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => go(active - 1)}
-                  className="feature-nav prev"
-                  aria-label="Slide sebelumnya"
-                >
-                  &#8249;
-                </button>
-                <button
-                  type="button"
-                  onClick={() => go(active + 1)}
-                  className="feature-nav next"
-                  aria-label="Slide berikutnya"
-                >
-                  &#8250;
-                </button>
-              </>
-            )}
-
-            <div className="feature-content">
-              <span className="feature-category">{slide.category}</span>
-              <h4 className="feature-title">
-                <Link href={`/berita/${slide.slug}`}>{slide.title}</Link>
-              </h4>
-              <div className="feature-meta">
-                <span>{slide.date}</span>
-                <span className="dot" aria-hidden="true" />
-                <span>{slide.author}</span>
+      <div
+        className="feature-track"
+        style={{ transform: `translateX(-${active * 100}%)` }}
+      >
+        {slides.map((slide) => (
+          <article key={slide.slug} className="feature-slide">
+            <div className="feature-image" style={{ backgroundImage: `url('${slide.image}')` }}>
+              <div className="feature-content">
+                <span className="feature-category">{slide.category}</span>
+                <h4 className="feature-title">
+                  <Link href={`/berita/${slide.slug}`}>{slide.title}</Link>
+                </h4>
+                <div className="feature-meta">
+                  <span>{slide.date}</span>
+                  <span className="dot" aria-hidden="true" />
+                  <span>{slide.author}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </article>
-      ))}
+          </article>
+        ))}
+      </div>
+
+      {slides.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={() => go(active - 1)}
+            className="feature-nav prev"
+            aria-label="Slide sebelumnya"
+          >
+            &#8249;
+          </button>
+          <button
+            type="button"
+            onClick={() => go(active + 1)}
+            className="feature-nav next"
+            aria-label="Slide berikutnya"
+          >
+            &#8250;
+          </button>
+        </>
+      )}
     </div>
   );
 }

@@ -185,6 +185,16 @@
         @apply bg-[#edf5ff] text-[#0d4ea8];
     }
 
+    /* Anak menu (HKI di dalam PROFIL) — sedikit menjorok supaya terlihat
+       sebagai sub-sub-menu, bukan menu sejajar. */
+    .nav-submenu-item-child {
+        @apply border-b-0 pl-9 text-[0.68rem] text-[#41536b];
+    }
+
+    .nav-submenu-item-child::before {
+        @apply size-[5px] bg-[#9fb2c9];
+    }
+
     /* --- Search panel ----------------------------------- */
     .site-search-inner {
         @apply mx-auto flex w-[min(1240px,calc(100%-22px))] items-center gap-2.5 rounded-full border-navy/10 bg-white py-2 pr-3 pl-[18px] shadow-[0_8px_18px_rgba(13,45,94,0.08)];
@@ -218,12 +228,13 @@
     }
 
     /* --- Featured slider -------------------------------- */
-    .feature-slide {
-        @apply pointer-events-none invisible absolute inset-0 z-0 translate-x-[8%] scale-[0.985] opacity-0 transition-[opacity,transform,visibility] duration-[600ms];
+    .feature-track {
+        @apply flex h-[480px] w-full transition-transform duration-700 ease-in-out;
+        will-change: transform;
     }
 
-    .feature-slide.active {
-        @apply pointer-events-auto visible z-[1] translate-x-0 scale-100 opacity-100;
+    .feature-slide {
+        @apply h-full min-w-full flex-none;
     }
 
     .feature-slide .feature-image {
@@ -411,5 +422,30 @@
 
     .rich-copy a {
         @apply text-[#0d4aa6] underline-offset-2 hover:underline;
+    }
+
+    /* Sanitized publication archive content imported from the official pages. */
+    .publication-original-content p {
+        @apply mb-5 text-justify text-[1.05rem] leading-[2.05] text-[#101010];
+    }
+
+    .publication-original-content h2,
+    .publication-original-content h3,
+    .publication-original-content h4,
+    .publication-original-content h5 {
+        @apply mt-6 mb-3 font-bold text-[#101010];
+    }
+
+    .publication-original-content ol,
+    .publication-original-content ul {
+        @apply mb-5 list-decimal space-y-1 pl-7 text-[1.02rem] leading-[1.8] text-[#101010];
+    }
+
+    .publication-original-content ul {
+        @apply list-disc;
+    }
+
+    .publication-original-content a {
+        @apply text-[#0000ee] underline-offset-2 hover:underline;
     }
 }

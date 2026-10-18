@@ -4,14 +4,32 @@
     ========================================================= */
 $page = $page ?? 'home';
 
+// Urutan menu mengikuti situs asli p2m.polibatam.ac.id:
+// PROFIL, INFORMASI, PUBLIKASI, HKI, SINTA, JURNAL, STATISTIK, BERDAMPAK.
+// (PROFIL dan HKI dirender sebagai dropdown di partial ini.)
 $navItems = [
     ['label' => 'INFORMASI', 'href' => '/informasi', 'active' => in_array($page, ['informasi', 'penelitian'], true)],
     ['label' => 'PUBLIKASI', 'href' => '/publikasi', 'active' => in_array($page, ['publikasi', 'tahun2024', 'tahun2025', 'tahun2026'], true)],
-    ['label' => 'HKI', 'href' => '/hki', 'active' => $page === 'hki'],
+    ['label' => 'HKI', 'href' => '/hki', 'active' => $page === 'hki', 'isHki' => true],
     ['label' => 'SINTA', 'href' => 'https://sinta.kemdiktisaintek.go.id/affiliations/profile/564', 'active' => false, 'external' => true],
     ['label' => 'JURNAL', 'href' => 'https://jurnal.polibatam.ac.id/', 'active' => false, 'external' => true],
     ['label' => 'STATISTIK', 'href' => '/statistik', 'active' => $page === 'statistik'],
     ['label' => 'POLIBATAM UNIVERSITY BERDAMPAK', 'href' => '/berdampak', 'active' => $page === 'berdampak'],
+];
+
+// Submenu HKI — sama seperti menu HKI di situs asli: Pendaftaran HKI dan
+// arsip HKI per tahun.
+$hkiDropdownItems = [
+    ['label' => 'Pendaftaran HKI', 'href' => '/hki/pendaftaran'],
+    ['label' => 'HKI TAHUN 2025', 'href' => '/hki/tahun-2025'],
+    ['label' => 'HKI Tahun 2024', 'href' => '/hki/tahun-2024'],
+    ['label' => 'HKI TAHUN 2023', 'href' => '/hki/tahun-2023'],
+    ['label' => 'HKI Tahun 2022', 'href' => '/hki/tahun-2022'],
+    ['label' => 'HKI Tahun 2021', 'href' => '/hki/tahun-2021'],
+    ['label' => 'HKI Tahun 2020', 'href' => '/hki/tahun-2020'],
+    ['label' => 'HKI Tahun 2019', 'href' => '/hki/tahun-2019'],
+    ['label' => 'HKI Tahun 2018', 'href' => '/hki/tahun-2018'],
+    ['label' => 'HKI Tahun 2017', 'href' => '/hki/tahun-2017'],
 ];
 
 // Submenu PROFIL — mirrors the live P2M menu.
@@ -97,11 +115,30 @@ $profileDropdownItems = [
         </div>
 
         @foreach ($navItems as $item)
-        <a class="nav-item {{ $item['active'] ? 'active' : '' }}"
-            href="{{ $item['href'] }}"
-            @if (!empty($item['external'])) target="_blank" rel="noopener noreferrer" @endif>
-            {{ $item['label'] }}
-        </a>
+        @if (!empty($item['isHki']))
+            {{-- Dropdown HKI — sama seperti situs asli: Pendaftaran HKI + arsip tahun.
+                 Urutannya ada setelah PUBLIKASI, sebelum SINTA. --}}
+            <div class="nav-dropdown relative {{ in_array($page, ['hki', 'hki-pendaftaran'], true) || str_starts_with($page, 'hki-tahun') ? 'open' : '' }}">
+                <a href="/hki" class="nav-item {{ $page === 'hki' ? 'active' : '' }}" aria-expanded="false" aria-controls="hki-submenu">
+                    HKI
+                    <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                </a>
+
+                <div id="hki-submenu" class="nav-submenu" hidden>
+                    @foreach ($hkiDropdownItems as $subItem)
+                    <a href="{{ $subItem['href'] }}" class="nav-submenu-item">{{ $subItem['label'] }}</a>
+                    @endforeach
+                </div>
+            </div>
+        @else
+            <a class="nav-item {{ $item['active'] ? 'active' : '' }}"
+                href="{{ $item['href'] }}"
+                @if (!empty($item['external'])) target="_blank" rel="noopener noreferrer" @endif>
+                {{ $item['label'] }}
+            </a>
+        @endif
         @endforeach
     </div>
 

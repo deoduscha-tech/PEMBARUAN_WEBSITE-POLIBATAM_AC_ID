@@ -16,13 +16,6 @@ use Illuminate\Http\JsonResponse;
  */
 class PublikasiApiController extends Controller
 {
-    /** Judul halaman untuk tiap tahun. */
-    protected const LABELS = [
-        '2026' => 'TAHUN 2026',
-        '2025' => 'TAHUN 2025',
-        '2024' => 'TAHUN 2024',
-    ];
-
     protected function data(): array
     {
         $path = resource_path('data/publikasi.php');
@@ -48,7 +41,7 @@ class PublikasiApiController extends Controller
 
             $menu[] = [
                 'key' => $key,
-                'label' => self::LABELS[$key] ?? ('TAHUN ' . $key),
+                'label' => 'TAHUN ' . $key,
                 'href' => '/publikasi?tahun=' . $key,
             ];
         }
@@ -104,11 +97,10 @@ class PublikasiApiController extends Controller
     {
         return [
             'year' => $year,
-            'label' => self::LABELS[$year] ?? ('TAHUN ' . $year),
+            'label' => 'TAHUN ' . $year,
             'visitors' => $group['visitors'] ?? 0,
-            'description' => $group['description'] ?? '',
-            'note' => $group['note'] ?? '',
-            'sections' => $group['sections'] ?? [],
+            'source_page_id' => $group['source_page_id'] ?? null,
+            'content' => $group['content'] ?? '',
         ];
     }
 }

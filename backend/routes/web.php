@@ -19,6 +19,8 @@ Route::get('/informasi', [PublicPageController::class, 'informasi'])->name('info
 Route::get('/penelitian', [PublicPageController::class, 'penelitian'])->name('penelitian');
 Route::get('/publikasi', [PublicPageController::class, 'publikasi'])->name('publikasi');
 Route::get('/hki', [PublicPageController::class, 'hki'])->name('hki');
+Route::get('/hki/pendaftaran', [PublicPageController::class, 'hkiPendaftaran'])->name('hki.pendaftaran');
+Route::get('/hki/tahun-{tahun}', [PublicPageController::class, 'hkiTahun'])->name('hki.tahun');
 Route::get('/statistik', [PublicPageController::class, 'statistik'])->name('statistik');
 Route::get('/berdampak', [PublicPageController::class, 'berdampak'])->name('berdampak');
 Route::get('/tahun-2024', [PublicPageController::class, 'tahun2024'])->name('tahun2024');
