@@ -4,6 +4,8 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { apiGet } from '@/lib/api';
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const response = await apiGet(`/berita/${slug}`);

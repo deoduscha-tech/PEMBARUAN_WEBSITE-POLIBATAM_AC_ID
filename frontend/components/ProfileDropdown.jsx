@@ -57,15 +57,37 @@ export default function ProfileDropdown({ isActive = false }) {
     };
   }, []);
 
+  // Penutupan karena kursor keluar ditunda sedikit. Tanpa jeda ini, panel
+  // yang keluar ke SAMPING (flyout HKI) langsung menutup begitu kursor
+  // meninggalkan tombol PROFIL, sebelum sempat masuk ke panel sampingnya.
+  const closeTimer = useRef(null);
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => {
+      setOpen(false);
+      setHkiOpen(false);
+    }, 220);
+  };
+
+  useEffect(() => () => cancelClose(), []);
+
   return (
     <div
       ref={ref}
       className="relative inline-flex items-stretch"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => {
-        setOpen(false);
-        setHkiOpen(false);
+      onMouseEnter={() => {
+        cancelClose();
+        setOpen(true);
       }}
+      onMouseLeave={scheduleClose}
     >
       <button
         type="button"
@@ -93,7 +115,12 @@ export default function ProfileDropdown({ isActive = false }) {
       </button>
 
       {open && (
-        <div id="profile-submenu" className="nav-submenu">
+        <div
+          id="profile-submenu"
+          className="nav-submenu"
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
+        >
           {PROFILE_SUBMENU.map((item) => (
             <Link
               key={item.href}
@@ -105,11 +132,12 @@ export default function ProfileDropdown({ isActive = false }) {
             </Link>
           ))}
 
-          {/* HKI — dibuka dengan klik supaya daftar tahun tidak menutupi
-              seluruh layar di HP. */}
+          {/* HKI — dibuka saat kursor diarahkan (desktop) dan juga bisa
+              diklik untuk layar sentuh. */}
           <button
             type="button"
             onClick={() => setHkiOpen((v) => !v)}
+            onMouseEnter={() => setHkiOpen(true)}
             aria-expanded={hkiOpen}
             aria-controls="profile-submenu-hki"
             className="nav-submenu-item flex w-full items-center justify-between text-left"
@@ -130,7 +158,11 @@ export default function ProfileDropdown({ isActive = false }) {
           </button>
 
           {hkiOpen && (
-            <div id="profile-submenu-hki">
+            <div
+              id="profile-submenu-hki"
+              onMouseEnter={cancelClose}
+              onMouseLeave={scheduleClose}
+            >
               {HKI_SUBMENU.map((item) => (
                 <Link
                   key={item.href}

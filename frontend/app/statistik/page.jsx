@@ -1,92 +1,19 @@
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
+import { apiGet } from '@/lib/api';
+
+// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
+// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
+export const revalidate = 60;
 
 export const metadata = {
-  title: 'Statistik — Pusat P2M Polibatam',
+  title: 'Statistik - Pusat P2M Polibatam',
   description: 'Grafik statistik penelitian, pengabdian, HKI, dan jabatan fungsional dosen Polibatam.',
 };
 
-const CHARTS = {
-  internal: {
-    title: 'Penelitian dan Pengabdian Internal',
-    id: 'R7LDv',
-    version: 3,
-    height: 414,
-    width: 970,
-  },
-  external: {
-    title: 'Penelitian dan Pengabdian Eksternal',
-    id: 'T8EQF',
-    version: 2,
-    height: 414,
-    width: 600,
-  },
-  hki: {
-    title: 'HKI (Hak Kekayaan Intelektual) Polibatam 2017-2024',
-    id: 'd5xu9',
-    version: 2,
-    height: 361,
-    width: 600,
-  },
-  copyright: {
-    title: 'Hak Cipta',
-    id: 'wFoOi',
-    version: 5,
-    height: 361,
-    width: 600,
-  },
-  patent: {
-    title: 'Paten/ Paten Sederhana 2017-2024',
-    id: 'dLDrv',
-    version: 1,
-    height: 361,
-    width: 600,
-  },
-  industrialDesign: {
-    title: 'Desain Industri',
-    id: 'fkF82',
-    version: 1,
-    height: 361,
-    width: 600,
-  },
-  lecturer: {
-    title: 'Jabatan Fungsional Dosen Polibatam (24 Feb 2025)',
-    id: 'PN2h5',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
-  electrical: {
-    title: 'Jabatan Fungsional Dosen Teknik Elektro',
-    id: 'F77g5',
-    version: 2,
-    height: 237,
-    width: 600,
-  },
-  informatics: {
-    title: 'Jabatan Fungsional Dosen Teknik Informatika',
-    id: 'NOaHv',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
-  business: {
-    title: 'Jabatan Fungsional Dosen Manajemen Bisnis',
-    id: '4reGJ',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
-  mechanical: {
-    title: 'Jabatan Fungsional Dosen Teknik Mesin',
-    id: 'F4ffL',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
-};
-
+// Grafik + jumlah pengunjung diambil dari API Laravel (/api/halaman/statistik)
+// sehingga tidak ada lagi angka/susunan grafik yang berbeda dengan backend.
 function ChartFrame({ chart, loading = 'lazy' }) {
   return (
     <iframe
@@ -105,39 +32,68 @@ function ChartFrame({ chart, loading = 'lazy' }) {
   );
 }
 
-export default function StatistikPage() {
+export default async function StatistikPage() {
+  const response = await apiGet('/halaman/statistik');
+  const data = response.ok ? response.data.data : null;
+  const charts = data?.charts ?? [];
+
+  const internal = charts.filter((chart) => chart.key === 'internal');
+  const external = charts.filter((chart) => chart.key === 'external');
+  const hki = charts.filter((chart) => chart.key === 'hki');
+  const hkiDetail = charts.filter((chart) => chart.group === 'hki-detail');
+  const lecturer = charts.filter((chart) => chart.key === 'lecturer');
+  const prodi = charts.filter((chart) => chart.group === 'prodi');
+
   return (
     <>
       <SiteHeader page="home" active="statistik" />
 
       <main className="bg-[#efefef] pb-6">
         <h1 className="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
-          Statistik
+          {data?.heading ?? 'Statistik'}
         </h1>
 
         <div className="wide-inner mb-4 space-y-8 border-line bg-white p-5 md:p-8">
-          <ChartFrame chart={CHARTS.internal} loading="eager" />
-          <ChartFrame chart={CHARTS.external} />
-          <ChartFrame chart={CHARTS.hki} />
+          {!data && (
+            <p>
+              Grafik statistik belum dapat dimuat
+              {response.error ? ` (${response.error})` : ''}. Pastikan backend Laravel berjalan.
+            </p>
+          )}
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            <ChartFrame chart={CHARTS.copyright} />
-            <ChartFrame chart={CHARTS.patent} />
-            <ChartFrame chart={CHARTS.industrialDesign} />
-          </div>
+          {internal.map((chart) => (
+            <ChartFrame key={chart.key} chart={chart} loading="eager" />
+          ))}
+          {external.map((chart) => (
+            <ChartFrame key={chart.key} chart={chart} />
+          ))}
+          {hki.map((chart) => (
+            <ChartFrame key={chart.key} chart={chart} />
+          ))}
 
-          <ChartFrame chart={CHARTS.lecturer} />
+          {hkiDetail.length > 0 && (
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+              {hkiDetail.map((chart) => (
+                <ChartFrame key={chart.key} chart={chart} />
+              ))}
+            </div>
+          )}
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <ChartFrame chart={CHARTS.electrical} />
-            <ChartFrame chart={CHARTS.informatics} />
-            <ChartFrame chart={CHARTS.business} />
-            <ChartFrame chart={CHARTS.mechanical} />
-          </div>
+          {lecturer.map((chart) => (
+            <ChartFrame key={chart.key} chart={chart} />
+          ))}
+
+          {prodi.length > 0 && (
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+              {prodi.map((chart) => (
+                <ChartFrame key={chart.key} chart={chart} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="wide-inner pb-6 text-[1.12rem] font-bold">
-          Jumlah Pengunjung: 2,702
+          Jumlah Pengunjung: {Number(data?.visitors ?? 0).toLocaleString('en-US')}
         </div>
 
         <MissedSection />

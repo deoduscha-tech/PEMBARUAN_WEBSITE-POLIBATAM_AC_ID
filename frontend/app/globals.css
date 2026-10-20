@@ -177,6 +177,17 @@
         @apply absolute left-0 top-full z-30 mt-0 min-w-[220px] border border-[#dfeaf6] bg-white shadow-[0_12px_30px_rgba(11,23,40,0.14)];
     }
 
+    /* Daftar tahun HKI tampil MENGALIR KE BAWAH tepat di bawah tombol HKI
+       (accordion), bukan panel ke samping. Ukuran item dikecilkan agar semua
+       tahun muat dalam tinggi layar tanpa terpotong. */
+    #profile-submenu-hki {
+        @apply mt-1 ml-2 border-l-2 border-[#cfdcec] bg-[#f7fafd];
+    }
+
+    #profile-submenu-hki .nav-submenu-item {
+        @apply px-3 py-1 text-[0.6rem] leading-[1.15];
+    }
+
     .nav-submenu-item {
         @apply block border-b border-[#edf2f7] px-4 py-3 text-[0.72rem] font-bold tracking-[0.04em] text-[#1f2d3d] uppercase transition-colors;
     }

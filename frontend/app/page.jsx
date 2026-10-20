@@ -4,6 +4,10 @@ import SiteFooter from '../components/SiteFooter';
 import FeaturedSlider from '../components/FeaturedSlider';
 import { apiGet } from '@/lib/api';
 
+// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
+// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Beranda — Pusat P2M Polibatam',
 };

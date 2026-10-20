@@ -3,6 +3,9 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import Pagination from '@/components/Pagination';
 import { apiGet } from '@/lib/api';
+// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
+// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
+export const revalidate = 60;
 
 export const metadata = {
   title: 'Berita — Pusat P2M Polibatam',

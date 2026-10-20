@@ -17,13 +17,26 @@ export default async function EditorialPage({
   children,
   showPosts = false,
   isPublication = false,
+  publicationYear = null,
 }) {
-  // Berita terbaru untuk blok unggulan (hanya halaman tertentu).
-  const postsResponse = showPosts
-    ? await apiGet('/berita', { params: { limit: 3 } })
-    : null;
+  // Berita terbaru untuk blok unggulan & konten publikasi: diambil PARALEL,
+  // bukan berurutan, supaya halaman tidak menunggu dua permintaan API
+  // satu per satu.
+  const [postsResponse, publicationResponse] = await Promise.all([
+    showPosts ? apiGet('/berita', { params: { limit: 3 } }) : Promise.resolve(null),
+    isPublication && publicationYear
+      ? apiGet('/publikasi', { params: { tahun: publicationYear } })
+      : Promise.resolve(null),
+  ]);
 
   const posts = postsResponse?.ok ? (postsResponse.data.data ?? []) : [];
+  const publication =
+    publicationResponse?.ok ? publicationResponse.data.data?.active : null;
+
+  // Angka pengunjung publikasi SUDAH tercetak di dalam konten asli dari backend
+  // (resources/data/publikasi.php, bagian "Jumlah Pengunjung: xxx"), jadi footer
+  // tidak perlu menuliskannya lagi — dulu angkanya tampil dua kali.
+  const showVisitors = isPublication ? false : Boolean(visitors);
 
   const yearMenu = [
     { label: 'TAHUN 2026', href: '/tahun-2026', key: 'tahun2026' },
@@ -48,28 +61,32 @@ export default async function EditorialPage({
                 <Link
                   key={year.key}
                   href={year.href}
-                  className={`year-item ${year.key === slug || (slug === 'publikasi' && year.key === 'tahun2026')
+                  className={`year-item ${
+                    year.key === slug || (slug === 'publikasi' && year.key === 'tahun2026')
                       ? 'active'
                       : ''
-                    }`}
+                  }`}
                 >
                   {year.label}
                 </Link>
               ))}
             </nav>
 
+            {/* Konten luaran publikasi diambil dari API Laravel
+                (/api/publikasi?tahun=...), bukan teks placeholder. */}
             <div className="min-h-[380px] bg-[#efefef] p-6 rich-copy">
-              <h3 className="mb-[18px] text-center text-[clamp(1.8rem,2.5vw,2.4rem)] font-black text-[#0b1d35]">
-                LUARAN PUBLIKASI
-              </h3>
-              <p>
-                Daftar luaran publikasi penelitian dan pengabdian kepada masyarakat Pusat P2M
-                Politeknik Negeri Batam. Silakan pilih tahun pada menu di samping untuk melihat
-                data publikasi terkait.
-              </p>
-              <p>
-                <a href="#">Lihat daftar publikasi lengkap &rarr;</a>
-              </p>
+              {publication?.content ? (
+                <div
+                  className="publication-original-content"
+                  dangerouslySetInnerHTML={{ __html: publication.content }}
+                />
+              ) : (
+                <p>
+                  Daftar luaran publikasi penelitian dan pengabdian kepada masyarakat Pusat P2M
+                  Politeknik Negeri Batam. Silakan pilih tahun pada menu di samping untuk melihat
+                  data publikasi terkait.
+                </p>
+              )}
             </div>
           </div>
         ) : (
@@ -105,7 +122,7 @@ export default async function EditorialPage({
           </div>
         )}
 
-        {visitors && (
+        {showVisitors && (
           <div className="wide-inner pb-6 text-[1.12rem] font-bold">
             Jumlah Pengunjung: {visitors}
           </div>

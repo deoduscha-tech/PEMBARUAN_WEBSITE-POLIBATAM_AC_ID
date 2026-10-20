@@ -3,6 +3,10 @@ import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
 
+// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
+// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Kontak P3M — Pusat P2M Polibatam',
   description:
@@ -10,8 +14,6 @@ export const metadata = {
 };
 
 // Selalu ambil data terbaru dari API Laravel.
-export const dynamic = 'force-dynamic';
-
 export default async function KontakPage() {
   const response = await apiGet('/kontak');
   const data = response.ok ? response.data.data : null;
