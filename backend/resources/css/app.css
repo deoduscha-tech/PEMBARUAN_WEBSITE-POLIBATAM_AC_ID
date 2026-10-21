@@ -220,12 +220,13 @@
     }
 
     /* --- Featured slider -------------------------------- */
-    .feature-slide {
-        @apply pointer-events-none invisible absolute inset-0 z-0 translate-x-[8%] scale-[0.985] opacity-0 transition-[opacity,transform,visibility] duration-[600ms];
+    .feature-track {
+        @apply flex h-[540px] w-full transition-transform duration-700 ease-in-out;
+        will-change: transform;
     }
 
-    .feature-slide.active {
-        @apply pointer-events-auto visible z-[1] translate-x-0 scale-100 opacity-100;
+    .feature-slide {
+        @apply relative h-full min-w-full flex-none;
     }
 
     .feature-slide .feature-image {

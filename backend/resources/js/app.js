@@ -88,13 +88,14 @@ function initSlider() {
 
     const slides = Array.from(slider.querySelectorAll('[data-slide]'));
     if (slides.length < 2) return;
+    const track = slider.querySelector('[data-slide-track]');
 
     let index = 0;
     let timer = null;
 
     const show = (next) => {
         index = (next + slides.length) % slides.length;
-        slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+        if (track) track.style.transform = `translateX(-${index * 100}%)`;
     };
 
     const restart = () => {

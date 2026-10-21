@@ -189,12 +189,12 @@
         </div>
 
         <a href="{{ route('home') }}"
-           class="mt-6 flex items-center justify-center gap-1.5 text-[0.82rem] font-semibold text-white/50 transition-colors hover:text-white">
+           class="mt-5 flex min-h-11 items-center justify-center gap-2 rounded border border-white/20 bg-white/5 px-4 text-[0.82rem] font-bold text-white/75 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white">
             <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 12H5"></path>
                 <path d="M12 19l-7-7 7-7"></path>
             </svg>
-            Kembali ke situs
+            Kembali ke Home sebagai Pengunjung
         </a>
     </main>
 

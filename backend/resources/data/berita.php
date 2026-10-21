@@ -91,20 +91,15 @@ return [
         'category' => 'Informasi',
         'author' => 'P3M',
         'date' => '2026-04-10',
-        'image' => '/images/1.jpg',
-        'excerpt' => 'P3M Politeknik Negeri Batam mengumumkan penerima pendanaan Program Penelitian dan Pengabdian kepada Masyarakat (BIMA), Hilirisasi Riset Prioritas, dan SEMESTA Tahun Anggaran 2026.',
+        'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/04/1.jpg',
+        'excerpt' => 'Berdasarkan surat Kementerian Pendidikan Tinggi, Sains, dan Teknologi, P3M mengumumkan penerima pendanaan BIMA, Inovasi Seni Nusantara, Hilirisasi Riset Prioritas, dan SEMESTA Tahun Anggaran 2026.',
         'featured' => false,
         'views' => 1188,
         'published' => true,
         'body' => <<<'HTML'
-        <p>Pusat Penelitian dan Pengabdian kepada Masyarakat (P3M) Politeknik Negeri Batam mengumumkan penerima pendanaan untuk program-program berikut pada Tahun Anggaran 2026:</p>
-        <ol>
-            <li>Program Penelitian dan Pengabdian kepada Masyarakat (BIMA)</li>
-            <li>Program Inovasi Seni Nusantara (BIMA)</li>
-            <li>Program Hilirisasi Riset Prioritas (HILIRISET)</li>
-            <li>Program SEMESTA</li>
-        </ol>
-        <p>Seluruh penerima diharapkan melengkapi dokumen administrasi sesuai ketentuan yang berlaku sebelum proses pencairan dana dilaksanakan.</p>
+        <p>Berdasarkan surat Kementerian Pendidikan Tinggi, Sains, dan Teknologi Direktorat Jenderal Riset dan Pengembangan Nomor 94/DST/C/AL.04.02/2026, P3M Polibatam menyampaikan pengumuman penerima pendanaan Tahun Anggaran 2026.</p>
+        <p>Pengumuman ini memuat penerima Program Penelitian dan Pengabdian kepada Masyarakat (BIMA), Program Inovasi Seni Nusantara, Hilirisasi Riset Prioritas, Hilirisasi Riset Strategis, dan program terkait lainnya.</p>
+        <p>Daftar nama dosen penerima, anggota tim, mitra, serta judul kegiatan dapat dilihat pada <a href="https://p2m.polibatam.ac.id/?p=8733">pengumuman resmi P3M</a>.</p>
         HTML,
     ],
     [
@@ -114,20 +109,99 @@ return [
         'category' => 'Informasi',
         'author' => 'P3M',
         'date' => '2026-02-12',
-        'image' => '/images/1.jpg',
+        'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2025/02/PK-DAN-COE.jpg',
         'excerpt' => 'Politeknik Negeri Batam menetapkan Pembentukan dan Pengangkatan Ketua Pusat Kajian (PK) serta Center Of Excellence (CoE) Politeknik Negeri Batam Tahun 2026.',
         'featured' => false,
         'views' => 743,
         'published' => true,
         'body' => <<<'HTML'
-        <p>Sebagai upaya penguatan ekosistem penelitian dan pengabdian kepada masyarakat, Politeknik Negeri Batam menetapkan pembentukan dan pengangkatan Ketua Pusat Kajian (PK) serta Center of Excellence (CoE).</p>
-        <h3>Tujuan pembentukan</h3>
-        <ul>
-            <li>Mengelompokkan kepakaran dosen sesuai bidang unggulan.</li>
-            <li>Mendorong riset yang selaras dengan kebutuhan industri.</li>
-            <li>Memperkuat kolaborasi lintas jurusan dan mitra strategis.</li>
-        </ul>
-        <p>Diharapkan struktur baru ini mempercepat hilirisasi hasil riset serta meningkatkan kontribusi institusi bagi masyarakat dan dunia usaha.</p>
+        <p>Politeknik Negeri Batam menetapkan pembentukan Pusat Kajian (PK) dan Center of Excellence (CoE), sekaligus mengangkat para ketuanya untuk Tahun 2026.</p>
+        <p>Keputusan tersebut mencakup dua Pusat Kajian dan berbagai CoE dari sejumlah bidang. Daftar nama ketua dan dokumen keputusan direktur tersedia pada <a href="https://p2m.polibatam.ac.id/?p=8683">pengumuman resmi P3M</a>.</p>
+        HTML,
+    ],
+    [
+        'id' => 6,
+        'title' => 'Pengumuman Hasil Seleksi Pengabdian kepada Masyarakat (Batch 2) Politeknik Negeri Batam TA 2024',
+        'slug' => 'pengumuman-hasil-seleksi-pengabdian-kepada-masyarakat-batch-2-polibatam-ta-2024',
+        'category' => 'Informasi',
+        'author' => 'P3M',
+        'date' => '2024-08-14',
+        'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2023/08/Batch-2-Penelitian-Pengabdian-Masyarakat-2-scaled.jpg',
+        'excerpt' => 'Setelah melalui review proposal dan rekomendasi final, P3M mengumumkan daftar penerima pendanaan Pengabdian kepada Masyarakat (Batch 2) Politeknik Negeri Batam TA 2024.',
+        'featured' => false,
+        'views' => 0,
+        'published' => true,
+        'body' => <<<'HTML'
+        <p>Setelah melalui review proposal dan rekomendasi final, Pusat Penelitian dan Pengabdian Masyarakat (P3M) mengumumkan daftar penerima pendanaan Pengabdian kepada Masyarakat (Batch 2) Politeknik Negeri Batam Tahun Anggaran 2024.</p>
+        <p>Informasi penerima dan ketentuan pelaksanaan kegiatan dapat dilihat pada pengumuman resmi P3M.</p>
+        HTML,
+    ],
+    [
+        'id' => 7,
+        'title' => 'Panduan Pengabdian kepada Masyarakat Tahun 2024 Batch 2',
+        'slug' => 'panduan-pengabdian-kepada-masyarakat-tahun-2024-batch-2',
+        'category' => 'Informasi',
+        'author' => 'P3M',
+        'date' => '2024-07-16',
+        'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2024/07/Batch-2-Penelitian-Pengabdian-Masyarakat-1.png',
+        'excerpt' => 'P3M Polibatam meluncurkan buku panduan pelaksanaan Pengabdian kepada Masyarakat Tahun 2024 Batch 2 beserta informasi skema dan jadwal pengusulan.',
+        'featured' => false,
+        'views' => 0,
+        'published' => true,
+        'body' => <<<'HTML'
+        <p>Pada pelaksanaan Pengabdian kepada Masyarakat Tahun 2024 Batch 2, P3M Polibatam meluncurkan buku panduan pelaksanaan kegiatan.</p>
+        <p>Panduan memuat ketentuan skema pengabdian, tata cara pengusulan, serta jadwal pelaksanaan. Pengusul dapat merujuk pada dokumen panduan resmi yang disediakan P3M.</p>
+        HTML,
+    ],
+    [
+        'id' => 8,
+        'title' => 'Pembentukan dan Pengangkatan Ketua Pusat Kajian (PK) dan Center Of Excellence (CoE) Politeknik Negeri Batam Tahun 2024',
+        'slug' => 'pembentukan-dan-pengangkatan-ketua-pusat-kajian-dan-center-of-excellence-polibatam-2024',
+        'category' => 'Informasi',
+        'author' => 'P3M',
+        'date' => '2024-01-31',
+        'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2024/01/COE-1024x512.jpg',
+        'excerpt' => 'Politeknik Negeri Batam membentuk dan mengangkat Ketua Pusat Kajian (PK) dan Center Of Excellence (CoE) Tahun 2024.',
+        'featured' => false,
+        'views' => 0,
+        'published' => true,
+        'body' => <<<'HTML'
+        <p>Politeknik Negeri Batam menetapkan pembentukan dan pengangkatan Ketua Pusat Kajian (PK) serta Center Of Excellence (CoE) Tahun 2024.</p>
+        <p>Keputusan ini mencakup Pusat Kajian ASEAN dan Keunggulan Daya Saing serta berbagai Center of Excellence di lingkungan Polibatam. Surat keputusan direktur tersedia pada halaman informasi resmi.</p>
+        HTML,
+    ],
+    [
+        'id' => 9,
+        'title' => 'Buku Panduan Penelitian dan Pengabdian kepada Masyarakat 2025 (BIMA)',
+        'slug' => 'buku-panduan-penelitian-dan-pengabdian-kepada-masyarakat-2025-bima',
+        'category' => 'Informasi',
+        'author' => 'P3M',
+        'date' => '2025-03-10',
+        'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2025/03/A1-1024x576.jpg',
+        'excerpt' => 'Kementerian Pendidikan Tinggi, Sains, dan Teknologi meluncurkan panduan hibah penelitian dan pengabdian kepada masyarakat Tahun Anggaran 2025.',
+        'featured' => false,
+        'views' => 0,
+        'published' => true,
+        'body' => <<<'HTML'
+        <p>Kementerian Pendidikan Tinggi, Sains, dan Teknologi resmi meluncurkan panduan hibah penelitian dan pengabdian kepada masyarakat Tahun Anggaran 2025.</p>
+        <p>Buku panduan ini menjadi acuan bagi pengusul dalam memahami jadwal, skema, dan ketentuan Program Penelitian dan Pengabdian kepada Masyarakat BIMA 2025.</p>
+        HTML,
+    ],
+    [
+        'id' => 10,
+        'title' => 'Workshop Pembekalan Penyusunan Roadmap CoE (Center of Excellence) Polibatam',
+        'slug' => 'workshop-pembekalan-penyusunan-roadmap-coe-polibatam',
+        'category' => 'Informasi',
+        'author' => 'P3M',
+        'date' => '2025-02-20',
+        'image' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-18-at-11.04.32-2-scaled.jpeg',
+        'excerpt' => 'Workshop pembekalan penyusunan Roadmap CoE Polibatam dilaksanakan pada 18 Februari 2025 di Gedung Technopreneur, dengan narasumber Ir. Basuki Rachmatul Alam, M.Sc., Ph.D.',
+        'featured' => false,
+        'views' => 0,
+        'published' => true,
+        'body' => <<<'HTML'
+        <p>Workshop Pembekalan Penyusunan Roadmap CoE (Center of Excellence) Polibatam dilaksanakan pada Selasa, 18 Februari 2025 di ruang Batu Ampar, Gedung Technopreneur, Politeknik Negeri Batam.</p>
+        <p>Kegiatan menghadirkan Ir. Basuki Rachmatul Alam, M.Sc., Ph.D. sebagai pemateri untuk membekali tim CoE dalam menyusun roadmap serta memperjelas topik penelitian dan pengabdian.</p>
         HTML,
     ],
 ];

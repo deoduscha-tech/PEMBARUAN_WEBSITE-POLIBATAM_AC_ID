@@ -92,8 +92,9 @@
 
                 {{-- Featured carousel --}}
                 <div data-slider class="relative min-h-[480px] overflow-hidden border-navy-dark/10 bg-[#eef2f7] shadow-card">
-                    @foreach ($featuredSlides as $index => $slide)
-                        <article data-slide class="feature-slide {{ $index === 0 ? 'active' : '' }}">
+                    <div data-slide-track class="feature-track">
+                    @foreach ($featuredSlides as $slide)
+                        <article data-slide class="feature-slide">
                             <div class="feature-image" style="background-image: url('{{ $slide['image'] }}');">
                                 <button type="button" data-slide-prev
                                         class="feature-nav prev" aria-label="Slide sebelumnya">&#8249;</button>
@@ -111,6 +112,7 @@
                             </div>
                         </article>
                     @endforeach
+                    </div>
                 </div>
 
                 {{-- Sidebar: latest / popular / trending --}}
