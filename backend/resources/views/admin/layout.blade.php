@@ -6,6 +6,7 @@ $menu = [
 ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'pattern' => 'admin.dashboard', 'icon' => 'grid'],
 ['label' => 'Kelola Berita', 'route' => 'admin.berita.index', 'pattern' => 'admin.berita.*', 'icon' => 'news'],
 ['label' => 'Tulis Berita', 'route' => 'admin.berita.create', 'pattern' => 'admin.berita.create', 'icon' => 'plus'],
+['label' => 'Kelola HKI', 'route' => 'admin.hki.index', 'pattern' => 'admin.hki.*', 'icon' => 'hki'],
 ];
 
 $icons = [
@@ -20,6 +21,11 @@ $icons = [
 'plus' => '<circle cx="12" cy="12" r="9"></circle>
 <path d="M12 8v8"></path>
 <path d="M8 12h8"></path>',
+'hki' => '<path d="M12 3v18"></path>
+<path d="M5 7h14"></path>
+<path d="M7 7 4 13h6L7 7Z"></path>
+<path d="m17 7-3 6h6l-3-6Z"></path>
+<path d="M8 21h8"></path>',
 ];
 @endphp
 <!DOCTYPE html>

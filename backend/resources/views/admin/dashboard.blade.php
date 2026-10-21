@@ -74,6 +74,13 @@ $tones = [
             </svg>
             Kelola Semua Berita
         </a>
+        <a href="{{ route('admin.hki.index') }}"
+            class="inline-flex items-center gap-2 rounded border border-line bg-[#f7f9fc] px-4 py-2.5 text-[0.78rem] font-extrabold tracking-[0.03em] text-navy-dark uppercase transition-colors hover:border-blue hover:bg-[#eef4ff] hover:text-blue">
+            <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v18"></path><path d="M5 7h14"></path><path d="M7 7 4 13h6L7 7Z"></path><path d="m17 7-3 6h6l-3-6Z"></path>
+            </svg>
+            Kelola HKI
+        </a>
         <a href="{{ route('home') }}" target="_blank"
             class="inline-flex items-center gap-2 rounded border border-line bg-[#f7f9fc] px-4 py-2.5 text-[0.78rem] font-extrabold tracking-[0.03em] text-navy-dark uppercase transition-colors hover:border-blue hover:bg-[#eef4ff] hover:text-blue">
             <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
