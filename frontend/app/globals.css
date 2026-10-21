@@ -64,21 +64,25 @@
 @layer components {
     /* --- Layout helpers --------------------------------- */
     .page-inner {
-        @apply mx-auto w-[calc(100%-22px)] max-w-[1240px];
+        @apply mx-auto w-[calc(100%-8%)] max-w-[1780px];
     }
 
     .wide-inner {
-        @apply mx-auto w-[calc(100%-26px)] max-w-[1280px];
+        @apply mx-auto w-[calc(100%-8%)] max-w-[1780px];
     }
 
     /* --- Top date bar ----------------------------------- */
     .top-date-time {
-        @apply rounded-[3px] bg-blue px-[9px] py-[3px] text-[12px] font-extrabold tracking-[0.02em] text-white;
+        @apply rounded-[2px] bg-blue px-[5px] py-[2px] text-[16px] font-bold tracking-[0.02em] text-white;
+    }
+
+    .skip-link {
+        @apply block h-[37px] bg-white px-1 py-1 text-[18px] text-blue underline;
     }
 
     /* --- Hero / branding -------------------------------- */
     .hero-wrap {
-        @apply relative flex min-h-[138px] items-center justify-center overflow-hidden bg-navy;
+        @apply relative flex min-h-[126px] items-center justify-center overflow-hidden bg-navy;
         background-image:
             linear-gradient(180deg, rgba(13, 36, 74, 0.72), rgba(13, 36, 74, 0.58)),
             url('/images/head-back.jpg');
@@ -88,7 +92,7 @@
     }
 
     .hero-wrap::after {
-        @apply pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[4px] bg-gradient-to-r from-blue to-blue-bright;
+        @apply hidden;
         content: '';
     }
 
@@ -103,11 +107,11 @@
 
     /* --- Navigation ------------------------------------- */
     .nav-bar {
-        @apply flex min-h-[50px] items-center justify-between gap-2 border-b border-white/10 bg-gradient-to-b from-navy-soft to-navy-dark pr-2.5;
+        @apply flex min-h-[65px] items-center justify-between gap-2 border-b border-white/10 bg-[#203260] pr-2.5;
     }
 
     .nav-home {
-        @apply mr-2 inline-flex size-[46px] shrink-0 items-center justify-center border-r border-white/10 bg-white/10 text-lg text-white transition-colors;
+        @apply mr-2 inline-flex size-[80px] shrink-0 items-center justify-center border-r border-white/10 bg-blue text-lg text-white transition-colors;
     }
 
     .nav-home:hover,
@@ -116,7 +120,7 @@
     }
 
     .nav-item {
-        @apply inline-flex items-center gap-1 border-b-[3px] border-transparent px-[11px] pt-4 pb-[15px] text-[0.7rem] leading-tight font-bold tracking-[0.02em] text-white/90 uppercase transition-colors;
+        @apply inline-flex items-center gap-1 border-b-[3px] border-transparent px-[14px] py-[22px] text-[16px] leading-tight font-bold tracking-[0.01em] text-white/90 uppercase transition-colors;
     }
 
     .nav-item:hover {
@@ -213,7 +217,7 @@
 
     /* --- Latest-post ticker ----------------------------- */
     .bn-title {
-        @apply inline-flex h-[52px] min-w-[180px] shrink-0 items-center justify-center bg-gradient-to-b from-[#1e7be8] to-[#0e5ebf] px-5 text-base font-extrabold text-white;
+        @apply inline-flex h-[52px] min-w-[210px] shrink-0 items-center justify-center bg-gradient-to-b from-[#1e7be8] to-[#0e5ebf] px-5 text-base font-extrabold text-white;
     }
 
     .ticker-icon {
@@ -226,7 +230,7 @@
     }
 
     .ticker-item {
-        @apply relative inline-flex h-full items-center gap-2.5 px-[26px] text-[0.95rem] leading-none font-bold whitespace-nowrap text-[#0d4aa6];
+        @apply relative inline-flex h-full items-center gap-2.5 px-[26px] text-[1.05rem] leading-none font-bold whitespace-nowrap text-[#0d4aa6];
     }
 
     .ticker-item:hover {
@@ -240,7 +244,7 @@
 
     /* --- Featured slider -------------------------------- */
     .feature-track {
-        @apply flex h-[480px] w-full transition-transform duration-700 ease-in-out;
+        @apply flex h-[540px] w-full transition-transform duration-700 ease-in-out;
         will-change: transform;
     }
 
@@ -249,7 +253,7 @@
     }
 
     .feature-slide .feature-image {
-        @apply relative flex h-full w-full items-end justify-center overflow-hidden bg-[#edf3fb] bg-contain bg-center bg-no-repeat;
+        @apply relative flex h-full w-full items-end justify-center overflow-hidden bg-[#edf3fb] bg-cover bg-center bg-no-repeat;
     }
 
     .feature-slide .feature-image::before {
@@ -258,7 +262,7 @@
     }
 
     .feature-slide .feature-content {
-        @apply absolute inset-x-0 bottom-0 z-[1] max-w-[74%] px-9 pt-[22px] pb-[18px] text-white;
+        @apply absolute inset-x-0 bottom-0 z-[1] max-w-[88%] px-9 pt-[22px] pb-[18px] text-white;
     }
 
     .feature-category {
@@ -266,7 +270,7 @@
     }
 
     .feature-title {
-        @apply mb-3 max-w-[820px] text-[clamp(2rem,3vw,4.1rem)] leading-[0.96] font-black tracking-[-0.06em] text-white uppercase;
+        @apply mb-3 max-w-[820px] text-[clamp(1.8rem,2.35vw,2.55rem)] leading-[1.12] font-extrabold tracking-[-0.035em] text-white;
         text-shadow: 0 2px 14px rgba(4, 20, 41, 0.24);
     }
 
@@ -279,7 +283,7 @@
     }
 
     .feature-nav {
-        @apply absolute top-1/2 z-[2] grid size-[38px] -translate-y-1/2 cursor-pointer place-items-center rounded-full border-navy/10 bg-white/85 text-[2rem] leading-none text-navy-dark;
+        @apply absolute top-1/2 z-[2] grid size-[44px] -translate-y-1/2 cursor-pointer place-items-center rounded-[2px] border-navy/10 bg-white text-[2rem] leading-none text-[#333];
         box-shadow: 0 8px 18px rgba(12, 24, 54, 0.16);
     }
 
@@ -293,7 +297,7 @@
 
     /* --- Sidebar tabs ----------------------------------- */
     .tab {
-        @apply relative flex min-h-[48px] cursor-pointer items-center justify-center gap-2 border-0 border-r border-navy/10 bg-gradient-to-b from-[#f8fafc] to-[#edf2f8] px-2.5 py-3 text-[0.82rem] font-extrabold text-[#1a2d43] transition-all duration-200;
+        @apply relative flex min-h-[50px] cursor-pointer items-center justify-center gap-2 border-0 border-r border-navy/10 bg-white px-2.5 py-3 text-[1.15rem] font-bold text-[#111827] transition-all duration-200;
     }
 
     .tab:last-child {
@@ -301,7 +305,7 @@
     }
 
     .tab:hover {
-        @apply bg-gradient-to-b from-white to-[#edf4ff] text-[#123d6d];
+        @apply bg-gradient-to-b from-white to-[#edf4ff] text-[#0d5ec9];
     }
 
     .tab.active {
@@ -325,11 +329,16 @@
 
     /* --- Small post list (sidebar) ---------------------- */
     .small-post {
-        @apply grid-cols-[92px_1fr] items-center gap-2.5 border-line bg-[#f7f9fc] p-2;
+        @apply grid-cols-[110px_1fr] items-center gap-4 border-line bg-white p-2;
     }
 
     .small-post .title {
-        @apply mt-1.5 line-clamp-3 text-[0.9rem] leading-snug;
+        @apply mt-1.5 line-clamp-3 text-[0.9rem] leading-snug font-bold text-[#111827] transition-colors duration-150;
+    }
+
+    .small-post:hover .title,
+    .small-post:focus-visible .title {
+        @apply text-[#0d5ec9];
     }
 
     /* --- Article cards ---------------------------------- */
@@ -338,7 +347,11 @@
     }
 
     .article-post .entry-title {
-        @apply mt-2 mb-2.5 text-[clamp(1.15rem,1.7vw,1.5rem)] leading-[1.28] font-extrabold text-[#0e294f];
+        @apply mt-2 mb-2.5 text-[clamp(1.15rem,1.7vw,1.5rem)] leading-[1.28] font-extrabold text-[#111827];
+    }
+
+    .article-post .entry-title a {
+        @apply transition-colors duration-150 hover:text-[#0d5ec9];
     }
 
     /* --- Cover-card overlays ---------------------------- */

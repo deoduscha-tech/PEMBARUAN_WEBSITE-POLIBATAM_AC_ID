@@ -34,7 +34,7 @@ export default async function BeritaDetailPage({ params }) {
 
   return (
     <>
-      <SiteHeader page="home" />
+      <SiteHeader page="home" active="informasi" />
 
       <main className="bg-[#efefef] pb-6">
         <div className="wide-inner py-6">

@@ -131,7 +131,7 @@ function Shell({ children }) {
   return (
     <>
       <SiteHeader page="home" active="kontak" />
-      <main className="bg-[#efefef] pb-6">{children}</main>
+      <main id="main-content" className="bg-[#efefef] pb-6">{children}</main>
       <SiteFooter />
     </>
   );

@@ -8,23 +8,17 @@ import { apiGet } from '@/lib/api';
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'Berita — Pusat P2M Polibatam',
+  title: 'Informasi — Pusat P2M Polibatam',
 };
 
-const PER_PAGE = 6;
+const PER_PAGE = 5;
 
 export default async function BeritaIndexPage({ searchParams }) {
   const params = await searchParams;
-
-  const page = Math.max(1, Number(params?.page ?? 1));
-  const query = params?.q ?? '';
-  const category = params?.kategori ?? '';
-
-  // Data diambil dari API Laravel.
+  const page = Math.max(1, Number(params?.page ?? 1) || 1);
+  const query = String(params?.q ?? '').trim();
   const response = await apiGet('/berita', {
-    params: query
-      ? { q: query }
-      : { page, per_page: PER_PAGE, category: category || null },
+    params: query ? { q: query, limit: 1000 } : { page, per_page: PER_PAGE },
   });
 
   if (!response.ok) {
@@ -32,10 +26,9 @@ export default async function BeritaIndexPage({ searchParams }) {
       <Shell>
         <div className="wide-inner py-16">
           <div className="border-l-4 border-amber-500 bg-amber-50 px-5 py-4 text-[#7c4a03]">
-            <p className="font-extrabold">Tidak dapat memuat berita</p>
+            <p className="font-extrabold">Tidak dapat memuat informasi</p>
             <p className="mt-1 text-[0.9rem]">
-              {response.error} — pastikan backend berjalan:{' '}
-              <code>cd backend &amp;&amp; php artisan serve</code>
+              {response.error} — pastikan backend berjalan: <code>cd backend &amp;&amp; php artisan serve</code>
             </p>
           </div>
         </div>
@@ -43,75 +36,23 @@ export default async function BeritaIndexPage({ searchParams }) {
     );
   }
 
-  const apiItems = response.data.data ?? [];
-  const apiMeta = response.data.meta ?? {};
-  const apiCategories = apiMeta.categories ?? [];
-
-  // Kalau ada pencarian, tampilkan hasilnya tanpa pagination.
-  if (query) {
-    return (
-      <Shell>
-        <h1 className="wide-inner py-6 text-[clamp(2rem,3.5vw,3rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
-          HASIL PENCARIAN
-        </h1>
-        <div className="wide-inner pb-6">
-          <p className="mb-5 text-[0.95rem] text-[#5b6675]">
-            {apiItems.length} hasil untuk <strong>&ldquo;{query}&rdquo;</strong>
-          </p>
-          <PostList posts={apiItems} />
-        </div>
-      </Shell>
-    );
-  }
-
-  const items = apiItems;
-  const meta = {
-    page: apiMeta.page ?? page,
-    lastPage: apiMeta.last_page ?? 1,
-    total: apiMeta.total ?? apiItems.length,
-  };
-
-  const categories = apiCategories;
+  const posts = response.data.data ?? [];
+  const meta = response.data.meta ?? {};
 
   return (
     <Shell>
-      <h1 className="wide-inner py-6 text-[clamp(2rem,3.5vw,3rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
-        BERITA
-      </h1>
+      <div className="wide-inner py-[18px]">
+        {query && (
+          <h1 className="mb-5 text-[clamp(1.8rem,3vw,2.5rem)] font-extrabold tracking-[-0.04em] text-[#111827]">
+            Hasil pencarian: {query}
+          </h1>
+        )}
 
-      {/* Filter kategori */}
-      <div className="wide-inner mb-5 flex flex-wrap items-center gap-2">
-        <Link
-          href="/berita"
-          className={`rounded-full px-3.5 py-1.5 text-[0.75rem] font-bold uppercase transition-colors ${!category
-              ? 'bg-[#1e6fd9] text-white'
-              : 'border border-[#c9d2de] text-[#3b4757] hover:bg-[#eaf1ff]'
-            }`}
-        >
-          Semua
-        </Link>
-        {categories.map((item) => (
-          <Link
-            key={item}
-            href={`/berita?kategori=${encodeURIComponent(item)}`}
-            className={`rounded-full px-3.5 py-1.5 text-[0.75rem] font-bold uppercase transition-colors ${category === item
-                ? 'bg-[#1e6fd9] text-white'
-                : 'border border-[#c9d2de] text-[#3b4757] hover:bg-[#eaf1ff]'
-              }`}
-          >
-            {item}
-          </Link>
-        ))}
-      </div>
+        <PostList posts={posts} />
 
-      <div className="wide-inner pb-6">
-        <p className="mb-4 text-[0.85rem] text-[#5b6675]">
-          Menampilkan {items.length} dari {meta.total} berita
-        </p>
-
-        <PostList posts={items} />
-
-        <Pagination page={meta.page} lastPage={meta.lastPage} basePath="/berita" />
+        {!query && (
+          <Pagination page={meta.page ?? page} lastPage={meta.last_page ?? 1} basePath="/berita" />
+        )}
       </div>
     </Shell>
   );
@@ -120,8 +61,8 @@ export default async function BeritaIndexPage({ searchParams }) {
 function Shell({ children }) {
   return (
     <>
-      <SiteHeader page="home" />
-      <main className="bg-[#efefef] pb-6">{children}</main>
+      <SiteHeader page="home" active="informasi" />
+      <main id="main-content" className="bg-[#efefef] pb-6">{children}</main>
       <SiteFooter />
     </>
   );
@@ -129,43 +70,35 @@ function Shell({ children }) {
 
 function PostList({ posts }) {
   if (posts.length === 0) {
-    return (
-      <p className="rounded border border-[#d7dce4] bg-white p-6 text-center text-[0.9rem] text-[#8894a6]">
-        Tidak ada berita ditemukan.
-      </p>
-    );
+    return <p className="border border-[#d7dce4] bg-white p-6 text-center text-[0.9rem] text-[#8894a6]">Tidak ada informasi ditemukan.</p>;
   }
 
   return (
-    <div className="flex flex-col gap-[18px]">
+    <div className="flex flex-col">
       {posts.map((post) => (
-        <article key={post.slug} className="flex gap-[18px] border border-[#e2e6ec] bg-white">
+        <article key={post.slug} className="article-post mb-[18px] flex flex-col gap-[18px] border md:flex-row">
           <Link
             href={`/berita/${post.slug}`}
-            className="block min-h-[180px] w-[280px] shrink-0 bg-cover bg-center"
+            className="block min-h-[220px] w-full shrink-0 border bg-cover bg-center md:min-h-[280px] md:w-1/2"
             style={{ backgroundImage: `url('${post.image}')` }}
             aria-label={post.title}
           />
-          <div className="flex min-w-0 flex-1 flex-col justify-center py-4 pr-5">
-            <span className="category-chip w-fit">
-              {String(post.category).toUpperCase()}
-            </span>
-            <h3 className="mt-2 text-[1.25rem] leading-snug font-extrabold text-[#0b1d35]">
+          <div className="flex min-w-0 flex-1 flex-col justify-center">
+            <span className="category-chip w-fit">{String(post.category).toUpperCase()}</span>
+            <h2 className="entry-title">
               <Link href={`/berita/${post.slug}`}>{post.title}</Link>
-            </h3>
-            <div className="mt-1.5 flex flex-wrap items-center gap-2.5 text-[0.76rem] font-bold text-[#6b7787]">
+            </h2>
+            <div className="flex flex-wrap items-center gap-2.5 text-[0.78rem] font-bold text-[#6b7787]">
               <span>{post.date}</span>
               <span aria-hidden="true">&middot;</span>
               <span>{post.author}</span>
-              <span aria-hidden="true">&middot;</span>
-              <span>{post.views ?? 0} dibaca</span>
             </div>
-            <p className="mt-2 text-[0.92rem] leading-relaxed text-[#5b6675]">{post.excerpt}</p>
+            <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">{post.excerpt}</p>
             <Link
               href={`/berita/${post.slug}`}
-              className="mt-2.5 w-fit text-[0.8rem] font-bold text-[#1e6fd9] hover:underline"
+              className="mt-3 inline-flex w-fit items-center gap-1.5 text-[0.8rem] font-bold text-blue hover:underline"
             >
-              Baca Selengkapnya &rarr;
+              Baca Selengkapnya <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
         </article>

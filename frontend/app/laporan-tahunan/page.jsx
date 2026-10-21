@@ -30,9 +30,9 @@ export default async function LaporanTahunanPage() {
 
   return (
     <>
-      <SiteHeader page="home" />
+      <SiteHeader page="home" active="profil" />
 
-      <main className="bg-[#efefef] pb-6">
+      <main id="main-content" className="bg-[#efefef] pb-6">
         <div className="wide-inner mb-4 border-line bg-white p-8">
           <h1 className="mb-[18px] text-[clamp(1.9rem,3vw,2.6rem)] font-black tracking-[0.02em] text-[#0b1d35] uppercase">
             {data.title ?? `LAPORAN TAHUNAN P3M TAHUN ${reportYear}`}

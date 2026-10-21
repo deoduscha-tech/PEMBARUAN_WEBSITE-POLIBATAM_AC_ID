@@ -39,7 +39,7 @@ export default async function PublikasiPage({ searchParams }) {
 
   return (
     <Shell>
-      <main className="bg-[#efefef] pb-6">
+      <main id="main-content" className="bg-[#efefef] pb-6">
         <h1 className="wide-inner py-6 text-[clamp(2rem,3.5vw,3rem)] font-black tracking-[-0.04em] text-[#101926] uppercase">
           {active.label ?? `TAHUN ${tahun ?? ''}`}
         </h1>

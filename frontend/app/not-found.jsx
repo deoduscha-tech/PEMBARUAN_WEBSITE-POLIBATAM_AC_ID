@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <main className="grid min-h-screen place-items-center bg-[#0a1428] px-4 text-center">
+    <main id="main-content" className="grid min-h-screen place-items-center bg-[#0a1428] px-4 text-center">
       <div className="max-w-[520px]">
         <p className="text-[clamp(4rem,12vw,8rem)] leading-none font-black tracking-[-0.06em] text-[#f0c869]">
           404

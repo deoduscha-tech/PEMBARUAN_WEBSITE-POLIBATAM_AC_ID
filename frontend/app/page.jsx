@@ -2,6 +2,8 @@ import Link from 'next/link';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
 import FeaturedSlider from '../components/FeaturedSlider';
+import SidebarTabs from '../components/SidebarTabs';
+import Pagination from '../components/Pagination';
 import { apiGet } from '@/lib/api';
 
 // Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
@@ -12,7 +14,10 @@ export const metadata = {
   title: 'Beranda — Pusat P2M Polibatam',
 };
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }) {
+  const params = await searchParams;
+  const requestedPage = Math.max(1, Number(params?.page ?? 1) || 1);
+
   // Data diambil dari API Laravel — frontend tidak menyimpan data sendiri.
   const response = await apiGet('/beranda');
 
@@ -25,15 +30,18 @@ export default async function HomePage() {
   const trending = payload.trendingPosts ?? [];
   const missed = payload.missedCards ?? [];
 
-  // Beranda hanya menampilkan 5 berita terbaru; sisanya di /berita.
-  const posts = (payload.homePosts ?? []).slice(0, 5);
-  const totalPosts = (payload.homePosts ?? []).length;
+  const allPosts = payload.homePosts ?? [];
+  const totalPosts = allPosts.length;
+  const homePageSize = 2;
+  const lastHomePage = 5;
+  const homePage = Math.min(requestedPage, lastHomePage);
+  const posts = allPosts.slice((homePage - 1) * homePageSize, homePage * homePageSize);
 
   if (!response.ok) {
     return (
       <>
         <SiteHeader page="home" />
-        <main className="wide-inner py-16">
+        <main id="main-content" className="wide-inner py-16">
           <div className="border-l-4 border-amber-500 bg-amber-50 px-5 py-4 text-[#7c4a03]">
             <p className="font-extrabold">Tidak dapat memuat data dari API Laravel</p>
             <p className="mt-1 text-[0.9rem]">
@@ -50,7 +58,7 @@ export default async function HomePage() {
   const tabs = [
     { key: 'latest', label: 'Latest', posts: latest },
     { key: 'popular', label: 'Popular', posts: popular },
-    { key: 'trending', label: 'Trending', posts: popular },
+    { key: 'trending', label: 'Trending', posts: trending },
   ];
 
   const slides = featured.length > 0 ? featured : posts.slice(0, 3);
@@ -102,60 +110,22 @@ export default async function HomePage() {
       </section>
 
       {/* Featured slider + sidebar tabs */}
-      <section className="bg-[#eceef2]">
-        <div className="wide-inner grid gap-[18px] py-[18px] lg:grid-cols-[minmax(0,2.1fr)_minmax(300px,0.92fr)] lg:items-stretch">
+      <section id="main-content" className="bg-[#eceef2]">
+        <div className="wide-inner grid gap-[18px] py-[36px] lg:grid-cols-[minmax(0,2.1fr)_minmax(300px,0.92fr)] lg:items-stretch">
           <FeaturedSlider slides={slides} />
 
-          {/* Tab sidebar — hanya satu panel yang tampil, sisanya `hidden`. */}
-          <div className="flex flex-col border-line bg-white shadow-card">
-            <ul className="grid grid-cols-3 border-b border-line">
-              {tabs.map((tab, index) => (
-                <li key={tab.key}>
-                  <span className={`tab ${index === 0 ? 'active' : ''}`}>{tab.label}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="flex flex-1 flex-col p-3">
-              {tabs.map((tab, index) => (
-                <div
-                  key={tab.key}
-                  className="flex flex-1 flex-col gap-3"
-                  hidden={index !== 0}
-                >
-                  {tab.posts.map((post) => (
-                    <Link
-                      key={`${tab.key}-${post.slug}`}
-                      href={`/berita/${post.slug}`}
-                      className="small-post grid border"
-                    >
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="h-[60px] w-full border-line object-cover"
-                        loading="lazy"
-                      />
-                      <div className="min-w-0">
-                        <span className="category-chip">INFORMASI</span>
-                        <p className="title">{post.title}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
+          <SidebarTabs tabs={tabs} />
         </div>
       </section>
 
       {/* Post list */}
       <div className="wide-inner py-[18px]">
         {posts.map((post) => (
-          <article key={post.slug} className="article-post mb-[18px] flex gap-[18px] border">
-            <div className="flex w-[300px] shrink-0 flex-col">
+          <article key={post.slug} className="article-post mb-[18px] flex flex-col gap-[18px] border md:flex-row">
+            <div className="flex w-full shrink-0 flex-col md:w-1/2">
               <Link
                 href={`/berita/${post.slug}`}
-                className="block min-h-[200px] flex-1 border bg-cover bg-center"
+                className="block min-h-[220px] flex-1 border bg-cover bg-center md:min-h-[280px]"
                 style={{ backgroundImage: `url('${post.image}')` }}
                 aria-label={post.title}
               />
@@ -187,18 +157,12 @@ export default async function HomePage() {
           </article>
         ))}
 
-        {totalPosts > posts.length && (
-          <div className="flex justify-center py-2">
-            <Link
-              href="/berita"
-              className="inline-flex items-center gap-2 rounded bg-gradient-to-b from-[#1e7be8] to-[#0e5ebf] px-6 py-3 text-[0.78rem] font-extrabold tracking-[0.03em] text-white uppercase shadow-[0_8px_18px_rgba(29,122,230,0.28)] transition-transform hover:-translate-y-px"
-            >
-              Lihat Semua Berita ({totalPosts})
-              <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" />
-                <path d="M12 5l7 7-7 7" />
-              </svg>
-            </Link>
+        {lastHomePage > 1 && (
+          <div className="mt-3 flex flex-col items-center justify-center gap-1.5 sm:flex-row sm:gap-2">
+            <h2 className="text-center text-[clamp(1.7rem,2.7vw,2.35rem)] leading-tight font-extrabold tracking-[-0.04em] text-[#111827]">
+              Posts pagination
+            </h2>
+            <Pagination page={homePage} lastPage={lastHomePage} basePath="/" showAllPages variant="home" />
           </div>
         )}
       </div>
