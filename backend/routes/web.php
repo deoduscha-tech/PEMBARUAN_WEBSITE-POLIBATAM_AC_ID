@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\HkiController;
 use App\Http\Controllers\PublicPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,5 +50,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('berita/{id}/edit', [NewsController::class, 'edit'])->name('berita.edit');
         Route::put('berita/{id}', [NewsController::class, 'update'])->name('berita.update');
         Route::delete('berita/{id}', [NewsController::class, 'destroy'])->name('berita.destroy');
+
+        Route::get('hki', [HkiController::class, 'index'])->name('hki.index');
+        Route::get('hki/tambah', [HkiController::class, 'create'])->name('hki.create');
+        Route::post('hki', [HkiController::class, 'store'])->name('hki.store');
+        Route::get('hki/{year}/edit', [HkiController::class, 'edit'])->whereNumber('year')->name('hki.edit');
+        Route::put('hki/{year}', [HkiController::class, 'update'])->whereNumber('year')->name('hki.update');
+        Route::delete('hki/{year}', [HkiController::class, 'destroy'])->whereNumber('year')->name('hki.destroy');
     });
 });
