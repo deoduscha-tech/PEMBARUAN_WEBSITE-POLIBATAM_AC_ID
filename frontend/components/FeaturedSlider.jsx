@@ -43,6 +43,20 @@ export default function FeaturedSlider({ slides = [] }) {
 
       {slides.length > 1 && (
         <>
+          <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+            {slides.map((slide, index) => (
+              <button
+                key={slide.slug}
+                type="button"
+                onClick={() => go(index)}
+                aria-label={`Tampilkan slide ${index + 1}`}
+                aria-current={active === index ? 'true' : undefined}
+                className={`grid size-8 place-items-center rounded-full text-sm font-bold shadow ${active === index ? 'bg-white text-[#0e5ebf]' : 'bg-black/45 text-white hover:bg-black/65'}`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             onClick={() => go(active - 1)}

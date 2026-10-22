@@ -49,6 +49,8 @@ class HkiApiController extends Controller
         return response()->json([
             'data' => [
                 'menu' => $menu,
+                'views' => 8490,
+                'content' => '<p>Hak Kekayaan Intelektual (HKI) merupakan bagian dari komitmen Polibatam University Berdampak dalam mendorong lahirnya karya intelektual yang terlindungi dan bermanfaat bagi masyarakat serta industri.</p><ul><li>Perlindungan inovasi produk dan teknologi</li><li>Pengembangan karya riset yang aplikatif</li><li>Dukungan komersialisasi hasil penelitian</li><li>Kolaborasi dengan industri dan mitra strategis</li></ul>',
             ],
         ]);
     }

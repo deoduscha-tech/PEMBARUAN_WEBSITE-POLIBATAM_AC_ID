@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\KontakApiController;
 use App\Http\Controllers\Api\NewsAdminApiController;
 use App\Http\Controllers\Api\NewsApiController;
 use App\Http\Controllers\Api\PublikasiApiController;
+use App\Http\Controllers\Api\StatistikApiController;
 use App\Http\Controllers\Api\TupoksiApiController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/beranda', [NewsApiController::class, 'home'])->name('api.beranda');
 Route::get('/berita', [NewsApiController::class, 'index'])->name('api.berita.index');
 Route::get('/laporan-tahunan', [NewsApiController::class, 'laporanTahunan'])->name('api.laporan-tahunan');
+Route::get('/statistik', [StatistikApiController::class, 'index'])->name('api.statistik');
 
 // --- Publikasi ---
 Route::get('/publikasi', [PublikasiApiController::class, 'index'])->name('api.publikasi.index');

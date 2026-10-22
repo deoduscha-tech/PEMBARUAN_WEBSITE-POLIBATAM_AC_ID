@@ -17,12 +17,16 @@ class PublicPageController extends Controller
      */
     protected function sharedData(): array
     {
+        $statistikPath = resource_path('data/statistik.php');
+        $statistik = is_file($statistikPath) ? require $statistikPath : ['charts' => [], 'visitors' => 0];
+
         return [
             'featured' => $this->news->featured()->take(3)->values(),
             'latestPosts' => $this->news->latest(4),
             'popularPosts' => $this->news->popular(4),
             'trendingPosts' => $this->news->popular(4),
             'missedCards' => $this->news->latest(4),
+            'statistik' => $statistik,
         ];
     }
 

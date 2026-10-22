@@ -15,10 +15,11 @@
     $homePosts = $homePosts ?? collect();
     $missedCards = $missedCards ?? collect();
 
-    // Featured slider falls back to the newest posts when none is flagged.
+    // Featured slider shows all posts flagged for the home carousel; if none
+    // are flagged, it falls back to every published post.
     $featuredSlides = $featured->isNotEmpty()
-        ? $featured->take(3)
-        : $homePosts->take(3);
+        ? $featured
+        : $homePosts;
 
     // The running headline strip mirrors the newest posts (slug + title).
     $tickerItems = $homePosts->take(5);
@@ -92,13 +93,10 @@
 
                 {{-- Featured carousel --}}
                 <div data-slider class="relative min-h-[480px] overflow-hidden border-navy-dark/10 bg-[#eef2f7] shadow-card">
+                    <div data-slide-track class="feature-track">
                     @foreach ($featuredSlides as $index => $slide)
                         <article data-slide class="feature-slide {{ $index === 0 ? 'active' : '' }}">
                             <div class="feature-image" style="background-image: url('{{ $slide['image'] }}');">
-                                <button type="button" data-slide-prev
-                                        class="feature-nav prev" aria-label="Slide sebelumnya">&#8249;</button>
-                                <button type="button" data-slide-next
-                                        class="feature-nav next" aria-label="Slide berikutnya">&#8250;</button>
                                 <div class="feature-content">
                                     <span class="feature-category">{{ $slide['category'] }}</span>
                                     <h4 class="feature-title">{{ $slide['title'] }}</h4>
@@ -111,6 +109,11 @@
                             </div>
                         </article>
                     @endforeach
+                    </div>
+                    @if ($featuredSlides->count() > 1)
+                        <button type="button" data-slide-prev class="feature-nav prev" aria-label="Slide sebelumnya">&#8249;</button>
+                        <button type="button" data-slide-next class="feature-nav next" aria-label="Slide berikutnya">&#8250;</button>
+                    @endif
                 </div>
 
                 {{-- Sidebar: latest / popular / trending --}}
@@ -360,37 +363,46 @@
     @elseif ($page === 'statistik')
         <div class="bg-[#efefef] pb-6">
             <h1 class="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">STATISTIK</h1>
-            <div class="wide-inner mb-4 border-line bg-[#f3f3f3]">
-                <div class="story-row">
-                    <div class="story-thumb"><span class="text-[clamp(1.8rem,3vw,3rem)] font-black text-navy-dark">P2M</span></div>
-                    <div class="story-copy rich-copy">
-                        <h3>Statistik Pusat Penelitian dan Pengabdian Masyarakat</h3>
-                        <p>Pusat P2M Polibatam terus memperkuat aktivitas riset, publikasi, dan pengabdian dengan fokus pada inovasi, kolaborasi, serta dampak nyata bagi masyarakat dan industri.</p>
-                        <ul>
-                            <li>Riset dan inovasi terarah sesuai kebutuhan industri</li>
-                            <li>Kolaborasi lintas disiplin dan mitra strategis</li>
-                            <li>Publikasi ilmiah dan penguatan karya akademik</li>
-                            <li>Pengabdian masyarakat berbasis solusi teknologi</li>
-                        </ul>
-                    </div>
+            <div class="wide-inner mb-4 space-y-8 border-line bg-white p-5 md:p-8">
+                @php
+                    $statistikCharts = collect($statistik['charts'] ?? [])->keyBy('key');
+                    $renderStatistikChart = function ($key) use ($statistikCharts) {
+                        $chart = $statistikCharts->get($key);
+                        if (!$chart) return;
+                        echo '<iframe title="' . e($chart['title']) . '" src="https://datawrapper.dwcdn.net/' . e($chart['id']) . '/' . (int) $chart['version'] . '/" width="' . (int) $chart['width'] . '" height="' . (int) $chart['height'] . '" loading="lazy" scrolling="no" frameborder="0" class="block w-full border-0" style="max-width:' . (int) $chart['width'] . 'px;height:' . (int) $chart['height'] . 'px"></iframe>';
+                    };
+                @endphp
+                @php $renderStatistikChart('internal'); @endphp
+                @php $renderStatistikChart('external'); @endphp
+                @php $renderStatistikChart('hki'); @endphp
+                <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                    @foreach (['copyright', 'patent', 'industrialDesign'] as $chartKey)
+                        @php $renderStatistikChart($chartKey); @endphp
+                    @endforeach
+                </div>
+                @php $renderStatistikChart('lecturer'); @endphp
+                <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                    @foreach (['electrical', 'informatics', 'business', 'mechanical'] as $chartKey)
+                        @php $renderStatistikChart($chartKey); @endphp
+                    @endforeach
                 </div>
             </div>
-            <div class="wide-inner pb-6 text-[1.12rem] font-bold">Jumlah Pengunjung: 12,480</div>
+            <div class="wide-inner pb-6 text-[1.12rem] font-bold">Jumlah Pengunjung: {{ number_format($statistik['visitors'] ?? 0) }}</div>
         </div>
     @elseif ($page === 'berdampak')
         <div class="bg-[#efefef] pb-6">
             <h1 class="wide-inner py-6 text-[clamp(2rem,3.5vw,3.5rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">Polibatam University Berdampak</h1>
-            <div class="wide-inner mb-4 border-line bg-[#f3f3f3]">
-                <div class="story-row">
-                    <div class="story-thumb"><span class="text-[clamp(1.2rem,2vw,2.2rem)] font-black text-navy-dark uppercase">Impact</span></div>
-                    <div class="story-copy rich-copy">
-                        <h3>Membangun dampak nyata untuk masyarakat dan industri</h3>
-                        <p>Polibatam University Berdampak merupakan komitmen untuk membawa kontribusi nyata melalui riset, inovasi, pengabdian, dan penerapan teknologi yang berdampak pada kualitas hidup, daya saing industri, serta kesejahteraan masyarakat.</p>
-                        <p>Melalui pendekatan kolaboratif, Polibatam mendorong terciptanya solusi yang bermanfaat secara luas, terukur, dan berkelanjutan.</p>
-                        <a class="read-more" href="#">Pelajari lebih lanjut</a>
-                    </div>
-                </div>
+            <div class="wide-inner mb-4 border-line bg-[#f3f3f3] p-6 rich-copy">
+                <article class="mx-auto max-w-[1360px] px-0 py-2 md:px-2">
+                    <h2 class="mb-5 text-center text-[clamp(1.45rem,2vw,2rem)] leading-tight font-bold tracking-[-0.035em] text-black">Laporan Dampak Sosial, Ekonomi, dan Lingkungan Politeknik Negeri Batam Tahun 2025</h2>
+                    <p class="mb-5 text-justify leading-[2.05]">Politeknik Negeri Batam (Polibatam) berkomitmen untuk terus menghadirkan pendidikan vokasi yang memberikan manfaat nyata bagi masyarakat. Komitmen tersebut diwujudkan melalui <strong>Laporan Dampak Sosial, Ekonomi, dan Lingkungan Tahun 2025</strong>, yang mendokumentasikan kontribusi institusi dalam mendukung pembangunan berkelanjutan melalui pelaksanaan Tri Dharma Perguruan Tinggi dan tata kelola kelembagaan. Laporan ini disusun sebagai bentuk akuntabilitas kepada para pemangku kepentingan sekaligus sebagai instrumen evaluasi dalam memperkuat peran Polibatam sebagai <em>impact-driven polytechnic</em>.</p>
+                    <p class="mb-5 text-justify leading-[2.05]">Laporan ini menyajikan berbagai capaian Polibatam dalam menciptakan dampak pada tiga dimensi utama, yaitu <strong>dampak sosial, dampak ekonomi, dan dampak lingkungan</strong>. Pada aspek sosial, Polibatam terus memperluas akses pendidikan yang inklusif, meningkatkan kualitas penelitian dan inovasi yang berorientasi pada penyelesaian permasalahan masyarakat, serta memperkuat program pengabdian kepada masyarakat melalui kolaborasi dengan berbagai mitra. Di bidang ekonomi, kontribusi institusi diwujudkan melalui hilirisasi hasil riset, pengembangan kewirausahaan, kemitraan dengan dunia usaha dan dunia industri, serta aktivitas akademik yang memberikan nilai tambah bagi perekonomian daerah. Sementara itu, pada aspek lingkungan, Polibatam mengintegrasikan prinsip keberlanjutan dalam pengelolaan kampus, pendidikan, penelitian, dan pengabdian sebagai bagian dari upaya mendukung pencapaian Sustainable Development Goals (SDGs).</p>
+                    <p class="mb-5 text-justify leading-[2.05]">Lebih dari sekadar menyajikan capaian kinerja, laporan ini menunjukkan transformasi Polibatam menuju perguruan tinggi vokasi yang berorientasi pada outcome dan impact. Melalui sinergi antara pendidikan, penelitian, pengabdian kepada masyarakat, inovasi, dan kemitraan strategis, Polibatam berupaya menghadirkan solusi yang relevan bagi kebutuhan masyarakat, industri, dan pemerintah, sekaligus memperkuat daya saing institusi di tingkat nasional maupun internasional.</p>
+                    <p class="mb-5 text-justify leading-[2.05]">Dokumen ini diharapkan menjadi referensi bagi sivitas akademika, pemerintah, dunia usaha dan dunia industri, mitra, serta masyarakat dalam memahami kontribusi nyata Polibatam terhadap pembangunan berkelanjutan. Selain itu, laporan ini menjadi landasan dalam pengambilan keputusan berbasis bukti serta pengembangan kebijakan yang mendukung implementasi RPJP Polibatam 2025–2044, paradigma Diktisaintek Berdampak, dan pencapaian Tujuan Pembangunan Berkelanjutan (SDGs).</p>
+                    <p class="mt-7">Unduh Laporan Dampak Sosial, Ekonomi, dan Lingkungan Politeknik Negeri Batam Tahun 2025 (PDF): <a href="https://polbat-my.sharepoint.com/:b:/g/personal/p3m_polibatam_ac_id/IQDeI_xg-60RTr-O1opMKgpVAfMa5u5bFb4pnu1imIJG_T8?e=ZJtv19" target="_blank" rel="noopener noreferrer">Klik Disini</a></p>
+                </article>
             </div>
+            <div class="wide-inner pb-6 text-[1.12rem] font-bold">Jumlah Pengunjung: 129</div>
         </div>
     @elseif (str_starts_with($page, 'hki-tahun-'))
         {{-- Arsip HKI per tahun — meniru halaman "HKI TAHUN 20xx" situs asli.

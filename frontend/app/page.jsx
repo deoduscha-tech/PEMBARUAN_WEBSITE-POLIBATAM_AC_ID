@@ -46,10 +46,10 @@ export default async function HomePage() {
   const tabs = [
     { key: 'latest', label: 'Latest', posts: latest },
     { key: 'popular', label: 'Popular', posts: popular },
-    { key: 'trending', label: 'Trending', posts: popular },
+    { key: 'trending', label: 'Trending', posts: trending },
   ];
 
-  const slides = featured.length > 0 ? featured : posts.slice(0, 3);
+  const slides = featured.length > 0 ? featured : (payload.homePosts ?? []);
 
   return (
     <>
@@ -183,20 +183,13 @@ export default async function HomePage() {
           </article>
         ))}
 
-        {totalPosts > posts.length && (
-          <div className="flex justify-center py-2">
-            <Link
-              href="/berita"
-              className="inline-flex items-center gap-2 rounded bg-gradient-to-b from-[#1e7be8] to-[#0e5ebf] px-6 py-3 text-[0.78rem] font-extrabold tracking-[0.03em] text-white uppercase shadow-[0_8px_18px_rgba(29,122,230,0.28)] transition-transform hover:-translate-y-px"
-            >
-              Lihat Semua Berita ({totalPosts})
-              <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" />
-                <path d="M12 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        )}
+        <nav aria-label="Navigasi halaman" className="flex items-center justify-center gap-1.5 py-2">
+          <span className="page-numbers current" aria-current="page">1</span>
+          <Link className="page-numbers border" href="/berita?page=2">2</Link>
+          <span className="px-2 text-muted" aria-hidden="true">…</span>
+          <Link className="page-numbers border" href="/berita?page=27">27</Link>
+          <Link className="page-numbers border" href="/berita?page=2" aria-label="Halaman berikutnya">›</Link>
+        </nav>
       </div>
 
       {/* You missed */}

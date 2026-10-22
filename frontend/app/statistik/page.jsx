@@ -1,90 +1,11 @@
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
+import { apiGet } from '@/lib/api';
 
 export const metadata = {
   title: 'Statistik — Pusat P2M Polibatam',
   description: 'Grafik statistik penelitian, pengabdian, HKI, dan jabatan fungsional dosen Polibatam.',
-};
-
-const CHARTS = {
-  internal: {
-    title: 'Penelitian dan Pengabdian Internal',
-    id: 'R7LDv',
-    version: 3,
-    height: 414,
-    width: 970,
-  },
-  external: {
-    title: 'Penelitian dan Pengabdian Eksternal',
-    id: 'T8EQF',
-    version: 2,
-    height: 414,
-    width: 600,
-  },
-  hki: {
-    title: 'HKI (Hak Kekayaan Intelektual) Polibatam 2017-2024',
-    id: 'd5xu9',
-    version: 2,
-    height: 361,
-    width: 600,
-  },
-  copyright: {
-    title: 'Hak Cipta',
-    id: 'wFoOi',
-    version: 5,
-    height: 361,
-    width: 600,
-  },
-  patent: {
-    title: 'Paten/ Paten Sederhana 2017-2024',
-    id: 'dLDrv',
-    version: 1,
-    height: 361,
-    width: 600,
-  },
-  industrialDesign: {
-    title: 'Desain Industri',
-    id: 'fkF82',
-    version: 1,
-    height: 361,
-    width: 600,
-  },
-  lecturer: {
-    title: 'Jabatan Fungsional Dosen Polibatam (24 Feb 2025)',
-    id: 'PN2h5',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
-  electrical: {
-    title: 'Jabatan Fungsional Dosen Teknik Elektro',
-    id: 'F77g5',
-    version: 2,
-    height: 237,
-    width: 600,
-  },
-  informatics: {
-    title: 'Jabatan Fungsional Dosen Teknik Informatika',
-    id: 'NOaHv',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
-  business: {
-    title: 'Jabatan Fungsional Dosen Manajemen Bisnis',
-    id: '4reGJ',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
-  mechanical: {
-    title: 'Jabatan Fungsional Dosen Teknik Mesin',
-    id: 'F4ffL',
-    version: 1,
-    height: 237,
-    width: 600,
-  },
 };
 
 function ChartFrame({ chart, loading = 'lazy' }) {
@@ -105,7 +26,12 @@ function ChartFrame({ chart, loading = 'lazy' }) {
   );
 }
 
-export default function StatistikPage() {
+export default async function StatistikPage() {
+  const response = await apiGet('/statistik');
+  const statistik = response.ok ? response.data.data : null;
+  const charts = statistik?.charts ?? [];
+  const chart = (key) => charts.find((item) => item.key === key);
+
   return (
     <>
       <SiteHeader page="home" active="statistik" />
@@ -116,28 +42,23 @@ export default function StatistikPage() {
         </h1>
 
         <div className="wide-inner mb-4 space-y-8 border-line bg-white p-5 md:p-8">
-          <ChartFrame chart={CHARTS.internal} loading="eager" />
-          <ChartFrame chart={CHARTS.external} />
-          <ChartFrame chart={CHARTS.hki} />
+          {chart('internal') && <ChartFrame chart={chart('internal')} loading="eager" />}
+          {chart('external') && <ChartFrame chart={chart('external')} />}
+          {chart('hki') && <ChartFrame chart={chart('hki')} />}
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            <ChartFrame chart={CHARTS.copyright} />
-            <ChartFrame chart={CHARTS.patent} />
-            <ChartFrame chart={CHARTS.industrialDesign} />
+            {['copyright', 'patent', 'industrialDesign'].map((key) => chart(key) && <ChartFrame key={key} chart={chart(key)} />)}
           </div>
 
-          <ChartFrame chart={CHARTS.lecturer} />
+          {chart('lecturer') && <ChartFrame chart={chart('lecturer')} />}
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <ChartFrame chart={CHARTS.electrical} />
-            <ChartFrame chart={CHARTS.informatics} />
-            <ChartFrame chart={CHARTS.business} />
-            <ChartFrame chart={CHARTS.mechanical} />
+            {['electrical', 'informatics', 'business', 'mechanical'].map((key) => chart(key) && <ChartFrame key={key} chart={chart(key)} />)}
           </div>
         </div>
 
         <div className="wide-inner pb-6 text-[1.12rem] font-bold">
-          Jumlah Pengunjung: 2,702
+          Jumlah Pengunjung: {Number(statistik?.visitors ?? 0).toLocaleString('id-ID')}
         </div>
 
         <MissedSection />

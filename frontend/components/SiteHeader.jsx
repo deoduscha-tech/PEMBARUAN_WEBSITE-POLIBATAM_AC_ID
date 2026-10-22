@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import SearchToggle from './SearchToggle';
 import ProfileDropdown from './ProfileDropdown';
+import HkiDropdown from './HkiDropdown';
 
 /**
  * Alamat panel admin (Laravel).
@@ -76,7 +77,9 @@ export default function SiteHeader({ page = 'home', active = null }) {
 
           <ProfileDropdown isActive={active === 'profil'} />
 
-          {NAV_ITEMS.map((item) =>
+          {NAV_ITEMS.map((item) => item.label === 'HKI' ? (
+            <HkiDropdown key={item.label} active={active === 'hki'} />
+          ) :
             item.external ? (
               <a key={item.label} className="nav-item" href={item.href} target="_blank" rel="noopener noreferrer">
                 {item.label}

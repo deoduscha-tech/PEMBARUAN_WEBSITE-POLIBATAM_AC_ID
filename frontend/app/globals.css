@@ -229,8 +229,9 @@
 
     /* --- Featured slider -------------------------------- */
     .feature-track {
-        @apply flex h-[480px] w-full transition-transform duration-700 ease-in-out;
+        @apply flex h-[480px] w-full;
         will-change: transform;
+        transition: transform 900ms cubic-bezier(0.22, 0.61, 0.36, 1);
     }
 
     .feature-slide {

@@ -76,7 +76,7 @@ class NewsApiController extends Controller
     public function home(): JsonResponse
     {
         return response()->json([
-            'featured' => $this->news->featured()->take(3)->values(),
+            'featured' => $this->news->featured()->values(),
             'homePosts' => $this->news->published()->values(),
             'latestPosts' => $this->news->latest(4)->values(),
             'popularPosts' => $this->news->popular(4)->values(),
