@@ -27,6 +27,21 @@ const NAV_ITEMS = [
 ];
 
 export default function SiteHeader({ page = 'home', active = null }) {
+  // Tanggal & jam diambil saat render (server), bukan ditulis manual — sebelumnya
+  // tertulis "23 September 2026" sehingga basi setelah beberapa hari.
+  const now = new Date();
+  const dateText = new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Asia/Jakarta',
+  }).format(now);
+  const timeText = new Intl.DateTimeFormat('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Jakarta',
+  }).format(now);
 
   return (
     <header>
@@ -34,8 +49,8 @@ export default function SiteHeader({ page = 'home', active = null }) {
       <div className="w-full border-b border-white/10 bg-[#081d35] py-2">
         <div className="page-inner flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 text-[15px] font-bold tracking-[0.01em] text-[#dfeafc]">
-            <span>23 September 2026</span>
-            <span className="opacity-80">19:30</span>
+            <span>Waktu Batam · {dateText}</span>
+            <span className="opacity-80">{timeText} WIB</span>
           </div>
 
           {/* Panel admin ada di Laravel — tautan langsung ke sana. */}

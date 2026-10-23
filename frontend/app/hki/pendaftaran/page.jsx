@@ -121,13 +121,13 @@ export default function PendaftaranHkiPage() {
           HKI
         </Link>
         {HKI_YEARS.map((year) => (
-          <a
+          <Link
             key={year}
             href={`/hki/tahun-${year}`}
             className="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]"
           >
             HKI TAHUN {year}
-          </a>
+          </Link>
         ))}
       </div>
 

@@ -113,13 +113,14 @@ export default async function HkiTahunView({ tahun }) {
           <h3 className="mb-3 text-[1.05rem] font-bold text-[#101926]">Pilih Tahun</h3>
           <div className="flex flex-wrap gap-2">
             <Link
+              key="hki"
               href="/hki"
               className="rounded-full border border-[#c9d2de] bg-white px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] text-[#3b4757] uppercase transition-colors hover:bg-[#eaf1ff]"
             >
               HKI
             </Link>
             {HKI_YEARS.map((year) => (
-              <a
+              <Link
                 key={year}
                 href={`/hki/tahun-${year}`}
                 className={`rounded-full border px-4 py-2 text-[0.78rem] font-bold tracking-[0.02em] uppercase transition-colors ${
@@ -129,7 +130,7 @@ export default async function HkiTahunView({ tahun }) {
                 }`}
               >
                 HKI TAHUN {year}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

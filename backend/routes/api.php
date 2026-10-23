@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\Api\HalamanApiController;
 use App\Http\Controllers\Api\HkiApiController;
 use App\Http\Controllers\Api\KontakApiController;
 use App\Http\Controllers\Api\NewsAdminApiController;
@@ -14,11 +15,15 @@ use Illuminate\Support\Facades\Route;
    JSON API untuk front end Next.js / React
    ========================================================= */
 
-// --- Baca (publik) ---
+// --- Hal-hal statis (profil, visi misi, statistik, panduan) ---
 Route::get('/beranda', [NewsApiController::class, 'home'])->name('api.beranda');
 Route::get('/berita', [NewsApiController::class, 'index'])->name('api.berita.index');
 Route::get('/laporan-tahunan', [NewsApiController::class, 'laporanTahunan'])->name('api.laporan-tahunan');
 Route::get('/statistik', [StatistikApiController::class, 'index'])->name('api.statistik');
+
+// --- Halaman profil & unit ---
+Route::get('/halaman', [HalamanApiController::class, 'index'])->name('api.halaman.index');
+Route::get('/halaman/{slug}', [HalamanApiController::class, 'show'])->name('api.halaman.show');
 
 // --- Publikasi ---
 Route::get('/publikasi', [PublikasiApiController::class, 'index'])->name('api.publikasi.index');

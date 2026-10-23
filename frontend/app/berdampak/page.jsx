@@ -9,7 +9,7 @@ const REPORT_URL =
 
 export default function BerdampakPage() {
   return (
-    <EditorialPage slug="berdampak" heading="Polibatam University Berdampak" visitors={129}>
+    <EditorialPage slug="berdampak" heading="Polibatam University Berdampak" visitors={405}>
       <article className="mx-auto max-w-[1360px] px-0 py-2 md:px-2">
         <h2 className="mb-5 text-center text-[clamp(1.45rem,2vw,2rem)] leading-tight font-bold tracking-[-0.035em] text-black">
           Laporan Dampak Sosial, Ekonomi, dan Lingkungan Politeknik Negeri Batam Tahun 2025

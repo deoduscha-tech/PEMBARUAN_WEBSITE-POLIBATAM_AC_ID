@@ -4,12 +4,14 @@ import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
 
+// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
+// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Publikasi — Pusat P2M Polibatam',
   description: 'Arsip luaran penelitian dan pengabdian kepada masyarakat Pusat P2M Polibatam.',
 };
-
-export const dynamic = 'force-dynamic';
 
 export default async function PublikasiPage({ searchParams }) {
   const params = await searchParams;
@@ -37,7 +39,7 @@ export default async function PublikasiPage({ searchParams }) {
 
   return (
     <Shell>
-      <main className="bg-[#efefef] pb-6">
+      <main id="main-content" className="bg-[#efefef] pb-6">
         <h1 className="wide-inner py-6 text-[clamp(2rem,3.5vw,3rem)] font-black tracking-[-0.04em] text-[#101926] uppercase">
           {active.label ?? `TAHUN ${tahun ?? ''}`}
         </h1>
@@ -61,18 +63,23 @@ export default async function PublikasiPage({ searchParams }) {
 
         <article className="wide-inner mb-4 border-line bg-white p-6 md:p-8">
           {active.content ? (
-            <div
-              className="publication-original-content"
-              dangerouslySetInnerHTML={{ __html: active.content }}
-            />
+            <>
+              {/* Konten asli dari backend sudah memuat "Jumlah Pengunjung: xxx"
+                  di bagian bawahnya, jadi tidak ditambahkan lagi di sini. */}
+              <div
+                className="publication-original-content"
+                dangerouslySetInnerHTML={{ __html: active.content }}
+              />
+            </>
           ) : (
-            <p>Konten publikasi untuk tahun {active.year} belum tersedia.</p>
+            <>
+              <p>Konten publikasi untuk tahun {active.year} belum tersedia.</p>
+              <div className="pb-2 text-[1.12rem] font-bold">
+                Jumlah Pengunjung: {Number(active.visitors ?? 0).toLocaleString('en-US')}
+              </div>
+            </>
           )}
         </article>
-
-        <div className="wide-inner pb-6 text-[1.12rem] font-bold">
-          Jumlah Pengunjung: {Number(active.visitors ?? 0).toLocaleString('en-US')}
-        </div>
 
         <MissedSection />
       </main>

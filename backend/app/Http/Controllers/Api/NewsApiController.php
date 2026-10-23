@@ -21,7 +21,12 @@ class NewsApiController extends Controller
     /**
      * GET /api/berita
      *
-     * Query params: limit (int), category (string), featured (bool).
+     * Query params: limit (int), category (string), featured (bool),
+     *               q (pencarian judul/isi), page (int), per_page (int).
+     *
+     * Tanpa `page`/`per_page`, semua berita dikembalikan sekaligus. Kalau salah
+     * satunya dikirim, hasilnya dipotong per halaman dan `meta` memuat
+     * page/last_page/per_page supaya komponen Pagination front end bisa bekerja.
      */
     public function index(Request $request): JsonResponse
     {
@@ -35,18 +40,48 @@ class NewsApiController extends Controller
             $posts = $posts->where('featured', true);
         }
 
+        if ($request->filled('q')) {
+            $term = mb_strtolower($request->string('q')->toString());
+            $posts = $posts->filter(
+                fn (array $post) => str_contains(mb_strtolower($post['title']), $term)
+                    || str_contains(mb_strtolower((string) ($post['excerpt'] ?? '')), $term)
+                    || str_contains(mb_strtolower((string) ($post['body'] ?? '')), $term)
+            )->values();
+        }
+
+        $total = $posts->count();
+
+        $meta = [
+            'total' => $total,
+            'categories' => $this->news->categories()->values(),
+        ];
+
         $limit = $request->integer('limit');
+        $perPage = $request->integer('per_page');
+
+        if ($request->filled('page') || $perPage > 0) {
+            $perPage = max(1, $perPage > 0 ? $perPage : 6);
+            $lastPage = max(1, (int) ceil($total / $perPage));
+            $page = min(max(1, $request->integer('page', 1)), $lastPage);
+
+            $posts = $posts->forPage($page, $perPage)->values();
+
+            $meta += [
+                'page' => $page,
+                'per_page' => $perPage,
+                'last_page' => $lastPage,
+                'from' => $total > 0 ? ($page - 1) * $perPage + 1 : 0,
+                'to' => min($page * $perPage, $total),
+            ];
+        }
 
         if ($limit > 0) {
-            $posts = $posts->take($limit);
+            $posts = $posts->take($limit)->values();
         }
 
         return response()->json([
             'data' => $posts->values(),
-            'meta' => [
-                'total' => $posts->count(),
-                'categories' => $this->news->categories()->values(),
-            ],
+            'meta' => $meta,
         ]);
     }
 

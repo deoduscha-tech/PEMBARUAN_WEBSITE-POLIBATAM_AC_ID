@@ -3,6 +3,10 @@ import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
 
+// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
+// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Tupoksi — Pusat P2M Polibatam',
   description:
@@ -10,8 +14,6 @@ export const metadata = {
 };
 
 // Selalu ambil data terbaru dari API Laravel.
-export const dynamic = 'force-dynamic';
-
 export default async function TupoksiPage() {
   const response = await apiGet('/tupoksi');
   const data = response.ok ? response.data.data : null;
@@ -82,7 +84,7 @@ function Shell({ children }) {
   return (
     <>
       <SiteHeader page="home" active="tupoksi" />
-      <main className="bg-[#efefef] pb-6">{children}</main>
+      <main id="main-content" className="bg-[#efefef] pb-6">{children}</main>
       <SiteFooter />
     </>
   );

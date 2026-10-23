@@ -2,14 +2,24 @@ import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
+import { apiGet } from '@/lib/api';
 
 /**
- * VIEW — layout bersama untuk halaman Penelitian & Pengabdian.
+ * VIEW (server) — layout bersama untuk halaman Penelitian & Pengabdian.
  *
- * Keduanya memakai susunan yang sama (angka capaian → skema → dokumen →
- * berita terbaru). Yang berbeda hanya judul, teks, dan daftar skemanya.
+ * Isi halaman (judul, pengantar, skema, dokumen) diambil dari API Laravel
+ * /api/halaman/{slug}, sumbernya backend/resources/data/halaman.php. Dengan
+ * begitu frontend dan backend menampilkan teks yang sama persis.
  */
-export default function RisetPage({ heading, intro = [], schemes = [], documents = [] }) {
+export default async function RisetPage({ slug }) {
+  const response = await apiGet(`/halaman/${slug}`);
+  const data = response.ok ? response.data.data : null;
+
+  const heading = data?.heading ?? String(slug).toUpperCase();
+  const intro = data?.intro ?? [];
+  const schemes = data?.schemes ?? [];
+  const documents = data?.documents ?? [];
+
   const stats = [
     { value: '99', label: 'Publikasi Internasional' },
     { value: '163', label: 'Pendaftaran HKI' },
@@ -25,6 +35,16 @@ export default function RisetPage({ heading, intro = [], schemes = [], documents
         <h1 className="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
           {heading}
         </h1>
+
+        {!data && (
+          <div className="wide-inner mb-6 border-l-4 border-amber-500 bg-amber-50 px-5 py-4 text-[#7c4a03]">
+            <p className="font-extrabold">Konten halaman belum dapat dimuat</p>
+            <p className="mt-1 text-[0.9rem]">
+              {response.error} — pastikan backend berjalan:{' '}
+              <code>cd backend &amp;&amp; php artisan serve</code>
+            </p>
+          </div>
+        )}
 
         {/* Pengantar */}
         {intro.length > 0 && (
