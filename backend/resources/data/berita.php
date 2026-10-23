@@ -130,4 +130,18 @@ return [
         <p>Diharapkan struktur baru ini mempercepat hilirisasi hasil riset serta meningkatkan kontribusi institusi bagi masyarakat dan dunia usaha.</p>
         HTML,
     ],
+    [
+        'id' => 6,
+        'title' => 'asdasdsa',
+        'slug' => 'asdasdsa',
+        'category' => 'Informasi',
+        'author' => 'P3M',
+        'date' => '2026-10-23',
+        'image' => '',
+        'excerpt' => 'asasdasd',
+        'featured' => false,
+        'views' => 0,
+        'published' => true,
+        'body' => 'asdasasasd',
+    ],
 ];

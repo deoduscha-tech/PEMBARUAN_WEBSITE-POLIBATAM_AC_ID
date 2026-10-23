@@ -12,7 +12,7 @@ $oldValue = fn (string $key, $fallback = '') => old($key, $post[$key] ?? $fallba
 
 @section('content')
 
-<form id="news-form" method="POST" action="{{ $action }}" class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+<form id="news-form" method="POST" action="{{ $action }}" enctype="multipart/form-data" class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
     @csrf
     @if ($isEdit)
     @method('PUT')
@@ -167,21 +167,26 @@ $oldValue = fn (string $key, $fallback = '') => old($key, $post[$key] ?? $fallba
                 <label for="image" class="mb-1.5 block text-[0.72rem] font-bold tracking-[0.05em] text-navy-dark uppercase">
                     Gambar Utama
                 </label>
-                <input id="image" name="image" type="text" value="{{ $oldValue('image') }}"
-                    placeholder="/images/contoh.jpg"
-                    class="w-full rounded border border-line bg-white px-3.5 py-2.5 font-mono text-[0.8rem] text-ink outline-none transition-colors placeholder:text-[#a9b4c2] focus:border-blue focus:ring-2 focus:ring-blue/15" />
+                <input id="image" name="image" type="file" accept="image/*"
+                    class="w-full rounded border border-line bg-white px-3 py-2 text-[0.8rem] text-ink file:mr-3 file:cursor-pointer file:rounded file:border-0 file:bg-[#eaf2fc] file:px-3 file:py-2 file:font-bold file:text-blue hover:file:bg-[#dceafd] focus:border-blue focus:ring-2 focus:ring-blue/15 @error('image') border-[#e05252] @else border-line @enderror" />
                 <p class="mt-1.5 text-[0.74rem] leading-snug text-muted">
-                    Isi dengan path gambar di folder <code class="font-mono">public/images</code>.
+                    Pilih gambar dari perangkat (JPG, PNG, WEBP, atau GIF; maksimal 5 MB).
                 </p>
+                @error('image')
+                <p class="mt-1.5 text-[0.76rem] font-semibold text-[#d14343]">{{ $message }}</p>
+                @enderror
 
                 @if ($oldValue('image'))
                 <div class="mt-3">
-                    <span class="mb-1.5 block text-[0.7rem] font-bold tracking-[0.05em] text-muted uppercase">Pratinjau gambar</span>
+                    <span id="image-preview-label" class="mb-1.5 block text-[0.7rem] font-bold tracking-[0.05em] text-muted uppercase">Gambar saat ini — pilih file untuk mengganti</span>
                     <img id="image-preview" src="{{ $oldValue('image') }}" alt="Pratinjau gambar berita"
                         class="max-h-40 w-full rounded border border-line object-cover" />
                 </div>
                 @else
-                <img id="image-preview" src="" alt="" class="mt-3 hidden max-h-40 w-full rounded border border-line object-cover" />
+                <div id="image-preview-wrap" class="mt-3 hidden">
+                    <span id="image-preview-label" class="mb-1.5 block text-[0.7rem] font-bold tracking-[0.05em] text-muted uppercase">Pratinjau gambar</span>
+                    <img id="image-preview" src="" alt="Pratinjau gambar berita" class="max-h-40 w-full rounded border border-line object-cover" />
+                </div>
                 @endif
             </div>
         </div>
@@ -208,10 +213,15 @@ $oldValue = fn (string $key, $fallback = '') => old($key, $post[$key] ?? $fallba
     const imageInput = document.getElementById('image');
     const imagePreview = document.getElementById('image-preview');
 
-    imageInput?.addEventListener('input', () => {
-        const value = imageInput.value.trim();
-        imagePreview.src = value;
-        imagePreview.classList.toggle('hidden', value === '');
+    imageInput?.addEventListener('change', () => {
+        const file = imageInput.files?.[0];
+        if (!file) return;
+
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreview.classList.remove('hidden');
+        document.getElementById('image-preview-wrap')?.classList.remove('hidden');
+        const label = document.getElementById('image-preview-label');
+        if (label) label.textContent = 'Pratinjau gambar baru';
     });
 
     // Toggle the rendered HTML preview of the body field

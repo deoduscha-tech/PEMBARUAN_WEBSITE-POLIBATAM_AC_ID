@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use App\Support\SiteContentRepository;
 
 /**
  * API kontak — dipakai halaman /kontak di front end Next.js.
@@ -12,21 +13,12 @@ use Illuminate\Http\JsonResponse;
  */
 class KontakApiController extends Controller
 {
+    public function __construct(private SiteContentRepository $content) {}
     /**
      * GET /api/kontak
      */
     public function index(): JsonResponse
     {
-        $path = resource_path('data/kontak.php');
-
-        if (! is_file($path)) {
-            return response()->json(['data' => null]);
-        }
-
-        $data = require $path;
-
-        return response()->json([
-            'data' => is_array($data) ? $data : null,
-        ]);
+        return response()->json(['data' => $this->content->get('kontak')]);
     }
 }

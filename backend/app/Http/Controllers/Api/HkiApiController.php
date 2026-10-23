@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Support\HkiRepository;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -11,29 +12,18 @@ use Illuminate\Http\JsonResponse;
  *   GET /api/hki            -> daftar tahun + pendaftaran
  *   GET /api/hki/{tahun}    -> tabel HKI satu tahun
  *
- * Data dibaca dari resources/data/hki.php.
+ * Data dibaca dari tabel hki_years.
  */
 class HkiApiController extends Controller
 {
-    protected function data(): array
-    {
-        $path = resource_path('data/hki.php');
-
-        if (!is_file($path)) {
-            return [];
-        }
-
-        $data = require $path;
-
-        return is_array($data) ? $data : [];
-    }
+    public function __construct(private HkiRepository $hki) {}
 
     /**
      * GET /api/hki
      */
     public function index(): JsonResponse
     {
-        $years = $this->data();
+        $years = $this->hki->all();
         krsort($years);
 
         $menu = [];
@@ -60,15 +50,13 @@ class HkiApiController extends Controller
      */
     public function show(string $tahun): JsonResponse
     {
-        $years = $this->data();
+        $group = $this->hki->find((int) $tahun);
 
-        if (!isset($years[$tahun])) {
+        if ($group === null) {
             return response()->json([
                 'message' => 'Data HKI tahun ' . $tahun . ' tidak ditemukan.',
             ], 404);
         }
-
-        $group = $years[$tahun];
 
         return response()->json([
             'data' => [

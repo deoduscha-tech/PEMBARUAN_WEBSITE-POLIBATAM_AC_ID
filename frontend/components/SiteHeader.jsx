@@ -2,6 +2,7 @@ import Link from 'next/link';
 import SearchToggle from './SearchToggle';
 import ProfileDropdown from './ProfileDropdown';
 import HkiDropdown from './HkiDropdown';
+import PublikasiDropdown from './PublikasiDropdown';
 
 /**
  * Alamat panel admin (Laravel).
@@ -12,9 +13,7 @@ import HkiDropdown from './HkiDropdown';
 const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL ?? 'http://127.0.0.1:8000/admin';
 
 const NAV_ITEMS = [
-  { label: 'BERITA', href: '/berita' },
-  { label: 'PENELITIAN', href: '/penelitian' },
-  { label: 'PENGABDIAN', href: '/pengabdian' },
+  { label: 'INFORMASI', href: '/informasi' },
   { label: 'PUBLIKASI', href: '/publikasi' },
   { label: 'HKI', href: '/hki' },
   {
@@ -77,7 +76,9 @@ export default function SiteHeader({ page = 'home', active = null }) {
 
           <ProfileDropdown isActive={active === 'profil'} />
 
-          {NAV_ITEMS.map((item) => item.label === 'HKI' ? (
+          {NAV_ITEMS.map((item) => item.label === 'PUBLIKASI' ? (
+            <PublikasiDropdown key={item.label} active={active === 'publikasi'} />
+          ) : item.label === 'HKI' ? (
             <HkiDropdown key={item.label} active={active === 'hki'} />
           ) :
             item.external ? (

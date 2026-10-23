@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Support\NewsRepository;
+use App\Support\SiteContentRepository;
 use Illuminate\Contracts\View\View;
 
 class PublicPageController extends Controller
 {
     public function __construct(
         protected NewsRepository $news,
+        protected SiteContentRepository $content,
     ) {
     }
 
@@ -17,8 +19,7 @@ class PublicPageController extends Controller
      */
     protected function sharedData(): array
     {
-        $statistikPath = resource_path('data/statistik.php');
-        $statistik = is_file($statistikPath) ? require $statistikPath : ['charts' => [], 'visitors' => 0];
+        $statistik = $this->content->get('statistik', ['charts' => [], 'visitors' => 0]);
 
         return [
             'featured' => $this->news->featured()->take(3)->values(),
@@ -107,13 +108,12 @@ class PublicPageController extends Controller
 
     /**
      * Arsip HKI per tahun, mis. /hki/tahun-2025. Data judul HKI disimpan pada
-     * resources/data/hki.php dan ditampilkan sebagai tabel — meniru halaman
+     * tabel hki_years dan ditampilkan sebagai tabel — meniru halaman
      * "HKI TAHUN 20xx" di situs asli.
      */
     public function hkiTahun(string $tahun): View
     {
-        $path = resource_path('data/hki.php');
-        $data = is_file($path) ? require $path : [];
+        $data = app(\App\Support\HkiRepository::class)->all();
 
         return view('dashboard', array_merge($this->sharedData(), [
             'page' => 'hki-tahun-' . $tahun,

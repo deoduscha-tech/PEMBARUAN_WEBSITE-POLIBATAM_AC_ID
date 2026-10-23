@@ -187,6 +187,36 @@
         @apply bg-[#edf5ff] text-[#0d4ea8];
     }
 
+    .publikasi-nav-submenu {
+        min-width: 200px;
+        max-height: min(70vh, 640px);
+        overflow-y: auto;
+        border: 0;
+        border-top: 3px solid #1e6fd9;
+        background: #202124;
+    }
+
+    .publikasi-nav-submenu .nav-submenu-item {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 14px 20px;
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: normal;
+    }
+
+    .publikasi-nav-submenu .nav-submenu-item::before {
+        content: none;
+    }
+
+    .publikasi-nav-submenu .nav-submenu-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+
     /* --- Search panel ----------------------------------- */
     .site-search-inner {
         @apply mx-auto flex w-[min(1240px,calc(100%-22px))] items-center gap-2.5 rounded-full border-navy/10 bg-white py-2 pr-3 pl-[18px] shadow-[0_8px_18px_rgba(13,45,94,0.08)];

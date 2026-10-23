@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\NewsImageStorage;
 use App\Support\NewsRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,7 @@ class NewsController extends Controller
 {
     public function __construct(
         protected NewsRepository $news,
+        protected NewsImageStorage $images,
     ) {}
 
     /**
@@ -78,6 +80,11 @@ class NewsController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->images->store($request->file('image'));
+        } else {
+            unset($data['image']);
+        }
 
         $this->news->create($data);
 
@@ -100,11 +107,22 @@ class NewsController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+        $existing = $this->news->findById($id);
+        abort_if($existing === null, 404);
+
         $data = $this->validated($request);
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->images->store($request->file('image'));
+        } else {
+            unset($data['image']);
+        }
 
         $updated = $this->news->update($id, $data);
 
         abort_if($updated === null, 404);
+        if ($request->hasFile('image')) {
+            $this->images->delete($existing['image'] ?? null);
+        }
 
         return redirect()
             ->route('admin.berita.index')
@@ -118,6 +136,7 @@ class NewsController extends Controller
         abort_if($post === null, 404);
 
         $this->news->delete($id);
+        $this->images->delete($post['image'] ?? null);
 
         return redirect()
             ->route('admin.berita.index')
@@ -135,7 +154,7 @@ class NewsController extends Controller
             'category' => ['required', 'string', 'max:60'],
             'author' => ['nullable', 'string', 'max:80'],
             'date' => ['required', 'date'],
-            'image' => ['nullable', 'string', 'max:500'],
+            'image' => ['nullable', 'image', 'max:5120'],
             'excerpt' => ['nullable', 'string', 'max:600'],
             'body' => ['required', 'string'],
             'published' => ['nullable', 'boolean'],

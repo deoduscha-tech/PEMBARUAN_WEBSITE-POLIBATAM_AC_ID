@@ -26,7 +26,7 @@ class HkiController extends Controller
 
     public function edit(int $year): View
     {
-        $record = $this->hki->all()[$year] ?? null;
+        $record = $this->hki->find($year);
         abort_if($record === null, 404);
         return view('admin.hki.form', ['year' => $year, 'record' => $record]);
     }
@@ -34,31 +34,25 @@ class HkiController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
-        $years = $this->hki->all();
-        if (isset($years[$data['year']])) {
+        if ($this->hki->find((int) $data['year']) !== null) {
             return back()->withErrors(['year' => 'Data HKI untuk tahun tersebut sudah ada.'])->withInput();
         }
-        $years[$data['year']] = $this->buildRecord($data, 0);
-        $this->hki->save($years);
+        $this->hki->saveYear((int) $data['year'], $this->buildRecord($data, 0));
         return redirect()->route('admin.hki.index')->with('success', 'Data HKI tahun ' . $data['year'] . ' berhasil ditambahkan.');
     }
 
     public function update(Request $request, int $year): RedirectResponse
     {
-        $years = $this->hki->all();
-        abort_if(!isset($years[$year]), 404);
+        $record = $this->hki->find($year);
+        abort_if($record === null, 404);
         $data = $this->validated($request, false);
-        $years[$year] = $this->buildRecord($data, (int) ($years[$year]['views'] ?? 0));
-        $this->hki->save($years);
+        $this->hki->saveYear($year, $this->buildRecord($data, (int) ($record['views'] ?? 0)));
         return redirect()->route('admin.hki.index')->with('success', 'Data HKI tahun ' . $year . ' berhasil diperbarui.');
     }
 
     public function destroy(int $year): RedirectResponse
     {
-        $years = $this->hki->all();
-        abort_if(!isset($years[$year]), 404);
-        unset($years[$year]);
-        $this->hki->save($years);
+        abort_if($this->hki->deleteYear($year) === false, 404);
         return redirect()->route('admin.hki.index')->with('success', 'Arsip HKI tahun ' . $year . ' berhasil dihapus.');
     }
 

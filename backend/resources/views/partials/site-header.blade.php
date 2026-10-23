@@ -9,7 +9,7 @@ $page = $page ?? 'home';
 // (PROFIL dan HKI dirender sebagai dropdown di partial ini.)
 $navItems = [
     ['label' => 'INFORMASI', 'href' => '/informasi', 'active' => in_array($page, ['informasi', 'penelitian'], true)],
-    ['label' => 'PUBLIKASI', 'href' => '/publikasi', 'active' => in_array($page, ['publikasi', 'tahun2024', 'tahun2025', 'tahun2026'], true)],
+    ['label' => 'PUBLIKASI', 'href' => '/publikasi', 'active' => in_array($page, ['publikasi', 'tahun2024', 'tahun2025', 'tahun2026'], true), 'isPublikasi' => true],
     ['label' => 'HKI', 'href' => '/hki', 'active' => $page === 'hki', 'isHki' => true],
     ['label' => 'SINTA', 'href' => 'https://sinta.kemdiktisaintek.go.id/affiliations/profile/564', 'active' => false, 'external' => true],
     ['label' => 'JURNAL', 'href' => 'https://jurnal.polibatam.ac.id/', 'active' => false, 'external' => true],
@@ -115,7 +115,21 @@ $profileDropdownItems = [
         </div>
 
         @foreach ($navItems as $item)
-        @if (!empty($item['isHki']))
+        @if (!empty($item['isPublikasi']))
+            <div class="nav-dropdown relative {{ in_array($page, ['publikasi', 'tahun2024', 'tahun2025', 'tahun2026'], true) ? 'open' : '' }}">
+                <a href="/publikasi" class="nav-item {{ $item['active'] ? 'active' : '' }}" aria-expanded="false" aria-controls="publikasi-submenu">
+                    PUBLIKASI
+                    <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                </a>
+                <div id="publikasi-submenu" class="nav-submenu publikasi-nav-submenu" hidden>
+                    @foreach ([2026, 2025, 2024] as $year)
+                    <a href="/tahun-{{ $year }}" class="nav-submenu-item">TAHUN {{ $year }}</a>
+                    @endforeach
+                </div>
+            </div>
+        @elseif (!empty($item['isHki']))
             {{-- Dropdown HKI — sama seperti situs asli: Pendaftaran HKI + arsip tahun.
                  Urutannya ada setelah PUBLIKASI, sebelum SINTA. --}}
             <div class="nav-dropdown relative {{ in_array($page, ['hki', 'hki-pendaftaran'], true) || str_starts_with($page, 'hki-tahun') ? 'open' : '' }}">

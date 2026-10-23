@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Support\NewsImageStorage;
 use App\Support\NewsRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class NewsAdminApiController extends Controller
 {
     public function __construct(
         protected NewsRepository $news,
+        protected NewsImageStorage $images,
     ) {}
 
     public function store(Request $request): JsonResponse
@@ -35,12 +37,16 @@ class NewsAdminApiController extends Controller
             'category' => ['required', 'string', 'max:100'],
             'author' => ['nullable', 'string', 'max:100'],
             'date' => ['nullable', 'date'],
-            'image' => ['nullable', 'string', 'max:500'],
+            'image' => $request->hasFile('image') ? ['nullable', 'image', 'max:5120'] : ['nullable', 'string', 'max:500'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],
             'featured' => ['nullable', 'boolean'],
             'published' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->images->store($request->file('image'));
+        }
 
         $post = $this->news->create($data);
 
@@ -56,7 +62,8 @@ class NewsAdminApiController extends Controller
             return response()->json(['message' => 'Tidak memiliki akses.'], 401);
         }
 
-        if ($this->news->findById($id) === null) {
+        $existing = $this->news->findById($id);
+        if ($existing === null) {
             return response()->json(['message' => 'Berita tidak ditemukan.'], 404);
         }
 
@@ -65,14 +72,21 @@ class NewsAdminApiController extends Controller
             'category' => ['required', 'string', 'max:100'],
             'author' => ['nullable', 'string', 'max:100'],
             'date' => ['nullable', 'date'],
-            'image' => ['nullable', 'string', 'max:500'],
+            'image' => $request->hasFile('image') ? ['nullable', 'image', 'max:5120'] : ['nullable', 'string', 'max:500'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],
             'featured' => ['nullable', 'boolean'],
             'published' => ['nullable', 'boolean'],
         ]);
 
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->images->store($request->file('image'));
+        }
+
         $updated = $this->news->update($id, $data);
+        if ($request->hasFile('image')) {
+            $this->images->delete($existing['image'] ?? null);
+        }
 
         return response()->json([
             'message' => 'Berita berhasil diperbarui.',
@@ -86,9 +100,11 @@ class NewsAdminApiController extends Controller
             return response()->json(['message' => 'Tidak memiliki akses.'], 401);
         }
 
-        if (! $this->news->delete($id)) {
+        $post = $this->news->findById($id);
+        if ($post === null || ! $this->news->delete($id)) {
             return response()->json(['message' => 'Berita tidak ditemukan.'], 404);
         }
+        $this->images->delete($post['image'] ?? null);
 
         return response()->json(['message' => 'Berita berhasil dihapus.']);
     }

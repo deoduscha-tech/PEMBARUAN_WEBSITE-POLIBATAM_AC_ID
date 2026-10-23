@@ -185,6 +185,43 @@
         @apply bg-[#edf5ff] text-[#0d4ea8];
     }
 
+    /* Publikasi archive menu follows the dark year dropdown in the reference. */
+    .publikasi-nav-submenu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 50;
+        width: 200px;
+        max-height: min(70vh, 640px);
+        overflow-y: auto;
+        border-top: 3px solid #1e6fd9;
+        background: #202124;
+        padding: 4px 0;
+        box-shadow: 0 18px 38px rgba(6, 18, 38, 0.42);
+    }
+
+    .publikasi-nav-submenu .nav-submenu-item {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 14px 20px;
+        color: white;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: normal;
+        text-transform: uppercase;
+    }
+
+    .publikasi-nav-submenu .nav-submenu-item::before {
+        content: none;
+    }
+
+    .publikasi-nav-submenu .nav-submenu-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
     /* Anak menu (HKI di dalam PROFIL) — sedikit menjorok supaya terlihat
        sebagai sub-sub-menu, bukan menu sejajar. */
     .nav-submenu-item-child {

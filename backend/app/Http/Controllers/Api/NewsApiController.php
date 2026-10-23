@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 /**
  * JSON API consumed by the Next.js front end.
  *
- * The Blade views are left untouched while the migration is in progress, so
- * both front ends can read the same flat-file store without conflict.
+ * The Blade views and JSON API read the same database-backed repository.
  */
 class NewsApiController extends Controller
 {

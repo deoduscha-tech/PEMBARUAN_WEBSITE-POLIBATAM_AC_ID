@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Support\SiteContentRepository;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -11,23 +12,11 @@ use Illuminate\Http\JsonResponse;
  *   GET /api/publikasi         -> semua tahun + tahun yang sedang dipilih
  *   GET /api/publikasi/{tahun} -> satu tahun saja
  *
- * Data dibaca dari resources/data/publikasi.php. Kalau nanti pindah ke MySQL,
- * cukup ganti isi data() — controller dan tampilan tidak perlu diubah.
+ * Data dibaca dari tabel site_contents.
  */
 class PublikasiApiController extends Controller
 {
-    protected function data(): array
-    {
-        $path = resource_path('data/publikasi.php');
-
-        if (! is_file($path)) {
-            return [];
-        }
-
-        $data = require $path;
-
-        return is_array($data) ? $data : [];
-    }
+    public function __construct(private SiteContentRepository $content) {}
 
     /**
      * Daftar menu tahun untuk navigasi.
@@ -35,6 +24,9 @@ class PublikasiApiController extends Controller
     protected function menu(array $years): array
     {
         $menu = [];
+
+        // Keep the navigation ordered from newest year to oldest.
+        krsort($years, SORT_NUMERIC);
 
         foreach ($years as $year) {
             $key = (string) $year;
@@ -54,8 +46,9 @@ class PublikasiApiController extends Controller
      */
     public function index(): JsonResponse
     {
-        $years = $this->data();
+        $years = $this->content->get('publikasi', []);
         $keys = array_map('strval', array_keys($years));
+        rsort($keys, SORT_NUMERIC);
 
         $requested = (string) request()->query('tahun', $keys[0] ?? '2026');
 
@@ -77,7 +70,7 @@ class PublikasiApiController extends Controller
      */
     public function show(string $tahun): JsonResponse
     {
-        $years = $this->data();
+        $years = $this->content->get('publikasi', []);
 
         if (! isset($years[$tahun])) {
             return response()->json([

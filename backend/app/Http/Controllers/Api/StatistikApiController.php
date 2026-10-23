@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use App\Support\SiteContentRepository;
 
 class StatistikApiController extends Controller
 {
+    public function __construct(private SiteContentRepository $content) {}
+
     public function index(): JsonResponse
     {
-        $path = resource_path('data/statistik.php');
-        $data = is_file($path) ? require $path : [];
-
-        return response()->json(['data' => $data]);
+        return response()->json(['data' => $this->content->get('statistik', [])]);
     }
 }

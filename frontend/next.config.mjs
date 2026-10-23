@@ -38,6 +38,11 @@ const nextConfig = {
         destination: `${BACKEND}/:path*`,
       },
       {
+        // Gambar hasil upload berita disimpan di backend (public/storage).
+        source: '/storage/:path*',
+        destination: `${BACKEND_ORIGIN}/storage/:path*`,
+      },
+      {
         // Gambar berita disimpan di backend (public/images).
         source: '/images/:path*',
         destination: `${BACKEND_ORIGIN}/images/:path*`,
