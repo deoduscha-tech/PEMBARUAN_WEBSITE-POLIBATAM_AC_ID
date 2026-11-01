@@ -5,12 +5,10 @@ import HkiDropdown from './HkiDropdown';
 import PublikasiDropdown from './PublikasiDropdown';
 
 /**
- * Alamat panel admin (Laravel).
- *
- * Autentikasi dimiliki backend, jadi tombol ini mengarah ke panel admin
- * Laravel — bukan halaman login di Next.js.
+ * Panel admin ada di front end ini juga (port 3000), supaya semua pekerjaan
+ * cukup dilakukan di satu alamat. Backend hanya dipakai sebagai API.
  */
-const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL ?? 'http://127.0.0.1:8000/admin';
+const ADMIN_URL = '/admin';
 
 const NAV_ITEMS = [
   { label: 'INFORMASI', href: '/informasi' },
@@ -53,7 +51,7 @@ export default function SiteHeader({ page = 'home', active = null }) {
             <span className="opacity-80">{timeText} WIB</span>
           </div>
 
-          {/* Panel admin ada di Laravel — tautan langsung ke sana. */}
+          {/* Panel admin di front end ini (/admin). */}
           <a
             href={ADMIN_URL}
             title="Masuk ke workspace admin"

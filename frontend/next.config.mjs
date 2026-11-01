@@ -33,6 +33,7 @@ const nextConfig = {
     // Dengan cara ini tidak ada permintaan lintas domain, jadi CORS tidak
     // perlu diutak-atik, dan alamat backend cukup diatur di .env.local.
     return [
+
       {
         source: '/api/:path*',
         destination: `${BACKEND}/:path*`,

@@ -15,7 +15,10 @@ export default async function HomePage() {
   const payload = response.ok ? response.data : {};
 
   const featured = payload.featured ?? [];
-  const ticker = payload.homePosts?.slice(0, 5) ?? payload.latestPosts ?? [];
+  // Teks & jumlah tampilan diatur dari panel admin (/admin/beranda).
+  const settings = payload.settings ?? {};
+  const tickerLabel = settings.ticker_label ?? 'Latest Post';
+  const ticker = payload.tickerPosts ?? payload.homePosts?.slice(0, 5) ?? payload.latestPosts ?? [];
   const latest = payload.latestPosts ?? [];
   const popular = payload.popularPosts ?? [];
   const trending = payload.trendingPosts ?? [];
@@ -66,7 +69,7 @@ export default async function HomePage() {
                     <path d="M13 2 4.5 13.5H11l-1 8.5 9-12h-6.5z" />
                   </svg>
                 </span>
-                Latest Post
+                {tickerLabel}
               </span>
             </div>
 
@@ -183,20 +186,30 @@ export default async function HomePage() {
           </article>
         ))}
 
-        <nav aria-label="Navigasi halaman" className="flex items-center justify-center gap-1.5 py-2">
-          <span className="page-numbers current" aria-current="page">1</span>
-          <Link className="page-numbers border" href="/berita?page=2">2</Link>
-          <span className="px-2 text-muted" aria-hidden="true">…</span>
-          <Link className="page-numbers border" href="/berita?page=27">27</Link>
-          <Link className="page-numbers border" href="/berita?page=2" aria-label="Halaman berikutnya">›</Link>
-        </nav>
+        {/* Angka halaman dihitung dari jumlah berita, bukan ditulis mati (dulu "27"). */}
+        {totalPosts > posts.length && (
+          <nav aria-label="Navigasi halaman" className="flex items-center justify-center gap-1.5 py-2">
+            <span className="page-numbers current" aria-current="page">1</span>
+            <Link className="page-numbers border" href="/berita?page=2">2</Link>
+            <span className="px-2 text-muted" aria-hidden="true">…</span>
+            <Link
+              className="page-numbers border"
+              href={`/berita?page=${Math.ceil(totalPosts / posts.length)}`}
+            >
+              {Math.ceil(totalPosts / posts.length)}
+            </Link>
+            <Link className="page-numbers border" href="/berita?page=2" aria-label="Halaman berikutnya">
+              ›
+            </Link>
+          </nav>
+        )}
       </div>
 
       {/* You missed */}
       <section className="border-t border-line bg-[#f3f5f7] py-[18px]">
         <div className="wide-inner">
           <div className="mb-[18px] flex items-end border-b-2 border-line">
-            <span className="section-label">You missed</span>
+            <span className="section-label">{settings.missed_title ?? 'You missed'}</span>
           </div>
           <div className="grid gap-[18px] sm:grid-cols-2 xl:grid-cols-4">
             {missed.map((card) => (

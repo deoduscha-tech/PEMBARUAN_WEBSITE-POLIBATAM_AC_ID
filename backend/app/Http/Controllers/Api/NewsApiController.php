@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Support\NewsRepository;
+use App\Support\SiteSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -109,13 +110,25 @@ class NewsApiController extends Controller
      */
     public function home(): JsonResponse
     {
+        $settings = SiteSettings::all();
+
+        $sliderCount = max(1, (int) ($settings['home_posts_count'] ?? 5));
+        $missedCount = max(1, (int) ($settings['missed_count'] ?? 4));
+        $tickerCount = max(1, (int) ($settings['ticker_count'] ?? 5));
+
+        $published = $this->news->published();
+
         return response()->json([
-            'featured' => $this->news->featured()->values(),
-            'homePosts' => $this->news->published()->values(),
+            // Slider & "You missed" mengikuti pilihan admin, bukan sekadar 4 terbaru.
+            'featured' => $this->news->slider($sliderCount),
+            'homePosts' => $published->values(),
+            'tickerPosts' => $published->take($tickerCount)->values(),
             'latestPosts' => $this->news->latest(4)->values(),
             'popularPosts' => $this->news->popular(4)->values(),
             'trendingPosts' => $this->news->popular(4)->values(),
-            'missedCards' => $this->news->latest(4)->values(),
+            'missedCards' => $this->news->missed($missedCount),
+            // Teks yang bisa diubah dari panel admin.
+            'settings' => $settings,
         ]);
     }
 

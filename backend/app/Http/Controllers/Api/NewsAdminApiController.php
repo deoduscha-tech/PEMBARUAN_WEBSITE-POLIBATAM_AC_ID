@@ -42,6 +42,10 @@ class NewsAdminApiController extends Controller
             'body' => ['nullable', 'string'],
             'featured' => ['nullable', 'boolean'],
             'published' => ['nullable', 'boolean'],
+            'show_in_slider' => ['nullable', 'boolean'],
+            'show_in_missed' => ['nullable', 'boolean'],
+            'sort_order' => ['nullable', 'integer'],
+            'slug' => ['nullable', 'string', 'max:255'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -77,6 +81,10 @@ class NewsAdminApiController extends Controller
             'body' => ['nullable', 'string'],
             'featured' => ['nullable', 'boolean'],
             'published' => ['nullable', 'boolean'],
+            'show_in_slider' => ['nullable', 'boolean'],
+            'show_in_missed' => ['nullable', 'boolean'],
+            'sort_order' => ['nullable', 'integer'],
+            'slug' => ['nullable', 'string', 'max:255'],
         ]);
 
         if ($request->hasFile('image')) {

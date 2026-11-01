@@ -4,6 +4,7 @@ namespace App\Support;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 /** Database-backed news store shared by the admin workspace and public pages. */
@@ -23,6 +24,39 @@ class NewsRepository
     public function featured(): Collection
     {
         return $this->query()->where('published', true)->where('featured', true)->orderByDesc('published_on')->get()->map(fn (object $post) => $this->toArray($post));
+    }
+
+    /**
+     * Berita untuk slider besar beranda.
+     *
+     * Diambil dari yang ditandai `featured` ATAU `show_in_slider`, jadi admin
+     * bisa memilih sendiri berita mana yang muncul besar di beranda.
+     */
+    public function slider(int $limit = 5): Collection
+    {
+        return $this->query()
+            ->where('published', true)
+            ->where(fn ($q) => $q->where('show_in_slider', true)->orWhere('featured', true))
+            ->orderBy('sort_order')
+            ->orderByDesc('published_on')
+            ->limit($limit)
+            ->get()
+            ->map(fn (object $post) => $this->toArray($post))
+            ->values();
+    }
+
+    /** Berita untuk blok "You missed". */
+    public function missed(int $limit = 4): Collection
+    {
+        return $this->query()
+            ->where('published', true)
+            ->where('show_in_missed', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('published_on')
+            ->limit($limit)
+            ->get()
+            ->map(fn (object $post) => $this->toArray($post))
+            ->values();
     }
 
     public function popular(int $limit = 4): Collection
@@ -97,7 +131,17 @@ class NewsRepository
 
     private function query()
     {
-        return DB::table('news_posts')->select('id', 'title', 'slug', 'category', 'author', 'published_on as date', 'image', 'excerpt', 'featured', 'views', 'published', 'body');
+        $columns = ['id', 'title', 'slug', 'category', 'author', 'published_on as date', 'image', 'excerpt', 'featured', 'views', 'published', 'body'];
+
+        // Kolom pengaturan beranda baru ada setelah migrasi; kalau belum ada,
+        // query tetap jalan dengan kolom lama supaya situs tidak error.
+        if (Schema::hasColumn('news_posts', 'show_in_slider')) {
+            $columns[] = 'show_in_slider';
+            $columns[] = 'show_in_missed';
+            $columns[] = 'sort_order';
+        }
+
+        return DB::table('news_posts')->select($columns);
     }
 
     private function toArray(object $post): array
@@ -108,6 +152,9 @@ class NewsRepository
         $post['featured'] = (bool) $post['featured'];
         $post['published'] = (bool) $post['published'];
         $post['views'] = (int) $post['views'];
+        $post['show_in_slider'] = (bool) ($post['show_in_slider'] ?? true);
+        $post['show_in_missed'] = (bool) ($post['show_in_missed'] ?? true);
+        $post['sort_order'] = (int) ($post['sort_order'] ?? 0);
         $imagePath = parse_url((string) ($post['image'] ?? ''), PHP_URL_PATH);
         if (is_string($imagePath) && str_starts_with($imagePath, '/storage/news/')) {
             $post['image'] = $imagePath;
@@ -139,6 +186,9 @@ class NewsRepository
             'views' => (int) ($attributes['views'] ?? 0),
             'published' => (bool) ($attributes['published'] ?? true),
             'body' => $attributes['body'] ?? '',
+            'show_in_slider' => (bool) ($attributes['show_in_slider'] ?? true),
+            'show_in_missed' => (bool) ($attributes['show_in_missed'] ?? true),
+            'sort_order' => (int) ($attributes['sort_order'] ?? 0),
         ];
     }
 }

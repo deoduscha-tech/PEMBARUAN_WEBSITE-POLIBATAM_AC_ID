@@ -17,17 +17,28 @@ use Illuminate\Http\JsonResponse;
  */
 class HalamanApiController extends Controller
 {
+    /**
+     * Konten halaman = isi berkas resources/data/halaman.php, DITIMPA oleh
+     * suntingan admin (site_contents -> "halaman:<slug>") bila ada. Dengan
+     * begitu teks yang diubah di panel admin langsung tampil di website.
+     */
     protected function data(): array
     {
         $path = resource_path('data/halaman.php');
+        $data = is_file($path) ? (require $path) : [];
+        $data = is_array($data) ? $data : [];
 
-        if (! is_file($path)) {
-            return [];
+        $content = app(\App\Support\SiteContentRepository::class);
+
+        foreach (array_keys($data) as $slug) {
+            $override = $content->get('halaman:' . $slug, null);
+
+            if (is_array($override)) {
+                $data[$slug] = array_merge($data[$slug], $override);
+            }
         }
 
-        $data = require $path;
-
-        return is_array($data) ? $data : [];
+        return $data;
     }
 
     /**

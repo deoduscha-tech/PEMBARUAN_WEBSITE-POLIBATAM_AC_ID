@@ -30,20 +30,26 @@ export default async function EditorialPage({
   ]);
 
   const posts = postsResponse?.ok ? (postsResponse.data.data ?? []) : [];
-  const publication =
-    publicationResponse?.ok ? publicationResponse.data.data?.active : null;
+  const publicationPayload = publicationResponse?.ok ? publicationResponse.data.data : null;
+  const publication = publicationPayload?.active ?? null;
+  const publicationYears = publicationPayload?.years ?? [];
 
   // Angka pengunjung publikasi SUDAH tercetak di dalam konten asli dari backend
   // (resources/data/publikasi.php, bagian "Jumlah Pengunjung: xxx"), jadi footer
   // tidak perlu menuliskannya lagi — dulu angkanya tampil dua kali.
   const showVisitors = isPublication ? false : Boolean(visitors);
 
-  const yearMenu = [
-    { label: 'TAHUN 2026', href: '/tahun-2026', key: 'tahun2026' },
-    { label: 'TAHUN 2025', href: '/tahun-2025', key: 'tahun2025' },
-    { label: 'TAHUN 2024', href: '/tahun-2024', key: 'tahun2024' },
-    { label: 'TAHUN SEBELUMNYA', href: '/publikasi', key: 'publikasi' },
-  ];
+  // Menu tahun diambil dari data publikasi (17 tahun), bukan 3 tahun yang
+  // ditulis mati — dulu sebagian tautan menuju halaman 404.
+  const yearMenu = (publicationYears ?? [])
+    .filter((year) => Number(year) >= 2012)
+    .map((year) => ({
+      label: `TAHUN ${year}`,
+      href: `/tahun-${year}`,
+      key: `tahun${year}`,
+    }));
+
+  yearMenu.push({ label: 'TAHUN SEBELUMNYA', href: '/publikasi', key: 'publikasi' });
 
   return (
     <>
@@ -61,11 +67,7 @@ export default async function EditorialPage({
                 <Link
                   key={year.key}
                   href={year.href}
-                  className={`year-item ${
-                    year.key === slug || (slug === 'publikasi' && year.key === 'tahun2026')
-                      ? 'active'
-                      : ''
-                  }`}
+                  className={`year-item ${year.key === slug ? 'active' : ''}`}
                 >
                   {year.label}
                 </Link>
