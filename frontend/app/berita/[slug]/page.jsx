@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { apiGet } from '@/lib/api';
+import { BlokView } from '@/components/BlokView';
 
 export const revalidate = 60;
 
@@ -62,10 +63,16 @@ export default async function BeritaDetailPage({ params }) {
               />
             )}
 
-            <div
-              className="rich-copy text-[1.02rem] leading-[1.85] text-[#1f2937]"
-              dangerouslySetInnerHTML={{ __html: post.body ?? '' }}
-            />
+            {Array.isArray(post.body_blocks) && post.body_blocks.length > 0 ? (
+              <div className="rich-copy text-[1.02rem] leading-[1.85] text-[#1f2937]">
+                <BlokView blocks={post.body_blocks} />
+              </div>
+            ) : (
+              <div
+                className="rich-copy text-[1.02rem] leading-[1.85] text-[#1f2937]"
+                dangerouslySetInnerHTML={{ __html: post.body ?? '' }}
+              />
+            )}
           </article>
         </div>
 
