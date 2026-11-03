@@ -27,6 +27,43 @@ class HtmlToBlocks
         // Bersihkan tag pembungkus yang tidak membawa arti.
         $html = preg_replace('#<(script|style|iframe)[^>]*>.*?</\1>#is', '', $html) ?? $html;
 
+        // Saat halaman situs lama diambil utuh, menu sidebar ikut tersedot
+        // ("LUARAN PUBLIKASI" + daftar A/B/C/D tanpa isi). Buang bagian itu
+        // supaya tidak muncul sebagai sisa menu di bawah konten.
+        $html = preg_replace('#LUARAN\s+PUBLIKASI#i', '', $html) ?? $html;
+
+        // Daftar isi / sidebar situs lama yang ikut tersedot (mis. deretan
+        // "A. Penelitian Terapan", "B. …", "Pengabdian Kerjasama").
+        // Dibiarkan di sini; pembersihannya dilakukan setelah blok jadi, karena
+        // di HTML mentah batasnya sulit dikenali dengan andal.
+
+        // Buang blok menu navigasi situs lama (menu tahun, SINTA, JURNAL,
+        // STATISTIK, dsb.). Polanya: <ul> berisi <li> pendek yang seluruhnya
+        // berupa tautan menu, tanpa kalimat panjang.
+        $html = preg_replace_callback(
+            '#<(ul|ol)[^>]*>(.*?)</\1>#is',
+            static function (array $m): string {
+                if (preg_match_all('#<li[^>]*>(.*?)</li>#is', $m[2], $lis, PREG_SET_ORDER) === 0) {
+                    return $m[0];
+                }
+
+                $pendek = 0;
+
+                foreach ($lis as $li) {
+                    $teks = trim(html_entity_decode(strip_tags($li[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+                    $teks = preg_replace('/\s+/u', ' ', $teks) ?? $teks;
+
+                    if (mb_strlen($teks) <= 60) {
+                        $pendek++;
+                    }
+                }
+
+                // Semua butir pendek => ini menu, bukan isi publikasi.
+                return $pendek === count($lis) ? '' : $m[0];
+            },
+            $html
+        ) ?? $html;
+
         // <br> jadi pemisah baris.
         $html = preg_replace('#<br\s*/?>#i', "\n", $html) ?? $html;
 
@@ -195,7 +232,54 @@ class HtmlToBlocks
             $push(['tipe' => 'paragraf', 'teks' => $text]);
         }
 
-        return $blocks;
+        return self::bersihkanSisaMenu($blocks);
+    }
+
+    /**
+     * Buang sisa daftar-isi/menu situs lama dari hasil konversi.
+     *
+     * Cirinya: blok paragraf pendek (judul kategori, tanpa angka dan tanpa
+     * tanda titik-panjang) yang berurutan SETELAH blok daftar terakhir.
+     * Isi publikasi selalu panjang dan memakai "–"; menu tidak.
+     *
+     * @param  array<int, array<string, mixed>>  $blocks
+     * @return array<int, array<string, mixed>>
+     */
+    public static function bersihkanSisaMenu(array $blocks): array
+    {
+        $akhirDaftar = -1;
+
+        foreach ($blocks as $i => $blok) {
+            if (in_array($blok['tipe'] ?? '', ['daftar', 'tabel', 'gambar'], true)) {
+                $akhirDaftar = $i;
+            }
+        }
+
+        if ($akhirDaftar === -1) {
+            return $blocks;
+        }
+
+        $bersih = [];
+
+        foreach ($blocks as $i => $blok) {
+            if ($i > $akhirDaftar && ($blok['tipe'] ?? '') === 'paragraf') {
+                $teks = trim((string) ($blok['teks'] ?? ''));
+
+                // Paragraf pendek tanpa kalimat penjelas = sisa menu.
+                if ($teks === '' || (mb_strlen($teks) <= 70 && ! preg_match('#\s[–-]\s#u', $teks))) {
+                    continue;
+                }
+            }
+
+            if ($i > $akhirDaftar && ($blok['tipe'] ?? '') === 'seksi') {
+                // Judul kategori tanpa butir setelahnya juga sisa menu.
+                continue;
+            }
+
+            $bersih[] = $blok;
+        }
+
+        return array_values($bersih);
     }
 
     /**
