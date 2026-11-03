@@ -32,7 +32,7 @@ export default async function RisetPage({ slug }) {
       <SiteHeader page="home" />
 
       <main className="bg-[#efefef] pb-6">
-        <h1 className="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
+        <h1 className="wide-inner py-6 text-[clamp(1.55rem,2.4vw,2.1rem)] font-black tracking-[-0.03em] text-[#101926] uppercase">
           {heading}
         </h1>
 

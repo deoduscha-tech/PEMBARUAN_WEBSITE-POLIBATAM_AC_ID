@@ -20,6 +20,14 @@ class SiteSettings
         'missed_title' => 'You missed',
         'missed_count' => '4',
         'slider_title' => 'Berita Unggulan',
+        // Label tab sidebar beranda.
+        'tab_latest' => 'Latest',
+        'tab_popular' => 'Popular',
+        'tab_trending' => 'Trending',
+        // Teks tombol & judul bagian yang tampil di beranda.
+        'read_more_label' => 'Baca Selengkapnya',
+        'footer_title' => 'Pusat P2M Polibatam',
+        'footer_text' => 'Proudly powered by WordPress | Theme: Newsup by Themeansar.',
     ];
 
     /** Label yang ditampilkan di panel admin. */
@@ -30,6 +38,12 @@ class SiteSettings
         'missed_title' => ['Judul blok "You missed"', 'text'],
         'missed_count' => ['Jumlah kartu "You missed"', 'number'],
         'slider_title' => ['Judul slider beranda', 'text'],
+        'tab_latest' => ['Label tab "Latest"', 'text'],
+        'tab_popular' => ['Label tab "Popular"', 'text'],
+        'tab_trending' => ['Label tab "Trending"', 'text'],
+        'read_more_label' => ['Teks tombol baca selengkapnya', 'text'],
+        'footer_title' => ['Judul di footer', 'text'],
+        'footer_text' => ['Teks kecil di footer', 'text'],
     ];
 
     public static function all(): array

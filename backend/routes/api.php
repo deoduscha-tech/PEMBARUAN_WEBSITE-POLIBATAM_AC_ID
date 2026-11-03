@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminContentApiController;
+use App\Http\Controllers\Api\AdminProfileApiController;
 use App\Http\Controllers\Api\AdminWorkspaceApiController;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\HalamanApiController;
@@ -51,6 +52,12 @@ Route::get('/admin/berita', [AdminWorkspaceApiController::class, 'berita'])->nam
 Route::get('/admin/ringkasan', [AdminWorkspaceApiController::class, 'ringkasan'])->name('api.admin.ringkasan');
 Route::get('/admin/pengaturan', [AdminWorkspaceApiController::class, 'pengaturan'])->name('api.admin.pengaturan');
 Route::put('/admin/pengaturan', [AdminWorkspaceApiController::class, 'simpanPengaturan'])->name('api.admin.pengaturan.simpan');
+
+// --- Profil admin & notifikasi (butuh token login) ---
+Route::get('/admin/profil-admin', [AdminProfileApiController::class, 'show'])->name('api.admin.profil');
+Route::put('/admin/profil-admin', [AdminProfileApiController::class, 'update'])->name('api.admin.profil.update');
+Route::post('/admin/ganti-sandi', [AdminProfileApiController::class, 'gantiSandi'])->name('api.admin.ganti-sandi');
+Route::get('/admin/notifikasi', [AdminProfileApiController::class, 'notifikasi'])->name('api.admin.notifikasi');
 
 // --- Kelola HKI, Publikasi, Profil ---
 Route::get('/admin/hki', [AdminContentApiController::class, 'hkiIndex'])->name('api.admin.hki.index');

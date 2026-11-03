@@ -47,9 +47,9 @@ export default async function HomePage() {
   }
 
   const tabs = [
-    { key: 'latest', label: 'Latest', posts: latest },
-    { key: 'popular', label: 'Popular', posts: popular },
-    { key: 'trending', label: 'Trending', posts: trending },
+    { key: 'latest', label: settings.tab_latest ?? 'Latest', posts: latest },
+    { key: 'popular', label: settings.tab_popular ?? 'Popular', posts: popular },
+    { key: 'trending', label: settings.tab_trending ?? 'Trending', posts: trending },
   ];
 
   const slides = featured.length > 0 ? featured : (payload.homePosts ?? []);
@@ -176,7 +176,7 @@ export default async function HomePage() {
                 href={`/berita/${post.slug}`}
                 className="mt-3 inline-flex w-fit items-center gap-1.5 text-[0.8rem] font-bold text-blue hover:underline"
               >
-                Baca Selengkapnya
+                {settings.read_more_label ?? 'Baca Selengkapnya'}
                 <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" />
                   <path d="M12 5l7 7-7 7" />
@@ -237,7 +237,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <SiteFooter />
+      <SiteFooter settings={settings} />
     </>
   );
 }

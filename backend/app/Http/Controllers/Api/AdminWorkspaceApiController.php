@@ -145,6 +145,12 @@ class AdminWorkspaceApiController extends Controller
             'missed_title' => ['nullable', 'string', 'max:60'],
             'missed_count' => ['nullable', 'integer', 'min:1', 'max:12'],
             'slider_title' => ['nullable', 'string', 'max:60'],
+            'tab_latest' => ['nullable', 'string', 'max:30'],
+            'tab_popular' => ['nullable', 'string', 'max:30'],
+            'tab_trending' => ['nullable', 'string', 'max:30'],
+            'read_more_label' => ['nullable', 'string', 'max:40'],
+            'footer_title' => ['nullable', 'string', 'max:80'],
+            'footer_text' => ['nullable', 'string', 'max:160'],
         ]);
 
         $saved = SiteSettings::put(array_filter($payload, fn($v) => $v !== null && $v !== ''));

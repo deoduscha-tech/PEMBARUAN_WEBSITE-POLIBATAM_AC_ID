@@ -1,12 +1,12 @@
-export default function SiteFooter() {
+export default function SiteFooter({ settings = {} }) {
   return (
     <footer className="relative overflow-hidden bg-gradient-to-b from-[#0a132a] to-[#080f22] text-white">
       <div className="wide-inner relative pt-10 pb-[18px]">
-        <h2 className="mb-[34px] text-[clamp(2.4rem,3.1vw,3.5rem)] leading-[1.1] font-extrabold tracking-[-0.06em] text-white/95">
-          Pusat P2M Polibatam
+        <h2 className="mb-6 text-[clamp(1.35rem,1.9vw,1.85rem)] leading-[1.2] font-extrabold tracking-[-0.03em] text-white/95">
+          {settings.footer_title ?? 'Pusat P2M Polibatam'}
         </h2>
         <div className="border-t border-white/15 pt-[18px] text-center text-[0.82rem] leading-normal text-white/75">
-          Proudly powered by WordPress | Theme: Newsup by Themeansar.
+          {settings.footer_text ?? 'Proudly powered by WordPress | Theme: Newsup by Themeansar.'}
         </div>
         <a
           href="#"
