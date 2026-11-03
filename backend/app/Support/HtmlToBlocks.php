@@ -26,11 +26,22 @@ class HtmlToBlocks
 
         // Bersihkan tag pembungkus yang tidak membawa arti.
         $html = preg_replace('#<(script|style|iframe)[^>]*>.*?</\1>#is', '', $html) ?? $html;
-        $html = preg_replace('#<(div|span|section|article|figure|strong|b|em|i|u|small)[^>]*>#i', '', $html) ?? $html;
-        $html = preg_replace('#</(div|span|section|article|figure|strong|b|em|i|u|small)>#i', '', $html) ?? $html;
+
+        // <br> jadi pemisah baris.
+        $html = preg_replace('#<br\s*/?>#i', "\n", $html) ?? $html;
+
+        // Penanda entri lama: pada sebagian data (mis. publikasi 2015) setiap
+        // entri dipisah <strong>…</strong> tanpa <p>/<li>. Sebelum tag lain
+        // dihapus, penutup </strong> diubah menjadi pemisah baris supaya tiap
+        // entri tetap terpisah.
+        $html = preg_replace('#</(strong|b)>#i', "\n", $html) ?? $html;
+
+        // Baru setelah itu tag pemisah lain dibuang (daftar <li>/<ul> sudah
+        // ditangani terpisah di bawah, jadi tidak ikut dihapus).
+        $html = preg_replace('#</?(div|span|section|article|figure|font|p|strong|b|em|i|u|small|h[1-6])\b[^>]*>#i', "\n", $html) ?? $html;
 
         // Normalkan baris baru antar elemen blok.
-        $html = preg_replace('#<(/?)(p|h[1-6]|ul|ol|li|table|tr|td|th|br)\b#i', "\n<$1$2", $html) ?? $html;
+        $html = preg_replace('#<(/?)(p|h[1-6]|ul|ol|li|table|tr|td|th)\b#i', "\n<$1$2", $html) ?? $html;
 
         $blocks = [];
         $counter = 0;
@@ -40,22 +51,48 @@ class HtmlToBlocks
             $blocks[] = $blok;
         };
 
-        // Daftar butir dikumpulkan per <ul>/<ol>.
-        if (preg_match_all('#<(ul|ol)[^>]*>(.*?)</\1>#is', $html, $lists, PREG_SET_ORDER)) {
+        // Daftar butir dikumpulkan per <ul>/<ol>. Judul kategori (mis.
+        // "A. Publikasi Jurnal Internasional") dicari di teks sebelum daftar dan
+        // dipakai sebagai judul blok "seksi" supaya isi terkelompok rapi.
+        if (preg_match_all('#<(ul|ol)[^>]*>(.*?)</\1>#is', $html, $lists, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+            $posisiTerakhir = 0;
+
             foreach ($lists as $list) {
+                $awalDaftar = $list[0][1];
                 $items = [];
 
-                if (preg_match_all('#<li[^>]*>(.*?)</li>#is', $list[2], $lis, PREG_SET_ORDER)) {
+                if (preg_match_all('#<li[^>]*>(.*?)</li>#is', $list[2][0], $lis, PREG_SET_ORDER)) {
                     foreach ($lis as $li) {
                         $text = self::plain($li[1]);
 
-                        if ($text !== '') {
-                            $items[] = $text;
+                        if ($text === '') {
+                            continue;
                         }
+
+                        // Tautan di dalam butir (mis. judul artikel jurnal) tetap
+                        // disimpan supaya isinya bisa diklik di halaman publik.
+                        $url = null;
+
+                        if (preg_match('#<a[^>]+href="([^"]+)"#i', $li[1], $m)) {
+                            $url = trim($m[1]);
+                        }
+
+                        $items[] = $url !== null && $url !== ''
+                            ? ['teks' => $text, 'url' => $url]
+                            : $text;
                     }
                 }
 
+                // Judul kategori = teks terakhir sebelum daftar dimulai.
+                $sebelum = substr($html, $posisiTerakhir, max(0, $awalDaftar - $posisiTerakhir));
+                $posisiTerakhir = $awalDaftar + strlen($list[0][0]);
+                $judul = self::judulKategori($sebelum);
+
                 if ($items !== []) {
+                    if ($judul !== null) {
+                        $push(['tipe' => 'seksi', 'judul' => $judul]);
+                    }
+
                     $push(['tipe' => 'daftar', 'items' => $items]);
                 }
             }
@@ -159,6 +196,59 @@ class HtmlToBlocks
         }
 
         return $blocks;
+    }
+
+    /**
+     * Ambil judul kategori dari HTML sebelum daftar.
+     *
+     * Formatnya berbeda tiap tahun:
+     *   2026 -> "A. Publikasi Jurnal Internasional Berputasi"
+     *   2022 -> "Jurnal Nasional", "Publikasi Luaran", "Pengabdian Desa Wisata"
+     *   2015 -> "Publikasi Melalui Jurnal", "Publikasi Penelitian Melalui Seminar"
+     *
+     * Aturannya: ambil baris terakhir sebelum daftar, tapi buang baris yang
+     * merupakan sisa isi butir daftar sebelumnya (mengandung "–" atau sangat
+     * panjang).
+     */
+    public static function judulKategori(string $html): ?string
+    {
+        // Buang tag, ambil baris-baris teks.
+        $teks = preg_replace('#<[^>]+>#', "\n", $html) ?? $html;
+        $teks = html_entity_decode($teks, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $baris = array_filter(
+            array_map('trim', preg_split('#\n+#', $teks) ?: []),
+            fn ($b) => $b !== ''
+        );
+
+        foreach (array_reverse($baris) as $kandidat) {
+            $kandidat = preg_replace('/\s+/u', ' ', $kandidat) ?? $kandidat;
+            $panjang = mb_strlen($kandidat);
+
+            // Kategori selalu pendek.
+            if ($panjang < 4 || $panjang > 90) {
+                continue;
+            }
+
+            // Lewati sisa butir daftar sebelumnya: "Nama – Judul …".
+            if (mb_strpos($kandidat, ' – ') !== false || mb_strpos($kandidat, ' - ') !== false) {
+                continue;
+            }
+
+            // Lewati kalimat/isorat panjang yang berakhir titik.
+            if (preg_match('#[.;:]$#u', $kandidat) && $panjang > 60) {
+                continue;
+            }
+
+            // Harus berupa frasa judul (kapital di awal).
+            if (! preg_match('/^[A-Z]/u', $kandidat)) {
+                continue;
+            }
+
+            return $kandidat;
+        }
+
+        return null;
     }
 
     /** HTML -> teks polos satu baris. */
