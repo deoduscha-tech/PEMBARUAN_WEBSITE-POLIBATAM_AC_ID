@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from '@/components/AdminShell';
+import BlokEditor from '@/components/BlokEditor';
+import Icon from '@/components/AdminIcons';
 import { adminFetch } from '@/lib/adminSession';
 
 /**
@@ -25,6 +27,7 @@ const FORM_KOSONG = {
   image: '',
   excerpt: '',
   body: '',
+  bodyBlocks: [],
   featured: false,
   published: true,
   show_in_slider: true,
@@ -32,19 +35,42 @@ const FORM_KOSONG = {
   sort_order: 0,
 };
 
-function Toggle({ label, hint, checked, onChange }) {
+function Toggle({ label, hint, checked, onChange, icon = 'check' }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded border border-[#e2e8f0] px-3 py-2.5">
-      <input
+    <label
+      className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors ${
+        checked ? 'border-[#bcd7f8] bg-[#f4f9ff]' : 'border-[#e8edf4] bg-white hover:bg-[#fafcfe]'
+      }`}
+    >
+      <span
+        className={`mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg ${
+          checked ? 'bg-[#e3eeff] text-[#1266d2]' : 'bg-[#f1f4f8] text-[#9aa7b8]'
+        }`}
+      >
+        <Icon name={icon} className="size-4" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[0.86rem] font-bold text-[#0b1d35]">{label}</span>
+        {hint && <span className="block text-[0.75rem] leading-snug text-[#8894a6]">{hint}</span>}
+      </span>
+      <span
+        className={`mt-1 h-5 w-9 shrink-0 rounded-full p-0.5 transition-colors ${
+          checked ? 'bg-[#1266d2]' : 'bg-[#d5dde8]'
+        }`}
+        aria-hidden="true"
+      >
+        <span
+          className={`block size-4 rounded-full bg-white shadow transition-transform ${
+            checked ? 'translate-x-4' : 'translate-x-0'
+          }`}
+        />
+      </span>
+          <input
         type="checkbox"
         checked={Boolean(checked)}
         onChange={(event) => onChange(event.target.checked)}
-        className="mt-0.5 size-4 accent-[#1e6fd9]"
+        className="sr-only"
       />
-      <span className="min-w-0">
-        <span className="block text-[0.86rem] font-bold text-[#0b1d35]">{label}</span>
-        {hint && <span className="block text-[0.76rem] text-[#8894a6]">{hint}</span>}
-      </span>
     </label>
   );
 }
@@ -116,6 +142,7 @@ export default function AdminBeritaPage() {
       image: post.image ?? '',
       excerpt: post.excerpt ?? '',
       body: post.body ?? '',
+      bodyBlocks: Array.isArray(post.body_blocks) ? post.body_blocks : [],
       featured: post.featured,
       published: post.published,
       show_in_slider: post.show_in_slider,
@@ -146,6 +173,7 @@ export default function AdminBeritaPage() {
       image: form.image,
       excerpt: form.excerpt,
       body: form.body,
+      body_blocks: form.bodyBlocks,
       featured: form.featured,
       published: form.published,
       show_in_slider: form.show_in_slider,
@@ -199,6 +227,7 @@ export default function AdminBeritaPage() {
       image: post.image,
       excerpt: post.excerpt,
       body: post.body,
+      body_blocks: post.body_blocks ?? [],
       featured: post.featured,
       published: post.published,
       show_in_slider: post.show_in_slider,
@@ -221,14 +250,18 @@ export default function AdminBeritaPage() {
 
   return (
     <AdminShell>
-      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-[1.5rem] font-black tracking-[-0.02em] text-[#0b1d35]">
+          <nav aria-label="Breadcrumb" className="mb-1.5 flex items-center gap-1.5 text-[0.72rem] font-bold text-[#9aa7b8]">
+            <span>Admin</span>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#33445c]">Kelola Berita</span>
+          </nav>
+          <h1 className="text-[1.65rem] leading-tight font-black tracking-[-0.03em] text-[#0b1d35]">
             Kelola Berita
           </h1>
-          <p className="mt-1 text-[0.88rem] text-[#5b6675]">
-            {posts.length} berita ·{' '}
-            {posts.filter((post) => post.published).length} terbit ·{' '}
+          <p className="mt-1 text-[0.86rem] text-[#7b8798]">
+            {posts.length} berita · {posts.filter((post) => post.published).length} terbit ·{' '}
             {posts.filter((post) => !post.published).length} draf
           </p>
         </div>
@@ -236,21 +269,28 @@ export default function AdminBeritaPage() {
         <button
           type="button"
           onClick={formOpen ? resetForm : openCreate}
-          className="rounded bg-[#1e6fd9] px-4 py-2.5 text-[0.82rem] font-extrabold tracking-[0.02em] text-white uppercase hover:bg-[#1558b0]"
+          className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[0.82rem] font-extrabold transition-colors ${
+            formOpen
+              ? 'border border-[#dbe3ee] bg-white text-[#33445c] hover:bg-[#f5f8fc]'
+              : 'bg-[#1266d2] text-white shadow-[0_6px_18px_-4px_rgba(18,102,210,0.55)] hover:bg-[#0f56b3]'
+          }`}
         >
-          {formOpen ? 'Tutup Form' : '+ Tambah Berita'}
+          <Icon name={formOpen ? 'x' : 'plus'} className="size-4" strokeWidth={2.4} />
+          {formOpen ? 'Tutup Form' : 'Tambah Berita'}
         </button>
       </div>
 
       {error && (
-        <div role="alert" className="mb-4 rounded border-l-4 border-red-500 bg-red-50 px-4 py-3 text-[0.88rem] text-red-700">
-          {error}
+        <div role="alert" className="mb-4 flex items-start gap-2 rounded-xl border-l-4 border-red-500 bg-red-50 px-4 py-3 text-[0.88rem] text-red-700">
+          <Icon name="x" className="mt-0.5 size-4 shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
       {notice && (
-        <div role="status" className="mb-4 rounded border-l-4 border-green-600 bg-green-50 px-4 py-3 text-[0.88rem] text-green-800">
-          {notice}
+        <div role="status" className="mb-4 flex items-start gap-2 rounded-xl border-l-4 border-green-600 bg-green-50 px-4 py-3 text-[0.88rem] text-green-800">
+          <Icon name="check" className="mt-0.5 size-4 shrink-0" />
+          <span>{notice}</span>
         </div>
       )}
 
@@ -258,11 +298,21 @@ export default function AdminBeritaPage() {
       {formOpen && (
         <form
           onSubmit={handleSubmit}
-          className="mb-6 rounded-lg border border-[#dde3ec] bg-white p-5"
+          className="mb-6 rounded-2xl border border-[#e8edf4] bg-white p-6 shadow-[0_10px_30px_-18px_rgba(11,33,56,0.25)]"
         >
-          <h2 className="mb-4 text-[1.05rem] font-extrabold text-[#0b1d35]">
-            {form.id ? `Ubah Berita #${form.id}` : 'Berita Baru'}
-          </h2>
+          <div className="mb-5 flex items-center gap-3 border-b border-[#f0f3f8] pb-4">
+            <span className="grid size-9 place-items-center rounded-xl bg-[#e8f1ff] text-[#1266d2]">
+              <Icon name={form.id ? 'edit' : 'plus'} className="size-[18px]" />
+            </span>
+            <div>
+              <h2 className="text-[1.02rem] leading-tight font-extrabold text-[#0b1d35]">
+                {form.id ? `Ubah Berita #${form.id}` : 'Berita Baru'}
+              </h2>
+              <p className="text-[0.78rem] text-[#8894a6]">
+                Isi informasi berita, lalu simpan. Tanda * wajib diisi.
+              </p>
+            </div>
+          </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="md:col-span-2">
@@ -278,7 +328,7 @@ export default function AdminBeritaPage() {
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
                 required
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.92rem] text-[#12203a] outline-none transition-colors focus:border-[#1266d2] focus:ring-3 focus:ring-[#1266d2]/10"
               />
             </div>
 
@@ -296,7 +346,7 @@ export default function AdminBeritaPage() {
                 value={form.category}
                 onChange={(event) => setForm({ ...form, category: event.target.value })}
                 required
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.92rem] text-[#12203a] outline-none transition-colors focus:border-[#1266d2] focus:ring-3 focus:ring-[#1266d2]/10"
               />
               <datalist id="kategori-list">
                 {[...KATEGORI_UMUM, ...categories].map((item) => (
@@ -317,7 +367,7 @@ export default function AdminBeritaPage() {
                 type="text"
                 value={form.author}
                 onChange={(event) => setForm({ ...form, author: event.target.value })}
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.92rem] text-[#12203a] outline-none transition-colors focus:border-[#1266d2] focus:ring-3 focus:ring-[#1266d2]/10"
               />
             </div>
 
@@ -333,7 +383,7 @@ export default function AdminBeritaPage() {
                 type="date"
                 value={form.date}
                 onChange={(event) => setForm({ ...form, date: event.target.value })}
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.92rem] text-[#12203a] outline-none transition-colors focus:border-[#1266d2] focus:ring-3 focus:ring-[#1266d2]/10"
               />
             </div>
 
@@ -349,7 +399,7 @@ export default function AdminBeritaPage() {
                 type="number"
                 value={form.sort_order}
                 onChange={(event) => setForm({ ...form, sort_order: event.target.value })}
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.92rem] text-[#12203a] outline-none transition-colors focus:border-[#1266d2] focus:ring-3 focus:ring-[#1266d2]/10"
               />
               <p className="mt-1 text-[0.74rem] text-[#8894a6]">
                 Angka kecil tampil lebih dulu.
@@ -369,7 +419,7 @@ export default function AdminBeritaPage() {
                 value={form.image}
                 onChange={(event) => setForm({ ...form, image: event.target.value })}
                 placeholder="https://…/foto.jpg"
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.92rem] text-[#12203a] outline-none transition-colors focus:border-[#1266d2] focus:ring-3 focus:ring-[#1266d2]/10"
               />
               {form.image && (
                 <div
@@ -393,24 +443,19 @@ export default function AdminBeritaPage() {
                 onChange={(event) => setForm({ ...form, excerpt: event.target.value })}
                 rows={3}
                 placeholder="Dikosongkan = otomatis diambil dari isi berita."
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.92rem] text-[#12203a] outline-none transition-colors focus:border-[#1266d2] focus:ring-3 focus:ring-[#1266d2]/10"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label
-                htmlFor="berita-isi"
-                className="mb-1 block text-[0.78rem] font-bold text-[#33445c] uppercase"
-              >
-                Isi Berita (HTML diizinkan)
+              <label className="mb-1 block text-[0.78rem] font-bold text-[#33445c] uppercase">
+                Isi Berita
               </label>
-              <textarea
-                id="berita-isi"
-                value={form.body}
-                onChange={(event) => setForm({ ...form, body: event.target.value })}
-                rows={10}
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 font-mono text-[0.86rem] outline-none focus:border-[#1e6fd9]"
-              />
+              <p className="mb-2 text-[0.76rem] text-[#8894a6]">
+                Susun isi dari blok — paragraf, sub judul, daftar, tautan, tabel, atau gambar.
+                Tidak perlu menulis kode.
+              </p>
+              <BlokEditor blocks={form.bodyBlocks} onChange={(blocks) => setForm({ ...form, bodyBlocks: blocks })} />
             </div>
 
             <div className="grid gap-2 md:col-span-2 md:grid-cols-2">
@@ -445,7 +490,7 @@ export default function AdminBeritaPage() {
             <button
               type="submit"
               disabled={saving}
-              className="rounded bg-[#1e6fd9] px-5 py-2.5 text-[0.82rem] font-extrabold text-white hover:bg-[#1558b0] disabled:opacity-60"
+              className="rounded bg-[#1266d2] px-5 py-2.5 text-[0.82rem] font-extrabold text-white hover:bg-[#0f56b3] disabled:opacity-60"
             >
               {saving ? 'Menyimpan…' : form.id ? 'Simpan Perubahan' : 'Simpan Berita'}
             </button>
@@ -461,19 +506,22 @@ export default function AdminBeritaPage() {
       )}
 
       {/* Filter */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <input
-          type="search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Cari judul atau ringkasan…"
-          className="min-w-[220px] flex-1 rounded border border-[#cfd8e3] px-3 py-2 text-[0.9rem] outline-none focus:border-[#1e6fd9]"
-        />
+      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-[#e8edf4] bg-white p-2.5">
+        <div className="relative min-w-[220px] flex-1">
+          <Icon name="search" className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[#9aa7b8]" />
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Cari judul atau ringkasan…"
+            className="h-9 w-full rounded-lg border border-transparent bg-[#f6f9fc] pr-3 pl-9 text-[0.88rem] outline-none transition-colors placeholder:text-[#a6b2c2] focus:border-[#bcd7f8] focus:bg-white"
+          />
+        </div>
 
         <select
           value={filterCategory}
           onChange={(event) => setFilterCategory(event.target.value)}
-          className="rounded border border-[#cfd8e3] px-3 py-2 text-[0.86rem]"
+          className="h-9 rounded-lg border border-[#e2e8f0] bg-white px-3 text-[0.84rem] text-[#33445c] outline-none focus:border-[#1266d2]"
         >
           <option value="">Semua kategori</option>
           {categories.map((item) => (
@@ -486,13 +534,17 @@ export default function AdminBeritaPage() {
         <select
           value={filterStatus}
           onChange={(event) => setFilterStatus(event.target.value)}
-          className="rounded border border-[#cfd8e3] px-3 py-2 text-[0.86rem]"
+          className="h-9 rounded-lg border border-[#e2e8f0] bg-white px-3 text-[0.84rem] text-[#33445c] outline-none focus:border-[#1266d2]"
         >
           <option value="">Semua status</option>
           <option value="published">Terbit</option>
           <option value="draft">Draf</option>
           <option value="featured">Unggulan</option>
         </select>
+
+        <span className="ml-auto pr-2 text-[0.78rem] font-bold text-[#8894a6]">
+          {filtered.length} dari {posts.length}
+        </span>
       </div>
 
       {/* Daftar */}
@@ -506,102 +558,117 @@ export default function AdminBeritaPage() {
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-[#dde3ec] bg-white">
-          <table className="w-full border-collapse text-[0.86rem]">
-            <thead>
-              <tr className="bg-[#0f2238] text-left text-white">
-                <th className="px-3 py-2.5">Judul</th>
-                <th className="px-3 py-2.5">Kategori</th>
-                <th className="px-3 py-2.5">Tanggal</th>
-                <th className="px-3 py-2.5">Dibaca</th>
-                <th className="px-3 py-2.5">Status</th>
-                <th className="px-3 py-2.5">Beranda</th>
-                <th className="px-3 py-2.5 text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((post, index) => (
-                <tr
-                  key={post.id}
-                  className={index % 2 ? 'bg-[#f7f9fc]' : 'bg-white'}
-                >
-                  <td className="max-w-[420px] px-3 py-2.5">
-                    <div className="font-bold text-[#0b1d35]">{post.title}</div>
-                    <div className="truncate text-[0.76rem] text-[#8894a6]">/{post.slug}</div>
-                  </td>
-                  <td className="px-3 py-2.5 whitespace-nowrap">{post.category}</td>
-                  <td className="px-3 py-2.5 whitespace-nowrap">{post.date}</td>
-                  <td className="px-3 py-2.5">{post.views}</td>
-                  <td className="px-3 py-2.5">
-                    <button
-                      type="button"
-                      onClick={() => quickUpdate(post, { published: !post.published })}
-                      className={`rounded-full px-2.5 py-1 text-[0.72rem] font-extrabold uppercase ${post.published
-                          ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                          : 'bg-amber-100 text-amber-800 hover:bg-amber-200'
-                        }`}
-                      title="Klik untuk mengubah status"
-                    >
-                      {post.published ? 'Terbit' : 'Draf'}
-                    </button>
-                  </td>
-                  <td className="px-3 py-2.5">
-                    <div className="flex flex-wrap gap-1">
-                      <button
-                        type="button"
-                        onClick={() => quickUpdate(post, { featured: !post.featured })}
-                        className={`rounded px-2 py-1 text-[0.7rem] font-bold ${post.featured
-                            ? 'bg-[#fdecc8] text-[#8a5a00]'
-                            : 'bg-[#eef1f5] text-[#8894a6] hover:bg-[#e2e8f0]'
-                          }`}
-                        title="Unggulan"
-                      >
-                        ★
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => quickUpdate(post, { show_in_slider: !post.show_in_slider })}
-                        className={`rounded px-2 py-1 text-[0.7rem] font-bold ${post.show_in_slider
-                            ? 'bg-[#e3eeff] text-[#1558b0]'
-                            : 'bg-[#eef1f5] text-[#8894a6] hover:bg-[#e2e8f0]'
-                          }`}
-                        title="Tampil di slider beranda"
-                      >
-                        Slider
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => quickUpdate(post, { show_in_missed: !post.show_in_missed })}
-                        className={`rounded px-2 py-1 text-[0.7rem] font-bold ${post.show_in_missed
-                            ? 'bg-[#e3f6e9] text-[#146c39]'
-                            : 'bg-[#eef1f5] text-[#8894a6] hover:bg-[#e2e8f0]'
-                          }`}
-                        title="Tampil di blok You missed"
-                      >
-                        Missed
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-3 py-2.5 text-right whitespace-nowrap">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(post)}
-                      className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1e6fd9] hover:bg-[#e7f0ff]"
-                    >
-                      Ubah
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(post)}
-                      className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-red-600 hover:bg-red-50"
-                    >
-                      Hapus
-                    </button>
-                  </td>
+        <div className="overflow-hidden rounded-xl border border-[#e8edf4] bg-white">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-[0.86rem]">
+              <thead>
+                <tr className="border-b border-[#eef2f7] bg-[#f8fafc] text-left text-[0.72rem] font-extrabold tracking-[0.05em] text-[#7b8798] uppercase">
+                  <th className="px-4 py-3">Berita</th>
+                  <th className="px-3 py-3">Kategori</th>
+                  <th className="px-3 py-3">Tanggal</th>
+                  <th className="px-3 py-3 text-center">Dibaca</th>
+                  <th className="px-3 py-3">Status</th>
+                  <th className="px-3 py-3">Beranda</th>
+                  <th className="px-4 py-3 text-right">Aksi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((post) => (
+                  <tr
+                    key={post.id}
+                    className="border-b border-[#f4f6fa] transition-colors last:border-b-0 hover:bg-[#fafcff]"
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="size-11 shrink-0 rounded-lg border border-[#e8edf4] bg-[#f3f6fa] bg-cover bg-center"
+                          style={post.image ? { backgroundImage: `url('${post.image}')` } : undefined}
+                          aria-hidden="true"
+                        />
+                        <div className="min-w-0">
+                          <div className="line-clamp-1 max-w-[240px] font-bold text-[#0b1d35]">
+                            {post.title}
+                          </div>
+                          <div className="max-w-[240px] truncate text-[0.74rem] text-[#9aa7b8]">/{post.slug}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <span className="rounded-md bg-[#f1f5fa] px-2 py-0.5 text-[0.75rem] font-bold text-[#546479]">
+                        {post.category}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap text-[0.82rem] text-[#7b8798]">
+                      {post.date}
+                    </td>
+                    <td className="px-3 py-3 text-center text-[0.82rem] font-bold text-[#546479]">
+                      {post.views}
+                    </td>
+                    <td className="px-3 py-3">
+                      <button
+                        type="button"
+                        onClick={() => quickUpdate(post, { published: !post.published })}
+                        title="Klik untuk mengubah status"
+                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.72rem] font-extrabold transition-colors ${
+                          post.published
+                            ? 'bg-[#e6f7ee] text-[#0e8a4f] hover:bg-[#d4f0e2]'
+                            : 'bg-[#fef4e3] text-[#b7791f] hover:bg-[#fbe7c6]'
+                        }`}
+                      >
+                        <span
+                          className={`size-1.5 rounded-full ${
+                            post.published ? 'bg-[#0e8a4f]' : 'bg-[#b7791f]'
+                          }`}
+                        />
+                        {post.published ? 'Terbit' : 'Draf'}
+                      </button>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div className="flex gap-1">
+                        {[
+                          { key: 'featured', label: 'Unggulan', on: post.featured, cls: 'bg-[#fdf0cf] text-[#8a5a00]' },
+                          { key: 'show_in_slider', label: 'Slider', on: post.show_in_slider, cls: 'bg-[#e3eeff] text-[#1266d2]' },
+                          { key: 'show_in_missed', label: 'Missed', on: post.show_in_missed, cls: 'bg-[#e6f7ee] text-[#0e8a4f]' },
+                        ].map((flag) => (
+                          <button
+                            key={flag.key}
+                            type="button"
+                            onClick={() => quickUpdate(post, { [flag.key]: !flag.on })}
+                            aria-pressed={flag.on}
+                            className={`rounded-md px-2 py-1 text-[0.7rem] font-bold transition-colors ${
+                              flag.on ? flag.cls : 'bg-[#f1f4f8] text-[#b3bdca] hover:bg-[#e6ebf2]'
+                            }`}
+                          >
+                            {flag.label}
+                          </button>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
+                      <div className="inline-flex gap-1">
+                        <button
+                          type="button"
+                          onClick={() => openEdit(post)}
+                          aria-label={`Ubah ${post.title}`}
+                          className="grid size-8 place-items-center rounded-lg border border-[#e2e8f0] text-[#5b6675] transition-colors hover:border-[#bcd7f8] hover:bg-[#f2f8ff] hover:text-[#1266d2]"
+                        >
+                          <Icon name="edit" className="size-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(post)}
+                          aria-label={`Hapus ${post.title}`}
+                          className="grid size-8 place-items-center rounded-lg border border-[#e2e8f0] text-[#5b6675] transition-colors hover:border-[#f6c6c1] hover:bg-[#fef3f2] hover:text-[#d92d20]"
+                        >
+                          <Icon name="trash" className="size-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </AdminShell>

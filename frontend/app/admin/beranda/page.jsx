@@ -58,6 +58,48 @@ const URUTAN = [
     type: 'number',
     place: 'Beranda · blok bawah',
   },
+  {
+    key: 'tab_latest',
+    label: 'Label tab "Latest"',
+    hint: 'Teks tab pertama pada sidebar beranda.',
+    type: 'text',
+    place: 'Beranda · tab sidebar',
+  },
+  {
+    key: 'tab_popular',
+    label: 'Label tab "Popular"',
+    hint: 'Teks tab kedua pada sidebar beranda.',
+    type: 'text',
+    place: 'Beranda · tab sidebar',
+  },
+  {
+    key: 'tab_trending',
+    label: 'Label tab "Trending"',
+    hint: 'Teks tab ketiga pada sidebar beranda.',
+    type: 'text',
+    place: 'Beranda · tab sidebar',
+  },
+  {
+    key: 'read_more_label',
+    label: 'Teks tombol baca',
+    hint: 'Tulisan pada tombol di bawah setiap berita.',
+    type: 'text',
+    place: 'Beranda & daftar berita',
+  },
+  {
+    key: 'footer_title',
+    label: 'Judul footer',
+    hint: 'Teks besar di bagian bawah setiap halaman.',
+    type: 'text',
+    place: 'Footer semua halaman',
+  },
+  {
+    key: 'footer_text',
+    label: 'Teks kecil footer',
+    hint: 'Keterangan di bawah judul footer.',
+    type: 'text',
+    place: 'Footer semua halaman',
+  },
 ];
 
 export default function AdminBerandaPage() {
@@ -106,7 +148,7 @@ export default function AdminBerandaPage() {
         <p className="mt-1 text-[0.88rem] text-[#5b6675]">
           Atur teks dan jumlah berita yang tampil di halaman depan. Untuk memilih berita mana
           yang masuk slider atau blok &quot;You missed&quot;, gunakan{' '}
-          <Link href="/admin/berita" className="font-bold text-[#1e6fd9] hover:underline">
+          <Link href="/admin/berita" className="font-bold text-[#1266d2] hover:underline">
             Kelola Berita
           </Link>
           .
@@ -130,7 +172,7 @@ export default function AdminBerandaPage() {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="rounded-lg border border-[#dde3ec] bg-white p-5"
+          className="rounded-lg border border-[#e8edf4] bg-white p-5"
         >
           <div className="grid gap-5 md:grid-cols-2">
             {URUTAN.map((field) => (
@@ -149,7 +191,7 @@ export default function AdminBerandaPage() {
                   onChange={(event) =>
                     setValues({ ...values, [field.key]: event.target.value })
                   }
-                  className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1e6fd9]"
+                  className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.94rem] outline-none focus:border-[#1266d2]"
                 />
                 <p className="mt-1 text-[0.76rem] text-[#8894a6]">{field.hint}</p>
                 <p className="text-[0.74rem] text-[#a8b2c1]">{field.place}</p>
@@ -161,7 +203,7 @@ export default function AdminBerandaPage() {
             <button
               type="submit"
               disabled={saving}
-              className="rounded bg-[#1e6fd9] px-5 py-2.5 text-[0.82rem] font-extrabold text-white hover:bg-[#1558b0] disabled:opacity-60"
+              className="rounded bg-[#1266d2] px-5 py-2.5 text-[0.82rem] font-extrabold text-white hover:bg-[#0f56b3] disabled:opacity-60"
             >
               {saving ? 'Menyimpan…' : 'Simpan Pengaturan'}
             </button>
