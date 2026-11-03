@@ -135,14 +135,14 @@ class NewsApiController extends Controller
     /**
      * GET /api/laporan-tahunan
      *
-     * Editorial page payload. $reportFile stays null until a PDF is uploaded,
-     * which is what keeps the front end from rendering a dead link.
+     * PDF laporan disimpan di situs induk, jadi tautannya ditulis di sini.
+     * Selama tautan kosong, front end menampilkan teks mati (bukan link rusak).
      */
     public function laporanTahunan(): JsonResponse
     {
         return response()->json([
             'reportYear' => '2025',
-            'reportFile' => null,
+            'reportFile' => 'https://p2m.polibatam.ac.id/wp-content/uploads/2026/07/LAPORAN-TAHUNAN-P3M-POLIBATAM-TAHUN-2025.pdf',
             'title' => 'LAPORAN TAHUNAN P3M TAHUN 2025',
             'visitors' => 264,
             // The report narrative. Kept here so both front ends read the same
