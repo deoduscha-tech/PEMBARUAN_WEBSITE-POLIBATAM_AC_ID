@@ -5,7 +5,8 @@ import Link from 'next/link';
 import AdminShell from '@/components/AdminShell';
 import BlokEditor, { blokBaru } from '@/components/BlokEditor';
 import { BlokView } from '@/components/BlokView';
-import { Alert, Button, Empty, Loading, PageHead } from '@/components/AdminUI';
+import { Alert } from '@/components/AdminUI';
+import Icon from '@/components/AdminIcons';
 import { adminFetch } from '@/lib/adminSession';
 
 /**
@@ -110,24 +111,53 @@ export default function AdminPublikasiPage() {
 
   return (
     <AdminShell>
-      <PageHead
-        title="Kelola Publikasi"
-        description="Luaran publikasi penelitian & pengabdian per tahun. Isi yang disimpan di sini tampil di halaman /publikasi dan /tahun-20xx."
-      >
-        <Button onClick={startNewYear}>+ Tahun Berikutnya</Button>
-      </PageHead>
+      {/* Judul halaman */}
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <nav aria-label="Breadcrumb" className="mb-1.5 flex items-center gap-1.5 text-[0.72rem] font-bold text-[#9aa7b8]">
+            <span>Admin</span>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#33445c]">Kelola Publikasi</span>
+          </nav>
+          <h1 className="text-[1.65rem] leading-tight font-black tracking-[-0.03em] text-[#0b1d35]">
+            Kelola Publikasi
+          </h1>
+          <p className="mt-1 max-w-[70ch] text-[0.86rem] text-[#7b8798]">
+            Luaran publikasi penelitian dan pengabdian per tahun. Isi di sini langsung tampil di
+            halaman Publikasi tahun tersebut.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={startNewYear}
+          className="inline-flex items-center gap-2 rounded-xl bg-[#1266d2] px-4 py-2.5 text-[0.82rem] font-extrabold text-white shadow-[0_6px_18px_-4px_rgba(18,102,210,0.55)] hover:bg-[#0f56b3]"
+        >
+          <Icon name="plus" className="size-4" strokeWidth={2.4} /> Tahun Berikutnya
+        </button>
+      </div>
 
       <Alert type={status.type === 'success' ? 'success' : 'error'} message={status.message} />
 
       {editYear !== null && (
-        <section className="mb-6 rounded-lg border border-[#e8edf4] bg-white p-5">
-          <h2 className="mb-4 text-[1.05rem] font-extrabold text-[#0b1d35]">
-            Publikasi Tahun {editYear}
-          </h2>
-
-          <div className="mb-4 grid gap-4 md:grid-cols-2">
+        <section className="mb-6 rounded-2xl border border-[#bcd7f8] bg-white p-6 shadow-[0_10px_30px_-18px_rgba(18,102,210,0.35)]">
+          <div className="mb-5 flex items-center gap-3 border-b border-[#f0f3f8] pb-4">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#efeafd] text-[#6d47d9]">
+              <Icon name="publikasi" className="size-5" />
+            </span>
             <div>
-              <label htmlFor="pub-label" className="mb-1 block text-[0.76rem] font-bold text-[#33445c] uppercase">
+              <h2 className="text-[1.05rem] leading-tight font-extrabold text-[#0b1d35]">
+                Publikasi Tahun {editYear}
+              </h2>
+              <p className="text-[0.78rem] text-[#8894a6]">
+                {blocks.length} blok isi · {jumlahButir} butir daftar
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-5 grid gap-4 md:grid-cols-2">
+            <div>
+              <label htmlFor="pub-label" className="mb-1 block text-[0.72rem] font-bold text-[#33445c] uppercase">
                 Judul halaman
               </label>
               <input
@@ -135,12 +165,13 @@ export default function AdminPublikasiPage() {
                 type="text"
                 value={label}
                 onChange={(event) => setLabel(event.target.value)}
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.92rem]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.9rem] outline-none focus:border-[#1266d2]"
               />
+              <p className="mt-1 text-[0.74rem] text-[#8894a6]">Tampil sebagai judul halaman publikasi.</p>
             </div>
 
             <div>
-              <label htmlFor="pub-visitors" className="mb-1 block text-[0.76rem] font-bold text-[#33445c] uppercase">
+              <label htmlFor="pub-visitors" className="mb-1 block text-[0.72rem] font-bold text-[#33445c] uppercase">
                 Jumlah pengunjung
               </label>
               <input
@@ -149,8 +180,9 @@ export default function AdminPublikasiPage() {
                 min="0"
                 value={visitors}
                 onChange={(event) => setVisitors(event.target.value)}
-                className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.92rem]"
+                className="h-10 w-full rounded-lg border border-[#dbe3ee] px-3 text-[0.9rem] outline-none focus:border-[#1266d2]"
               />
+              <p className="mt-1 text-[0.74rem] text-[#8894a6]">Angka yang muncul di bagian bawah halaman.</p>
             </div>
           </div>
 
@@ -185,70 +217,113 @@ export default function AdminPublikasiPage() {
             </div>
           )}
 
-          <div className="mt-4 flex flex-wrap gap-2 border-t border-[#eef1f5] pt-4">
-            <Button onClick={save} disabled={saving}>
-              {saving ? 'Menyimpan…' : 'Simpan'}
-            </Button>
-            <Button variant="ghost" onClick={() => setEditYear(null)}>
+          <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-[#f0f3f8] pt-4">
+            <button
+              type="button"
+              onClick={save}
+              disabled={saving}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#1266d2] px-4 py-2.5 text-[0.82rem] font-extrabold text-white shadow-[0_6px_18px_-4px_rgba(18,102,210,0.55)] hover:bg-[#0f56b3] disabled:opacity-60"
+            >
+              <Icon name="check" className="size-4" strokeWidth={2.4} />
+              {saving ? 'Menyimpan…' : 'Simpan Publikasi'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditYear(null)}
+              className="ml-auto rounded-xl px-4 py-2.5 text-[0.82rem] font-bold text-[#5b6675] hover:bg-[#f3f6fa]"
+            >
               Batal
-            </Button>
+            </button>
           </div>
         </section>
       )}
 
-      {loading ? (
-        <Loading text="Memuat data publikasi…" />
-      ) : years.length === 0 ? (
-        <Empty title="Belum ada data publikasi" />
-      ) : (
-        <div className="overflow-x-auto rounded-lg border border-[#e8edf4] bg-white">
-          <table className="w-full border-collapse text-[0.86rem]">
-            <thead>
-              <tr className="bg-[#0b2138] text-left text-white">
-                <th className="px-3 py-2.5">Tahun</th>
-                <th className="px-3 py-2.5">Jumlah Butir</th>
-                <th className="px-3 py-2.5">Pengunjung</th>
-                <th className="px-3 py-2.5">Halaman Publik</th>
-                <th className="px-3 py-2.5 text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {years.map((item, index) => (
-                <tr key={item.year} className={index % 2 ? 'bg-[#f7f9fc]' : 'bg-white'}>
-                  <td className="px-3 py-2.5 font-bold text-[#0b1d35]">{item.label}</td>
-                  <td className="px-3 py-2.5">
-                    {item.items} butir
-                    {item.items === 0 && (
-                      <span className="ml-1 rounded bg-amber-100 px-1.5 py-0.5 text-[0.7rem] font-bold text-amber-800">
-                        kosong
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-3 py-2.5">{Number(item.visitors).toLocaleString('en-US')}</td>
-                  <td className="px-3 py-2.5">
-                    <Link
-                      href={`/tahun-${item.year}`}
-                      target="_blank"
-                      className="font-bold text-[#1266d2] hover:underline"
-                    >
-                      Lihat ↗
-                    </Link>
-                  </td>
-                  <td className="px-3 py-2.5 text-right">
-                    <button
-                      type="button"
-                      onClick={() => openYear(item.year)}
-                      className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1266d2] hover:bg-[#e7f0ff]"
-                    >
-                      Ubah
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Daftar tahun */}
+      <section className="rounded-xl border border-[#e8edf4] bg-white">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#f0f3f8] px-5 py-4">
+          <div>
+            <h2 className="text-[0.98rem] font-extrabold text-[#0b1d35]">Daftar Tahun</h2>
+            <p className="text-[0.78rem] text-[#8894a6]">
+              Klik “Ubah” untuk menyunting isi publikasi tahun tersebut.
+            </p>
+          </div>
+          <span className="rounded-full bg-[#f1f5fa] px-3 py-1 text-[0.76rem] font-bold text-[#546479]">
+            {years.length} tahun
+          </span>
         </div>
-      )}
+
+        {loading ? (
+          <p className="px-5 py-8 text-center text-[0.88rem] font-bold text-[#8894a6]">
+            Memuat data publikasi…
+          </p>
+        ) : years.length === 0 ? (
+          <p className="px-5 py-10 text-center text-[0.88rem] text-[#8894a6]">
+            Belum ada data publikasi. Klik “Tahun Berikutnya” untuk memulai.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-[0.86rem]">
+              <thead>
+                <tr className="border-b border-[#eef2f7] bg-[#f8fafc] text-left text-[0.72rem] font-extrabold tracking-[0.05em] text-[#7b8798] uppercase">
+                  <th className="px-5 py-3">Tahun</th>
+                  <th className="px-3 py-3">Jumlah butir</th>
+                  <th className="px-3 py-3 text-right">Pengunjung</th>
+                  <th className="px-3 py-3">Halaman publik</th>
+                  <th className="px-5 py-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {years.map((item) => (
+                  <tr
+                    key={item.year}
+                    className={`border-b border-[#f4f6fa] transition-colors last:border-b-0 hover:bg-[#fafcff] ${
+                      editYear === item.year ? 'bg-[#f5f9ff]' : ''
+                    }`}
+                  >
+                    <td className="px-5 py-3.5">
+                      <span className="text-[0.92rem] font-extrabold text-[#0b1d35]">
+                        {item.label}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3.5">
+                      {item.items > 0 ? (
+                        <span className="rounded-md bg-[#efeafd] px-2 py-0.5 text-[0.78rem] font-bold text-[#6d47d9]">
+                          {item.items} butir
+                        </span>
+                      ) : (
+                        <span className="rounded-md bg-[#fef4e3] px-2 py-0.5 text-[0.78rem] font-bold text-[#b7791f]">
+                          Belum diisi
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-3 py-3.5 text-right font-bold text-[#546479]">
+                      {Number(item.visitors).toLocaleString('en-US')}
+                    </td>
+                    <td className="px-3 py-3.5">
+                      <Link
+                        href={`/tahun-${item.year}`}
+                        target="_blank"
+                        className="inline-flex items-center gap-1 text-[0.8rem] font-bold text-[#1266d2] hover:underline"
+                      >
+                        Lihat <Icon name="external" className="size-3" />
+                      </Link>
+                    </td>
+                    <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => openYear(item.year)}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#e2e8f0] px-3 py-1.5 text-[0.78rem] font-bold text-[#33445c] transition-colors hover:border-[#bcd7f8] hover:bg-[#f2f8ff] hover:text-[#1266d2]"
+                      >
+                        <Icon name="edit" className="size-3.5" /> Ubah
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </AdminShell>
   );
 }

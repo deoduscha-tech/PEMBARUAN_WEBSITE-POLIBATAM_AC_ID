@@ -20,6 +20,7 @@ import Icon from '@/components/AdminIcons';
 export const BLOK_TIPE = [
   { value: 'paragraf', label: 'Paragraf', icon: 'berita' },
   { value: 'heading', label: 'Sub Judul', icon: 'arrowUp' },
+  { value: 'seksi', label: 'Judul Kategori', icon: 'layers' },
   { value: 'daftar', label: 'Daftar Butir', icon: 'layers' },
   { value: 'tautan', label: 'Daftar Tautan', icon: 'external' },
   { value: 'tabel', label: 'Tabel', icon: 'chart' },
@@ -33,6 +34,8 @@ export function blokBaru(tipe = 'paragraf') {
   switch (tipe) {
     case 'heading':
       return { id, tipe, teks: '' };
+    case 'seksi':
+      return { id, tipe, judul: '' };
     case 'daftar':
       return { id, tipe, items: [''] };
     case 'tautan':
@@ -101,6 +104,15 @@ function BlokItem({ blok, index, total, onChange, onRemove, onMove }) {
           />
         )}
 
+        {blok.tipe === 'seksi' && (
+          <input
+            className={`${inputCls} font-bold`}
+            value={blok.judul ?? ''}
+            placeholder="Contoh: A. Publikasi Jurnal Internasional"
+            onChange={(e) => ubah({ judul: e.target.value })}
+          />
+        )}
+
         {blok.tipe === 'paragraf' && (
           <textarea
             className={`${inputCls} leading-relaxed`}
@@ -112,28 +124,57 @@ function BlokItem({ blok, index, total, onChange, onRemove, onMove }) {
         )}
 
         {blok.tipe === 'daftar' && (
-          <div className="space-y-2">
-            {(blok.items ?? []).map((item, i) => (
-              <div key={i} className="flex gap-2">
-                <span className="mt-2 text-[0.8rem] font-bold text-[#8894a6]">•</span>
-                <input
-                  className={inputCls}
-                  value={item}
-                  placeholder={`Butir ${i + 1}`}
-                  onChange={(e) => {
-                    const items = [...blok.items];
-                    items[i] = e.target.value;
-                    ubah({ items });
-                  }}
-                />
-                <TombolKecil
-                  tone="red"
-                  onClick={() => ubah({ items: blok.items.filter((_, x) => x !== i) })}
-                >
-                  <Icon name="x" className="size-3.5" />
-                </TombolKecil>
-              </div>
-            ))}
+          <div className="space-y-3">
+            {(blok.items ?? []).map((item, i) => {
+              // Butir bisa berupa teks biasa atau { teks, url }.
+              const teks = typeof item === 'string' ? item : item?.teks ?? '';
+              const url = typeof item === 'object' && item ? item.url ?? '' : '';
+
+              const ubahButir = (patch) => {
+                const items = [...blok.items];
+                items[i] =
+                  typeof items[i] === 'string'
+                    ? { teks: items[i], url: '', ...patch }
+                    : { ...items[i], ...patch };
+                ubah({ items });
+              };
+
+              return (
+                <div key={i} className="rounded-lg border border-[#eef2f7] bg-[#fbfcfe] p-2.5">
+                  <div className="flex items-start gap-2">
+                    <span className="mt-2 shrink-0 text-[0.8rem] font-bold text-[#8894a6]">
+                      {i + 1}.
+                    </span>
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                      <textarea
+                        rows={2}
+                        className={`${inputCls} leading-relaxed`}
+                        value={teks}
+                        placeholder="Tulis isi butir…"
+                        onChange={(e) => ubahButir({ teks: e.target.value })}
+                      />
+                      <div className="flex items-center gap-1.5">
+                        <span className="shrink-0 text-[0.72rem] font-bold text-[#8894a6]">
+                          Tautan
+                        </span>
+                        <input
+                          className={`${inputCls} h-8 text-[0.82rem]`}
+                          value={url}
+                          placeholder="https://… (opsional, agar butir bisa diklik)"
+                          onChange={(e) => ubahButir({ url: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    <TombolKecil
+                      tone="red"
+                      onClick={() => ubah({ items: blok.items.filter((_, x) => x !== i) })}
+                    >
+                      <Icon name="x" className="size-3.5" />
+                    </TombolKecil>
+                  </div>
+                </div>
+              );
+            })}
             <TombolKecil onClick={() => ubah({ items: [...(blok.items ?? []), ''] })}>
               <Icon name="plus" className="size-3.5" /> Tambah butir
             </TombolKecil>
