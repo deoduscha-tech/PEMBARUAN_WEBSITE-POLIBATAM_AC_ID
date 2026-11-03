@@ -22,12 +22,46 @@ export function BlokView({ blocks = [] }) {
               </h3>
             ) : null;
 
+          case 'seksi':
+            // Judul kategori publikasi (mis. "A. Publikasi Jurnal Internasional").
+            return String(blok?.judul ?? '').trim() ? (
+              <h4
+                key={key}
+                className="mt-7 mb-2 border-l-4 border-[#1266d2] bg-[#f5f9ff] px-3 py-2 text-[0.95rem] leading-snug font-extrabold text-[#0b1d35]"
+              >
+                {blok.judul}
+              </h4>
+            ) : null;
+
           case 'daftar':
-            return (blok.items ?? []).some((item) => String(item).trim()) ? (
-              <ul key={key} className="list-disc space-y-1 pl-6">
-                {(blok.items ?? []).map((item, i) =>
-                  String(item).trim() ? <li key={i}>{item}</li> : null,
-                )}
+            return (blok.items ?? []).some((item) => String(item?.teks ?? item).trim()) ? (
+              <ul key={key} className="list-decimal space-y-2 pl-6">
+                {(blok.items ?? []).map((item, i) => {
+                  // Butir bisa berupa teks biasa atau { teks, url }.
+                  const teks = typeof item === 'string' ? item : item?.teks ?? '';
+                  const url = typeof item === 'object' && item ? item.url : null;
+
+                  if (!String(teks).trim()) return null;
+
+                  return (
+                    <li key={i} className="leading-relaxed">
+                      {teks}
+                      {url && (
+                        <>
+                          {' '}
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-bold text-[#1266d2] underline decoration-[#1266d2]/40 underline-offset-2 hover:text-[#0f56b3]"
+                          >
+                            Lihat ↗
+                          </a>
+                        </>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             ) : null;
 
@@ -107,7 +141,9 @@ export function blokKeTeks(blocks = []) {
       if (!blok) return '';
       if (blok.teks) return blok.teks;
       if (blok.items) {
-        return blok.items.map((item) => (typeof item === 'string' ? item : item?.label ?? '')).join(' ');
+        return blok.items
+          .map((item) => (typeof item === 'string' ? item : item?.teks ?? item?.label ?? ''))
+          .join(' ');
       }
       if (blok.caption) return blok.caption;
 
