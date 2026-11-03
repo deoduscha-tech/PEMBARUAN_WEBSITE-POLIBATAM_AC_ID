@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminShell from '@/components/AdminShell';
+import BlokEditor, { blokBaru } from '@/components/BlokEditor';
+import { BlokView } from '@/components/BlokView';
 import { Alert, Button, Empty, Loading, PageHead } from '@/components/AdminUI';
 import { adminFetch } from '@/lib/adminSession';
 
@@ -23,6 +25,7 @@ export default function AdminPublikasiPage() {
   const [label, setLabel] = useState('');
   const [visitors, setVisitors] = useState('0');
   const [content, setContent] = useState('');
+  const [blocks, setBlocks] = useState([]);
   const [pratinjau, setPratinjau] = useState(false);
 
   async function load() {
@@ -55,6 +58,7 @@ export default function AdminPublikasiPage() {
     setLabel(response.data.data.label ?? `TAHUN ${year}`);
     setVisitors(String(response.data.data.visitors ?? 0));
     setContent(response.data.data.content ?? '');
+    setBlocks(response.data.data.blocks ?? []);
     setPratinjau(false);
     setStatus({ type: '', message: '' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -67,7 +71,13 @@ export default function AdminPublikasiPage() {
     setEditYear(next);
     setLabel(`TAHUN ${next}`);
     setVisitors('0');
-    setContent('<p><strong>A. Publikasi Jurnal Internasional Bereputasi</strong></p>\n<ol>\n  <li>Nama Penulis – <a href="#">Judul artikel</a>. Terbit pada Nama Jurnal. (Q1)</li>\n</ol>');
+    setContent('');
+    // Contoh awal berupa blok siap isi, bukan HTML — admin tinggal mengubah teksnya.
+    setBlocks([
+      blokBaru('heading'),
+      blokBaru('paragraf'),
+      blokBaru('daftar'),
+    ]);
     setPratinjau(false);
     setStatus({ type: '', message: '' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -79,7 +89,7 @@ export default function AdminPublikasiPage() {
 
     const response = await adminFetch(`/admin/publikasi/${editYear}`, {
       method: 'POST',
-      body: { label, visitors: Number(visitors) || 0, content },
+      body: { label, visitors: Number(visitors) || 0, content, blocks },
     });
 
     setSaving(false);
@@ -94,7 +104,9 @@ export default function AdminPublikasiPage() {
     await load();
   }
 
-  const jumlahButir = (content.match(/<li/gi) ?? []).length;
+  const jumlahButir = blocks
+    .filter((blok) => blok.tipe === 'daftar')
+    .reduce((total, blok) => total + (blok.items?.length ?? 0), 0);
 
   return (
     <AdminShell>
@@ -108,7 +120,7 @@ export default function AdminPublikasiPage() {
       <Alert type={status.type === 'success' ? 'success' : 'error'} message={status.message} />
 
       {editYear !== null && (
-        <section className="mb-6 rounded-lg border border-[#dde3ec] bg-white p-5">
+        <section className="mb-6 rounded-lg border border-[#e8edf4] bg-white p-5">
           <h2 className="mb-4 text-[1.05rem] font-extrabold text-[#0b1d35]">
             Publikasi Tahun {editYear}
           </h2>
@@ -143,32 +155,33 @@ export default function AdminPublikasiPage() {
           </div>
 
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-            <label htmlFor="pub-content" className="text-[0.76rem] font-bold text-[#33445c] uppercase">
-              Isi publikasi (HTML)
-            </label>
+            <span className="text-[0.76rem] font-bold text-[#33445c] uppercase">
+              Isi publikasi
+            </span>
             <div className="flex items-center gap-3 text-[0.78rem] text-[#6b7787]">
-              <span>{jumlahButir} butir</span>
+              <span>{blocks.length} blok</span>
               <button
                 type="button"
                 onClick={() => setPratinjau((value) => !value)}
-                className="font-bold text-[#1e6fd9] hover:underline"
+                className="font-bold text-[#1266d2] hover:underline"
               >
                 {pratinjau ? 'Sembunyikan pratinjau' : 'Lihat pratinjau'}
               </button>
             </div>
           </div>
 
-          <textarea
-            id="pub-content"
-            value={content}
-            onChange={(event) => setContent(event.target.value)}
-            rows={14}
-            className="w-full rounded border border-[#cfd8e3] px-3 py-2 font-mono text-[0.8rem] leading-relaxed"
-          />
+          <p className="mb-2 text-[0.76rem] text-[#8894a6]">
+            Tambah dan susun isi per blok: sub judul, paragraf, daftar butir, tautan, tabel, atau
+            gambar. Tidak perlu menulis HTML.
+          </p>
+
+          <BlokEditor blocks={blocks} onChange={setBlocks} />
 
           {pratinjau && (
             <div className="mt-3 max-h-[420px] overflow-y-auto rounded border border-[#e2e8f0] bg-[#fbfcfe] p-4 text-[0.88rem]">
-              <div className="publication-original-content" dangerouslySetInnerHTML={{ __html: content }} />
+              <div className="rich-copy">
+                <BlokView blocks={blocks} />
+              </div>
             </div>
           )}
 
@@ -188,10 +201,10 @@ export default function AdminPublikasiPage() {
       ) : years.length === 0 ? (
         <Empty title="Belum ada data publikasi" />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-[#dde3ec] bg-white">
+        <div className="overflow-x-auto rounded-lg border border-[#e8edf4] bg-white">
           <table className="w-full border-collapse text-[0.86rem]">
             <thead>
-              <tr className="bg-[#0f2238] text-left text-white">
+              <tr className="bg-[#0b2138] text-left text-white">
                 <th className="px-3 py-2.5">Tahun</th>
                 <th className="px-3 py-2.5">Jumlah Butir</th>
                 <th className="px-3 py-2.5">Pengunjung</th>
@@ -216,7 +229,7 @@ export default function AdminPublikasiPage() {
                     <Link
                       href={`/tahun-${item.year}`}
                       target="_blank"
-                      className="font-bold text-[#1e6fd9] hover:underline"
+                      className="font-bold text-[#1266d2] hover:underline"
                     >
                       Lihat ↗
                     </Link>
@@ -225,7 +238,7 @@ export default function AdminPublikasiPage() {
                     <button
                       type="button"
                       onClick={() => openYear(item.year)}
-                      className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1e6fd9] hover:bg-[#e7f0ff]"
+                      className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1266d2] hover:bg-[#e7f0ff]"
                     >
                       Ubah
                     </button>

@@ -27,8 +27,10 @@ function ChartFrame({ chart, loading = 'lazy' }) {
 }
 
 export default async function StatistikPage() {
-  const response = await apiGet('/statistik');
+  // Judul & jumlah pengunjung bisa disunting dari panel admin.
+  const [response, halaman] = await Promise.all([apiGet('/statistik'), apiGet('/halaman/statistik')]);
   const statistik = response.ok ? response.data.data : null;
+  const pageInfo = halaman.ok ? halaman.data.data : null;
   const charts = statistik?.charts ?? [];
   const chart = (key) => charts.find((item) => item.key === key);
 
@@ -37,8 +39,8 @@ export default async function StatistikPage() {
       <SiteHeader page="home" active="statistik" />
 
       <main className="bg-[#efefef] pb-6">
-        <h1 className="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
-          Statistik
+        <h1 className="wide-inner py-6 text-[clamp(1.55rem,2.4vw,2.1rem)] font-black tracking-[-0.03em] text-[#101926] uppercase">
+          {pageInfo?.heading ?? 'Statistik'}
         </h1>
 
         <div className="wide-inner mb-4 space-y-8 border-line bg-white p-5 md:p-8">
@@ -58,7 +60,7 @@ export default async function StatistikPage() {
         </div>
 
         <div className="wide-inner pb-6 text-[1.12rem] font-bold">
-          Jumlah Pengunjung: {Number(statistik?.visitors ?? 0).toLocaleString('id-ID')}
+          Jumlah Pengunjung: {Number(pageInfo?.visitors ?? statistik?.visitors ?? 0).toLocaleString('en-US')}
         </div>
 
         <MissedSection />

@@ -94,6 +94,9 @@ class PublikasiApiController extends Controller
             'visitors' => $group['visitors'] ?? 0,
             'source_page_id' => $group['source_page_id'] ?? null,
             'content' => $group['content'] ?? '',
+            // Blok terstruktur lebih diutamakan daripada HTML mentah.
+            'blocks' => $group['blocks']
+                ?? \App\Support\HtmlToBlocks::convert((string) ($group['content'] ?? '')),
         ];
     }
 }

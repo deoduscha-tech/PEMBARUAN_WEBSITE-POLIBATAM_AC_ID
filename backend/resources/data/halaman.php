@@ -154,6 +154,88 @@ $pengabdian['documents'] = array(
   array('title' => 'Format Laporan Kemajuan', 'description' => 'Template pelaporan kemajuan kegiatan pengabdian.', 'href' => null),
 );
 
+// Kontak & tupoksi punya berkas data sendiri (dipakai API kontak/tupoksi).
+// Di sini keduanya didaftarkan juga supaya bisa disunting dari panel admin.
+$kontakPath = require __DIR__ . '/kontak.php';
+$tupoksiPath = require __DIR__ . '/tupoksi.php';
+
+// Halaman "Polibatam University Berdampak" — teks laporan dampak.
+$berdampak = array(
+  'heading' => 'Polibatam University Berdampak',
+  'visitors' => 405,
+  'intro' => array(
+    'Politeknik Negeri Batam (Polibatam) berkomitmen untuk terus menghadirkan pendidikan vokasi yang memberikan manfaat nyata bagi masyarakat. Komitmen tersebut diwujudkan melalui Laporan Dampak Sosial, Ekonomi, dan Lingkungan Tahun 2025, yang mendokumentasikan kontribusi institusi dalam mendukung pembangunan berkelanjutan melalui pelaksanaan Tri Dharma Perguruan Tinggi dan tata kelola kelembagaan.',
+    'Laporan ini menyajikan berbagai capaian Polibatam dalam menciptakan dampak pada tiga dimensi utama, yaitu dampak sosial, dampak ekonomi, dan dampak lingkungan. Di bidang ekonomi, kontribusi institusi diwujudkan melalui hilirisasi hasil riset, pengembangan kewirausahaan, serta kemitraan dengan dunia usaha dan dunia industri.',
+    'Dokumen ini diharapkan menjadi referensi bagi sivitas akademika, pemerintah, dunia usaha dan dunia industri, mitra, serta masyarakat dalam memahami kontribusi nyata Polibatam terhadap pembangunan berkelanjutan.',
+  ),
+  'sections' => array(
+    array(
+      'title' => 'Unduh Laporan Dampak Sosial, Ekonomi, dan Lingkungan Politeknik Negeri Batam Tahun 2025 (PDF):',
+      'paragraphs' => array(),
+      'list' => array(),
+      'hrefs' => array(
+        array(
+          'label' => 'Klik Disini',
+          'url' => 'https://polbat-my.sharepoint.com/:b:/g/personal/p3m_polibatam_ac_id/IQDeI_xg-60RTr-O1opMKgpVAfMa5u5bFb4pnu1imIJG_T8?e=ZJtv19',
+        ),
+      ),
+    ),
+  ),
+);
+
+// Halaman induk HKI — pengantar yang tampil di atas daftar tahun.
+$hki = array(
+  'heading' => 'HKI',
+  'visitors' => 8490,
+  'intro' => array(
+    'Hak Kekayaan Intelektual (HKI) merupakan bagian dari komitmen Polibatam University Berdampak dalam mendorong lahirnya karya intelektual yang terlindungi dan bermanfaat bagi masyarakat serta industri.',
+    'Pusat Penelitian dan Pengabdian kepada Masyarakat Politeknik Negeri Batam aktif mendorong pengembangan inovasi, karya ilmiah, dan produk teknologi yang memiliki nilai komersial serta manfaat bagi masyarakat.',
+  ),
+  'sections' => array(
+    array(
+      'title' => 'Prioritas Pengembangan HKI',
+      'paragraphs' => array(
+        'Beberapa fokus utama pengembangan HKI meliputi teknologi tepat guna, perangkat lunak, desain produk, inovasi pendidikan, serta solusi berbasis kebutuhan industri dan masyarakat.',
+      ),
+      'list' => array(
+        'Perlindungan inovasi produk dan teknologi',
+        'Pengembangan karya riset yang aplikatif',
+        'Dukungan komersialisasi hasil penelitian',
+        'Kolaborasi dengan industri dan mitra strategis',
+      ),
+      'hrefs' => array(),
+    ),
+  ),
+);
+
+$kontak = array(
+  'heading' => $kontakPath['heading'] ?? 'KONTAK P3M',
+  'visitors' => $kontakPath['visitors'] ?? 0,
+  'intro' => array(),
+  'sections' => array(),
+  'contact' => $kontakPath,
+);
+
+$tupoksi = array(
+  'heading' => $tupoksiPath['heading'] ?? 'Tupoksi',
+  'visitors' => $tupoksiPath['visitors'] ?? 0,
+  'intro' => $tupoksiPath['intro'] ?? array(),
+  'sections' => array(
+    array(
+      'title' => $tupoksiPath['duties']['title'] ?? 'Tugas dan Tanggung Jawab',
+      'paragraphs' => array(),
+      'list' => $tupoksiPath['duties']['items'] ?? array(),
+      'hrefs' => array(),
+    ),
+    array(
+      'title' => $tupoksiPath['authorities']['title'] ?? 'Kewenangan',
+      'paragraphs' => array(),
+      'list' => $tupoksiPath['authorities']['items'] ?? array(),
+      'hrefs' => array(),
+    ),
+  ),
+);
+
 // Data kontak & tupoksi tetap berada di berkasnya sendiri (kontak.php,
 // tupoksi.php) karena sudah dipakai API-nya masing-masing.
 return array(
@@ -164,4 +246,8 @@ return array(
   'statistik' => $statistik,
   'penelitian' => $penelitian,
   'pengabdian' => $pengabdian,
+  'kontak' => $kontak,
+  'tupoksi' => $tupoksi,
+  'berdampak' => $berdampak,
+  'hki' => $hki,
 );

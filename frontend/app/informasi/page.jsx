@@ -2,9 +2,9 @@ import EditorialPage from '@/components/EditorialPage';
 import { apiGet } from '@/lib/api';
 import { HalamanBody } from '@/components/HalamanContent';
 
-// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
-// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
-export const revalidate = 60;
+// Halaman ini bisa diubah dari panel admin, jadi JANGAN di-cache: setelah
+// admin menyimpan, pengunjung langsung melihat versi terbaru.
+export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Informasi — Pusat P2M Polibatam' };
 

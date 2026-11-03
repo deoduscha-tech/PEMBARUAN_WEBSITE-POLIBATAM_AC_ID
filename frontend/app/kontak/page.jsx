@@ -3,9 +3,9 @@ import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
 
-// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
-// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
-export const revalidate = 60;
+// Halaman ini bisa diubah dari panel admin, jadi JANGAN di-cache: setelah
+// admin menyimpan, pengunjung langsung melihat versi terbaru.
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Kontak P3M — Pusat P2M Polibatam',
@@ -41,7 +41,7 @@ export default async function KontakPage() {
   return (
     <Shell>
       {/* Judul halaman */}
-      <h1 className="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
+      <h1 className="wide-inner py-6 text-[clamp(1.55rem,2.4vw,2.1rem)] font-black tracking-[-0.03em] text-[#101926] uppercase">
         {data.heading ?? 'KONTAK P3M'}
       </h1>
 

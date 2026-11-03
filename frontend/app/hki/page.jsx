@@ -3,32 +3,37 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
+import { HalamanBody } from '@/components/HalamanContent';
 
 export const metadata = { title: 'HKI — Pusat P2M Polibatam' };
 
 export default async function HkiPage() {
-  const response = await apiGet('/hki');
+  // Pengantar HKI bisa disunting dari panel admin (/admin/profil -> hki).
+  const [response, halaman] = await Promise.all([apiGet('/hki'), apiGet('/halaman/hki')]);
   const menu = response.ok ? response.data?.data?.menu ?? [] : [];
   const content = response.ok ? response.data?.data?.content : null;
-  const visitors = response.ok ? response.data?.data?.views ?? 8490 : null;
+  const pageData = halaman.ok ? halaman.data?.data : null;
+  const visitors = pageData?.visitors ?? (response.ok ? response.data?.data?.views ?? 8490 : null);
 
   return (
     <>
       <SiteHeader page="home" active="hki" />
       <main className="bg-[#efefef] pb-6">
-        <h1 className="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">HKI</h1>
+        <h1 className="wide-inner py-6 text-[clamp(1.55rem,2.4vw,2.1rem)] font-black tracking-[-0.03em] text-[#101926] uppercase">
+          {pageData?.heading ?? 'HKI'}
+        </h1>
 
         <div className="wide-inner mb-4 border border-line bg-white p-6 rich-copy">
-          {content ? <div dangerouslySetInnerHTML={{ __html: content }} /> : (
-            <>
-              <p>Hak Kekayaan Intelektual (HKI) merupakan bagian dari komitmen Polibatam University Berdampak dalam mendorong lahirnya karya intelektual yang terlindungi dan bermanfaat bagi masyarakat serta industri.</p>
-              <ul>
-                <li>Perlindungan inovasi produk dan teknologi</li>
-                <li>Pengembangan karya riset yang aplikatif</li>
-                <li>Dukungan komersialisasi hasil penelitian</li>
-                <li>Kolaborasi dengan industri dan mitra strategis</li>
-              </ul>
-            </>
+          {pageData ? (
+            <HalamanBody data={pageData} />
+          ) : content ? (
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          ) : (
+            <p>
+              Hak Kekayaan Intelektual (HKI) merupakan bagian dari komitmen Polibatam University
+              Berdampak dalam mendorong lahirnya karya intelektual yang terlindungi dan bermanfaat
+              bagi masyarakat serta industri.
+            </p>
           )}
         </div>
 

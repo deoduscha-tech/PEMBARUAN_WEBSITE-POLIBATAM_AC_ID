@@ -3,6 +3,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
+import { BlokView } from '@/components/BlokView';
 
 /**
  * VIEW — komponen bersama untuk semua halaman editorial (profil, informasi,
@@ -56,7 +57,7 @@ export default async function EditorialPage({
       <SiteHeader page="home" active={slug} />
 
       <main className="bg-[#efefef] pb-6">
-        <h1 className="wide-inner py-6 text-[clamp(2.3rem,4vw,4rem)] font-black tracking-[-0.06em] text-[#101926] uppercase">
+        <h1 className="wide-inner py-6 text-[clamp(1.55rem,2.4vw,2.1rem)] font-black tracking-[-0.03em] text-[#101926] uppercase">
           {heading}
         </h1>
 
@@ -77,7 +78,9 @@ export default async function EditorialPage({
             {/* Konten luaran publikasi diambil dari API Laravel
                 (/api/publikasi?tahun=...), bukan teks placeholder. */}
             <div className="min-h-[380px] bg-[#efefef] p-6 rich-copy">
-              {publication?.content ? (
+              {publication?.blocks?.length > 0 ? (
+                <BlokView blocks={publication.blocks} />
+              ) : publication?.content ? (
                 <div
                   className="publication-original-content"
                   dangerouslySetInnerHTML={{ __html: publication.content }}

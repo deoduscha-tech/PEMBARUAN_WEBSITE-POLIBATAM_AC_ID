@@ -194,6 +194,10 @@ class AdminContentApiController extends Controller
                 'label' => $years[$year]['label'] ?? 'TAHUN ' . $year,
                 'visitors' => (int) ($years[$year]['visitors'] ?? 0),
                 'content' => $years[$year]['content'] ?? '',
+                // Blok terstruktur untuk editor. Kalau belum ada, HTML lama
+                // diubah otomatis supaya admin tidak perlu menyunting HTML.
+                'blocks' => $years[$year]['blocks']
+                    ?? \App\Support\HtmlToBlocks::convert((string) ($years[$year]['content'] ?? '')),
             ],
         ]);
     }
@@ -207,6 +211,7 @@ class AdminContentApiController extends Controller
             'visitors' => ['nullable', 'integer', 'min:0'],
             'content' => ['nullable', 'string'],
             'label' => ['nullable', 'string', 'max:80'],
+            'blocks' => ['nullable', 'array'],
         ]);
 
         $years = $this->content->get('publikasi', []);
@@ -214,7 +219,10 @@ class AdminContentApiController extends Controller
         $years[$year] = [
             'label' => $payload['label'] ?? ($years[$year]['label'] ?? 'TAHUN ' . $year),
             'visitors' => (int) ($payload['visitors'] ?? $years[$year]['visitors'] ?? 0),
-            'content' => $payload['content'] ?? ($years[$year]['content'] ?? ''),
+            // Konten disimpan sebagai blok; HTML lama dibiarkan sebagai
+            // cadangan untuk tampilan yang belum mengenal blok.
+            'content' => $years[$year]['content'] ?? '',
+            'blocks' => $payload['blocks'] ?? ($years[$year]['blocks'] ?? []),
             'source_page_id' => $years[$year]['source_page_id'] ?? null,
             'updated_at' => now()->toIso8601String(),
         ];
@@ -224,7 +232,13 @@ class AdminContentApiController extends Controller
 
         return response()->json([
             'message' => 'Data publikasi tahun ' . $year . ' disimpan.',
-            'data' => ['year' => $year, 'items' => substr_count($years[$year]['content'], '<li')],
+            'data' => [
+                'year' => $year,
+                'items' => count(array_filter(
+                    $years[$year]['blocks'] ?? [],
+                    fn ($blok) => ($blok['tipe'] ?? '') === 'daftar'
+                )),
+            ],
         ]);
     }
 
@@ -298,13 +312,48 @@ class AdminContentApiController extends Controller
             'visitors' => ['nullable', 'integer', 'min:0'],
             'intro' => ['nullable', 'array'],
             'intro.*' => ['string'],
+            // Kontak & tupoksi punya isi berstruktur, bukan hanya paragraf.
+            'contact' => ['nullable', 'array'],
+            'duties' => ['nullable', 'array'],
+            'authorities' => ['nullable', 'array'],
+            'sections' => ['nullable', 'array'],
         ]);
 
-        $this->content->put('halaman:' . $slug, [
+        $simpan = [
             'heading' => $payload['heading'] ?? $pages[$slug]['heading'] ?? $slug,
             'visitors' => (int) ($payload['visitors'] ?? $pages[$slug]['visitors'] ?? 0),
             'intro' => array_values($payload['intro'] ?? ($pages[$slug]['intro'] ?? [])),
-        ]);
+        ];
+
+        // Simpan isian khusus bila dikirim, supaya halaman publik bisa membacanya.
+        foreach (['contact', 'duties', 'authorities', 'sections'] as $field) {
+            if (array_key_exists($field, $payload) && is_array($payload[$field])) {
+                $simpan[$field] = $payload[$field];
+            }
+        }
+
+        $this->content->put('halaman:' . $slug, $simpan);
+
+        // Kontak & tupoksi dibaca API-nya sendiri dari kunci terpisah.
+        if ($slug === 'kontak' && isset($simpan['contact'])) {
+            // Halaman /kontak membaca judul & pengunjung dari objek contact,
+            // jadi nilainya disamakan agar judul hasil suntingan admin tampil.
+            $contact = $simpan['contact'];
+            $contact['heading'] = $simpan['heading'];
+            $contact['visitors'] = $simpan['visitors'];
+
+            $this->content->put('kontak', $contact);
+        }
+
+        if ($slug === 'tupoksi') {
+            $this->content->put('tupoksi', [
+                'heading' => $simpan['heading'],
+                'visitors' => $simpan['visitors'],
+                'intro' => $simpan['intro'],
+                'duties' => $simpan['duties'] ?? ($pages[$slug]['duties'] ?? []),
+                'authorities' => $simpan['authorities'] ?? ($pages[$slug]['authorities'] ?? []),
+            ]);
+        }
 
         return response()->json(['message' => 'Halaman ' . $slug . ' disimpan.']);
     }

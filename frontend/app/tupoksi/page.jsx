@@ -3,9 +3,9 @@ import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
 
-// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
-// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
-export const revalidate = 60;
+// Halaman ini bisa diubah dari panel admin, jadi JANGAN di-cache: setelah
+// admin menyimpan, pengunjung langsung melihat versi terbaru.
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Tupoksi — Pusat P2M Polibatam',

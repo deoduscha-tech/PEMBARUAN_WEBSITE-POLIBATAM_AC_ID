@@ -184,7 +184,7 @@ export default function AdminHkiPage() {
 
       {/* Form satu tahun */}
       {editYear !== null && (
-        <section className="mb-6 rounded-lg border border-[#dde3ec] bg-white p-5">
+        <section className="mb-6 rounded-lg border border-[#e8edf4] bg-white p-5">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <h2 className="text-[1.05rem] font-extrabold text-[#0b1d35]">
               HKI Tahun {editYear}
@@ -208,7 +208,7 @@ export default function AdminHkiPage() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-[0.86rem]">
               <thead>
-                <tr className="bg-[#0f2238] text-left text-white">
+                <tr className="bg-[#0b2138] text-left text-white">
                   <th className="w-8 px-2 py-2">No</th>
                   <th className="px-2 py-2">Judul *</th>
                   <th className="px-2 py-2">Jenis HKI</th>
@@ -304,10 +304,10 @@ export default function AdminHkiPage() {
       ) : years.length === 0 ? (
         <Empty title="Belum ada data HKI" hint="Tambahkan tahun terlebih dahulu." />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-[#dde3ec] bg-white">
+        <div className="overflow-x-auto rounded-lg border border-[#e8edf4] bg-white">
           <table className="w-full border-collapse text-[0.86rem]">
             <thead>
-              <tr className="bg-[#0f2238] text-left text-white">
+              <tr className="bg-[#0b2138] text-left text-white">
                 <th className="px-3 py-2.5">Tahun</th>
                 <th className="px-3 py-2.5">Jumlah Judul</th>
                 <th className="px-3 py-2.5">Jenis</th>
@@ -336,7 +336,7 @@ export default function AdminHkiPage() {
                     <Link
                       href={`/hki/tahun-${item.year}`}
                       target="_blank"
-                      className="font-bold text-[#1e6fd9] hover:underline"
+                      className="font-bold text-[#1266d2] hover:underline"
                     >
                       Lihat ↗
                     </Link>
@@ -345,7 +345,7 @@ export default function AdminHkiPage() {
                     <button
                       type="button"
                       onClick={() => openYear(item.year)}
-                      className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1e6fd9] hover:bg-[#e7f0ff]"
+                      className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1266d2] hover:bg-[#e7f0ff]"
                     >
                       Ubah
                     </button>

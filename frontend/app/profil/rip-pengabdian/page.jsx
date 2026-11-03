@@ -1,6 +1,6 @@
 import EditorialPage from '@/components/EditorialPage';
 import { apiGet } from '@/lib/api';
-import { HalamanBody, halamanMetadata } from '@/components/HalamanContent';
+import { HalamanBody } from '@/components/HalamanContent';
 
 /**
  * VIEW — halaman RIP Pengabdian.
@@ -10,13 +10,14 @@ import { HalamanBody, halamanMetadata } from '@/components/HalamanContent';
  */
 export const revalidate = 60;
 
-export async function generateMetadata({ params }) {
-  return halamanMetadata((await params)?.slug ?? 'rip-pengabdian');
-}
+export const metadata = {
+  title: 'RIP Pengabdian — Pusat P2M Polibatam',
+};
 
-export default async function HalamanStatisPage({ params }) {
-  const { slug } = await params;
-  const response = await apiGet(`/halaman/${slug}`);
+export default async function RipPengabdianPage() {
+  // Slug ditulis langsung: halaman ini statis (bukan [slug]), jadi params
+  // tidak tersedia dan dulu membuat API dipanggil dengan slug kosong → 404.
+  const response = await apiGet('/halaman/rip-pengabdian');
   const data = response.ok ? response.data.data : null;
 
   return (

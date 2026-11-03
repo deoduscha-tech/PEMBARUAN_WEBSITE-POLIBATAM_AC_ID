@@ -32,6 +32,7 @@ export default function AdminProfilPage() {
   const [heading, setHeading] = useState('');
   const [visitors, setVisitors] = useState('0');
   const [intro, setIntro] = useState([]);
+  const [kontak, setKontak] = useState({ nama: '', jabatan: '', email: '', alamat: '', peta: '' });
 
   async function load() {
     setLoading(true);
@@ -65,6 +66,16 @@ export default function AdminProfilPage() {
     setHeading(data.heading ?? '');
     setVisitors(String(data.visitors ?? 0));
     setIntro((data.intro ?? []).map((text) => ({ text })));
+
+    // Isi awal isian kontak (dari data kontak.php lewat API).
+    const c = data.contact ?? {};
+    setKontak({
+      nama: c.contact_person?.name ?? '',
+      jabatan: c.contact_person?.role ?? '',
+      email: (c.contact_person?.emails ?? []).join(', '),
+      alamat: c.address?.lines ?? '',
+      peta: c.map?.link ?? '',
+    });
     setStatus({ type: '', message: '' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -83,6 +94,23 @@ export default function AdminProfilPage() {
         heading,
         visitors: Number(visitors) || 0,
         intro: intro.map((row) => row.text).filter((text) => text.trim() !== ''),
+        // Khusus halaman kontak: kirim isian kontak terstruktur.
+        contact:
+          slug === 'kontak'
+            ? {
+                heading,
+                contact_person: {
+                  name: kontak.nama,
+                  role: kontak.jabatan,
+                  emails: kontak.email
+                    .split(',')
+                    .map((email) => email.trim())
+                    .filter(Boolean),
+                },
+                address: { label: 'Alamat', lines: kontak.alamat },
+                map: kontak.peta ? { link: kontak.peta, embed: kontak.peta } : null,
+              }
+            : undefined,
       },
     });
 
@@ -108,7 +136,7 @@ export default function AdminProfilPage() {
       <Alert type={status.type === 'success' ? 'success' : 'error'} message={status.message} />
 
       {slug !== null && (
-        <section className="mb-6 rounded-lg border border-[#dde3ec] bg-white p-5">
+        <section className="mb-6 rounded-lg border border-[#e8edf4] bg-white p-5">
           <h2 className="mb-4 text-[1.05rem] font-extrabold text-[#0b1d35]">
             Halaman: {slug}
           </h2>
@@ -149,11 +177,82 @@ export default function AdminProfilPage() {
             <button
               type="button"
               onClick={() => setIntro((current) => [...current, { text: '' }])}
-              className="text-[0.8rem] font-bold text-[#1e6fd9] hover:underline"
+              className="text-[0.8rem] font-bold text-[#1266d2] hover:underline"
             >
               + Tambah paragraf
             </button>
           </div>
+
+          {/* Kontak punya isian khusus: nama, email, alamat, dan peta. */}
+          {slug === 'kontak' && (
+            <div className="mb-5 grid gap-4 rounded-lg border border-[#e8edf4] bg-[#fafcfe] p-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="kontak-nama" className="mb-1 block text-[0.76rem] font-bold text-[#33445c] uppercase">
+                  Nama / jabatan kontak
+                </label>
+                <input
+                  id="kontak-nama"
+                  type="text"
+                  value={kontak.nama}
+                  onChange={(event) => setKontak({ ...kontak, nama: event.target.value })}
+                  className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.92rem]"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="kontak-jabatan" className="mb-1 block text-[0.76rem] font-bold text-[#33445c] uppercase">
+                  Jabatan
+                </label>
+                <input
+                  id="kontak-jabatan"
+                  type="text"
+                  value={kontak.jabatan}
+                  onChange={(event) => setKontak({ ...kontak, jabatan: event.target.value })}
+                  className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.92rem]"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label htmlFor="kontak-email" className="mb-1 block text-[0.76rem] font-bold text-[#33445c] uppercase">
+                  Email (pisahkan dengan koma bila lebih dari satu)
+                </label>
+                <input
+                  id="kontak-email"
+                  type="text"
+                  value={kontak.email}
+                  onChange={(event) => setKontak({ ...kontak, email: event.target.value })}
+                  className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.92rem]"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label htmlFor="kontak-alamat" className="mb-1 block text-[0.76rem] font-bold text-[#33445c] uppercase">
+                  Alamat
+                </label>
+                <textarea
+                  id="kontak-alamat"
+                  rows={3}
+                  value={kontak.alamat}
+                  onChange={(event) => setKontak({ ...kontak, alamat: event.target.value })}
+                  className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.92rem]"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label htmlFor="kontak-peta" className="mb-1 block text-[0.76rem] font-bold text-[#33445c] uppercase">
+                  Tautan peta (Google Maps, opsional)
+                </label>
+                <input
+                  id="kontak-peta"
+                  type="text"
+                  value={kontak.peta}
+                  placeholder="https://www.google.com/maps?q=…"
+                  onChange={(event) => setKontak({ ...kontak, peta: event.target.value })}
+                  className="w-full rounded border border-[#cfd8e3] px-3 py-2 text-[0.92rem]"
+                />
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col gap-2">
             {intro.length === 0 && (
@@ -200,10 +299,10 @@ export default function AdminProfilPage() {
       ) : pages.length === 0 ? (
         <Empty title="Belum ada halaman" />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-[#dde3ec] bg-white">
+        <div className="overflow-x-auto rounded-lg border border-[#e8edf4] bg-white">
           <table className="w-full border-collapse text-[0.86rem]">
             <thead>
-              <tr className="bg-[#0f2238] text-left text-white">
+              <tr className="bg-[#0b2138] text-left text-white">
                 <th className="px-3 py-2.5">Halaman</th>
                 <th className="px-3 py-2.5">Judul</th>
                 <th className="px-3 py-2.5">Paragraf</th>
@@ -244,7 +343,7 @@ export default function AdminProfilPage() {
                       <button
                         type="button"
                         onClick={() => open(page.slug)}
-                        className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1e6fd9] hover:bg-[#e7f0ff]"
+                        className="rounded px-2.5 py-1 text-[0.78rem] font-bold text-[#1266d2] hover:bg-[#e7f0ff]"
                       >
                         Ubah
                       </button>

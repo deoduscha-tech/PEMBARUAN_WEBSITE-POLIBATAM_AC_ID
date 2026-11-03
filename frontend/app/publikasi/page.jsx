@@ -3,10 +3,11 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import MissedSection from '@/components/MissedSection';
 import { apiGet } from '@/lib/api';
+import { BlokView } from '@/components/BlokView';
 
-// Data berita di-cache 60 detik (ISR) supaya perpindahan halaman instan.
-// Ubah ke `export const dynamic = 'force-dynamic';` kalau harus selalu segar.
-export const revalidate = 60;
+// Halaman ini bisa diubah dari panel admin, jadi JANGAN di-cache: setelah
+// admin menyimpan, pengunjung langsung melihat versi terbaru.
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Publikasi — Pusat P2M Polibatam',
@@ -40,7 +41,7 @@ export default async function PublikasiPage({ searchParams }) {
   return (
     <Shell>
       <main id="main-content" className="bg-[#efefef] pb-6">
-        <h1 className="wide-inner py-6 text-[clamp(2rem,3.5vw,3rem)] font-black tracking-[-0.04em] text-[#101926] uppercase">
+        <h1 className="wide-inner py-6 text-[clamp(1.5rem,2.2vw,1.9rem)] font-black tracking-[-0.03em] text-[#101926] uppercase">
           {active.label ?? `TAHUN ${tahun ?? ''}`}
         </h1>
 
@@ -62,10 +63,13 @@ export default async function PublikasiPage({ searchParams }) {
         </nav>
 
         <article className="wide-inner mb-4 border-line bg-white p-6 md:p-8">
-          {active.content ? (
+          {active.blocks?.length > 0 ? (
+            <div className="rich-copy">
+              <BlokView blocks={active.blocks} />
+            </div>
+          ) : active.content ? (
             <>
-              {/* Konten asli dari backend sudah memuat "Jumlah Pengunjung: xxx"
-                  di bagian bawahnya, jadi tidak ditambahkan lagi di sini. */}
+              {/* Cadangan: konten lama yang masih berupa HTML. */}
               <div
                 className="publication-original-content"
                 dangerouslySetInnerHTML={{ __html: active.content }}
