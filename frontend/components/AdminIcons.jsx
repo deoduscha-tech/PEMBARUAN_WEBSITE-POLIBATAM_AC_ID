@@ -1,14 +1,11 @@
 
-'use client';
-
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-
 /**
  * VIEW — ikon garis untuk sidebar & kartu admin.
  *
  * Sengaja SVG kecil tanpa library tambahan supaya bundle ringan dan
- * warna mengikuti `currentColor`.
+ * warna mengikuti `currentColor`. File ini murni presentasional (tanpa hook,
+ * tanpa `next/link`), jadi tidak perlu `'use client'` — bisa dipakai baik di
+ * server component maupun client component.
  */
 
 const PATHS = {
@@ -61,5 +58,3 @@ export default function Icon({ name, className = 'size-4', strokeWidth = 1.8 }) 
     </svg>
   );
 }
-
-export { Link, Icon, usePathname };

@@ -1,0 +1,200 @@
+[
+  {
+    "path": "/",
+    "vw": 390,
+    "docW": 491,
+    "overflow": true,
+    "overflowPx": 101,
+    "offenders": [
+      {
+        "tag": "div",
+        "cls": "ticker-track",
+        "left": 111,
+        "right": 8564,
+        "w": 8453,
+        "text": "Pengumuman Hasil Seleksi Penelitian dan Penga"
+      },
+      {
+        "tag": "div",
+        "cls": "flex h-full shrink-0 items-center",
+        "left": 111,
+        "right": 4337,
+        "w": 4226,
+        "text": "Pengumuman Hasil Seleksi Penelitian dan Penga"
+      },
+      {
+        "tag": "a",
+        "cls": "ticker-item",
+        "left": 111,
+        "right": 960,
+        "w": 849,
+        "text": "Pengumuman Hasil Seleksi Penelitian dan Penga"
+      },
+      {
+        "tag": "span",
+        "cls": "inline-block size-[9px] shrink-0 rounded-full bg-blue shadow-[0_0_0_3p",
+        "left": 986,
+        "right": 995,
+        "w": 9,
+        "text": ""
+      },
+      {
+        "tag": "article",
+        "cls": "feature-slide",
+        "left": 377,
+        "right": 741,
+        "w": 364,
+        "text": "InformasiPanduan Penelitian dan Pengabdian ke"
+      },
+      {
+        "tag": "div",
+        "cls": "feature-image",
+        "left": 377,
+        "right": 741,
+        "w": 364,
+        "text": "InformasiPanduan Penelitian dan Pengabdian ke"
+      },
+      {
+        "tag": "div",
+        "cls": "feature-content",
+        "left": 377,
+        "right": 646,
+        "w": 269,
+        "text": "InformasiPanduan Penelitian dan Pengabdian ke"
+      },
+      {
+        "tag": "span",
+        "cls": "feature-category",
+        "left": 413,
+        "right": 516,
+        "w": 103,
+        "text": "Informasi"
+      },
+      {
+        "tag": "h4",
+        "cls": "feature-title",
+        "left": 413,
+        "right": 610,
+        "w": 197,
+        "text": "Panduan Penelitian dan Pengabdian kepada Masy"
+      },
+      {
+        "tag": "a",
+        "cls": "",
+        "left": 413,
+        "right": 641,
+        "w": 228,
+        "text": "Panduan Penelitian dan Pengabdian kepada Masy"
+      },
+      {
+        "tag": "div",
+        "cls": "feature-meta",
+        "left": 413,
+        "right": 610,
+        "w": 197,
+        "text": "2026-04-29P3M"
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "left": 413,
+        "right": 487,
+        "w": 74,
+        "text": "2026-04-29"
+      }
+    ],
+    "smallTargets": 0,
+    "tapCount": 68,
+    "scrolledX": 101,
+    "shot": "c:\\laragon\\www\\PEMBARUAN_WEBSITE-POLIBATAM_AC_ID\\.tmp\\m-_.png"
+  },
+  {
+    "path": "/berita",
+    "vw": 390,
+    "docW": 390,
+    "overflow": false,
+    "overflowPx": 0,
+    "offenders": [],
+    "smallTargets": 5,
+    "tapCount": 29,
+    "scrolledX": 0,
+    "shot": "c:\\laragon\\www\\PEMBARUAN_WEBSITE-POLIBATAM_AC_ID\\.tmp\\m-_berita.png"
+  },
+  {
+    "path": "/profil",
+    "vw": 390,
+    "docW": 390,
+    "overflow": false,
+    "overflowPx": 0,
+    "offenders": [],
+    "smallTargets": 2,
+    "tapCount": 18,
+    "scrolledX": 0,
+    "shot": "c:\\laragon\\www\\PEMBARUAN_WEBSITE-POLIBATAM_AC_ID\\.tmp\\m-_profil.png"
+  },
+  {
+    "path": "/publikasi",
+    "vw": 390,
+    "docW": 485,
+    "overflow": true,
+    "overflowPx": 95,
+    "offenders": [],
+    "smallTargets": 33,
+    "tapCount": 69,
+    "scrolledX": 95,
+    "shot": "c:\\laragon\\www\\PEMBARUAN_WEBSITE-POLIBATAM_AC_ID\\.tmp\\m-_publikasi.png"
+  },
+  {
+    "path": "/hki",
+    "vw": 390,
+    "docW": 390,
+    "overflow": false,
+    "overflowPx": 0,
+    "offenders": [],
+    "smallTargets": 0,
+    "tapCount": 26,
+    "scrolledX": 0,
+    "shot": "c:\\laragon\\www\\PEMBARUAN_WEBSITE-POLIBATAM_AC_ID\\.tmp\\m-_hki.png"
+  },
+  {
+    "path": "/statistik",
+    "vw": 390,
+    "docW": 390,
+    "overflow": false,
+    "overflowPx": 0,
+    "offenders": [],
+    "smallTargets": 0,
+    "tapCount": 16,
+    "scrolledX": 0,
+    "shot": "c:\\laragon\\www\\PEMBARUAN_WEBSITE-POLIBATAM_AC_ID\\.tmp\\m-_statistik.png"
+  },
+  {
+    "path": "/admin/login",
+    "vw": 390,
+    "docW": 390,
+    "overflow": false,
+    "overflowPx": 0,
+    "offenders": [
+      {
+        "tag": "div",
+        "cls": "pointer-events-none absolute rounded-full border border-white/10 right",
+        "left": 110,
+        "right": 550,
+        "w": 440,
+        "text": ""
+      },
+      {
+        "tag": "span",
+        "cls": "absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent v",
+        "left": -243,
+        "right": 49,
+        "w": 292,
+        "text": ""
+      }
+    ],
+    "smallTargets": 2,
+    "tapCount": 4,
+    "scrolledX": 0,
+    "shot": "c:\\laragon\\www\\PEMBARUAN_WEBSITE-POLIBATAM_AC_ID\\.tmp\\m-_admin_login.png"
+  }
+]

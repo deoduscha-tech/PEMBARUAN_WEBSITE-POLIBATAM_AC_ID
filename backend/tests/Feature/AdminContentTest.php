@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Support\NewsRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AdminContentTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function admin(): static
     {
         return $this->withSession([
